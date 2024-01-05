@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { GestureResponderEvent, Image, ImageSourcePropType, StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 import { colors } from 'src/assets/Colors';
 import { scaler } from '../utils/Scaler';
 
 interface ButtonProps {
-    title?: string;
+    title?: string | ReactElement | ReactNode;
     containerStyle?: StyleProp<ViewStyle>;
     textStyle?: TextStyle;
     buttonStyle?: StyleProp<ViewStyle>;
     startIcon?: ImageSourcePropType | undefined;
     endIcon?: ImageSourcePropType | undefined;
     onPressButton?: ((event: GestureResponderEvent) => void) | undefined;
+    disabled?: boolean;
 }
 
 const Button = (props: ButtonProps) => {
-    const { title, startIcon, endIcon, onPressButton } = props
+    const { title, startIcon, endIcon, onPressButton, disabled } = props
 
     const styles = StyleSheet.create({
         title: {
@@ -24,7 +25,7 @@ const Button = (props: ButtonProps) => {
             ...StyleSheet.flatten(props.textStyle)
         },
         button: {
-            backgroundColor: colors.colorPrimary,
+            backgroundColor: disabled ? colors.colorFadedPrimary : colors.colorPrimary,
             display: 'flex',
             alignItems: 'center',
             justifyContent: startIcon || endIcon ? 'flex-start' : 'center',
@@ -42,7 +43,7 @@ const Button = (props: ButtonProps) => {
     })
 
     return (
-        <TouchableOpacity style={styles.button} onPress={onPressButton}>
+        <TouchableOpacity style={styles.button} onPress={onPressButton} disabled={disabled}>
             {startIcon ?
                 <Image source={startIcon} style={styles.icon} />
                 : null
