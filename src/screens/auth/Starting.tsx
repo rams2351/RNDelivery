@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { colors } from 'src/assets/Colors'
 import { Images } from 'src/assets/image'
 import Button from 'src/components/Button'
@@ -13,26 +12,30 @@ const GetStartScreen = ({ navigation }: any) => {
         navigation.push(AuthScreens.GET_OTP)
     }, [])
     return (
-        <View style={styles.container}>
-            <SafeAreaView>
+        <>
+            <StatusBar backgroundColor={'transparent'} translucent />
+            <View style={styles.container}>
                 <View style={styles.logoAndTextContainer}>
                     <View style={styles.logoContainer}>
                         <Image source={Images.logo} style={styles.logo} />
                     </View>
-                    <Text style={{ color: colors.colorWhite, fontSize: scaler(50), fontWeight: '800', lineHeight: 55 }}>Food for Everyone</Text>
+                    <Text style={{ color: colors.colorWhite, fontSize: scaler(50), fontWeight: '800', lineHeight: 65 }}>Food for Everyone</Text>
                 </View>
                 <View style={styles.toysLogoContainer}>
                     <Image source={Images.toy2}
                         style={styles.toy1} />
                     <Image source={Images.toy1} style={styles.toy2} />
                 </View>
-                <Button title='Get Started'
-                    buttonStyle={styles.getStartedButton}
-                    textStyle={{ color: colors.colorPrimary }}
-                    onPressButton={onPressGetStarted}
-                />
-            </SafeAreaView>
-        </View>
+                <View style={styles.buttonContainer}>
+                    <Button title='Get Started'
+                        buttonStyle={styles.getStartedButton}
+                        textStyle={{ color: colors.colorPrimary }}
+                        onPressButton={onPressGetStarted}
+                    />
+                </View>
+            </View>
+        </>
+
     )
 }
 
@@ -56,10 +59,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 100,
-        marginBottom: scaler(19)
+        marginBottom: scaler(19),
+
     },
     logoAndTextContainer: {
-        padding: scaler(40)
+        padding: scaler(40),
+        marginTop: scaler(20)
     },
     toy1: {
         height: scaler(300),
@@ -79,11 +84,20 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        shadowColor: colors.colorWhite,
+        shadowOffset: { height: 0, width: 10 },
+        shadowOpacity: 0.5,
+        shadowRadius: 4
     },
     getStartedButton: {
         backgroundColor: colors.colorWhite,
         marginHorizontal: scaler(20),
-        marginTop: scaler(30)
+    },
+    buttonContainer: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'flex-end',
+        paddingVertical: scaler(25)
     }
 })

@@ -7,16 +7,18 @@ import { scaler } from 'utils/Scaler';
 interface PhoneInputProps {
     phone?: string;
     onChangeValue?: (e: string) => void;
+    defaultValue?: string;
 }
 
 const RNPhoneInput = (props: PhoneInputProps) => {
-    const { onChangeValue } = props;
+    const { onChangeValue, defaultValue } = props;
     return (
         <PhoneInput
             containerStyle={styles.container}
             textContainerStyle={styles.input}
             placeholder="10 digit mobile number"
             onChangeFormattedText={onChangeValue}
+            defaultValue={defaultValue}
             autoFocus
         />
     )

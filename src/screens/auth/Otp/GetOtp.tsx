@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Image, Platform, StyleSheet, Text, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { colors } from 'src/assets/Colors'
-import { Images } from 'src/assets/image'
+import { colors, Images } from 'src/assets'
 import Button from 'src/components/Button'
 import RNPhoneInput from 'src/components/PhoneInput'
 import { AuthScreens } from 'utils/Constants'
@@ -10,9 +10,10 @@ import { scaler } from 'utils/Scaler'
 
 interface IMobileState { value: string; disable: boolean; }
 
+
 const GetOtpScreen = ({ navigation }: any) => {
     const [mobile, setMobile] = useState<IMobileState>({
-        value: "",
+        value: "9001547464",
         disable: true
     })
 
@@ -21,8 +22,13 @@ const GetOtpScreen = ({ navigation }: any) => {
     }, [])
 
     const getOtpHandler = useCallback((phone: string) => {
-        console.log(phone);
         navigation.push(AuthScreens.VERIFY_OTP, { phone })
+    }, [])
+    useEffect(() => {
+        setMobile((_) => {
+            let val = '9001547464'
+            return { value: val, disable: val.length <= 12 ?? false }
+        })
     }, [])
     return (
         <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
@@ -32,20 +38,30 @@ const GetOtpScreen = ({ navigation }: any) => {
                 <Text style={styles.otpText}>OTP</Text>
                 <View style={styles.underline} />
             </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.enterMobileText}>Enter your mobile number to get OTP</Text>
-                <RNPhoneInput onChangeValue={phoneHandler} />
+            <KeyboardAwareScrollView
+                bounces={false}
+                showsVerticalScrollIndicator={false}
+                enableOnAndroid={true}
+                // extraScrollHeight={Platform.OS === 'ios' ? 0 : 40}
+                enableAutomaticScroll={(Platform.OS === 'ios')}
+            >
+                <View style={styles.inputContainer}>
+                    <Text style={styles.enterMobileText}>Enter your mobile number to get OTP</Text>
+                    <RNPhoneInput onChangeValue={phoneHandler} defaultValue={mobile.value} />
+                </View>
+            </KeyboardAwareScrollView>
+            <View style={{ paddingHorizontal: scaler(15) }}>
                 <Text style={styles.termsText}>By clicking, I accept the terms of service and privacy policy.</Text>
-
                 <Button
                     title='Get OTP'
-                    buttonStyle={{}}
+                    buttonStyle={{ marginBottom: scaler(25) }}
                     textStyle={{ fontWeight: '600' }}
                     disabled={mobile.disable}
                     onPressButton={() => getOtpHandler(mobile.value)}
                 />
             </View>
-        </SafeAreaView>
+
+        </SafeAreaView >
     )
 }
 
@@ -89,7 +105,6 @@ const styles = StyleSheet.create({
         fontSize: scaler(10),
         fontWeight: '600',
         color: colors.colorBlackText,
-        marginTop: 'auto',
         marginBottom: scaler(10),
         textAlign: 'center'
     }

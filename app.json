@@ -1,4 +1,7 @@
 {
   "name": "FoodDelivery",
-  "displayName": "FoodDelivery"
+  "displayName": "FoodDelivery",
+  "androidStatusBar": {
+    "backgroundColor": "#000000"
+  }
 }
