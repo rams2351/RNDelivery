@@ -1,20 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Image, Platform, StyleSheet, Text, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors, Images } from 'src/assets'
 import Button from 'src/components/Button'
 import RNPhoneInput from 'src/components/PhoneInput'
-import { AuthScreens } from 'utils/Constants'
+import { AuthScreens } from 'utils/Constant'
 import { scaler } from 'utils/Scaler'
 
 interface IMobileState { value: string; disable: boolean; }
 
 
 const GetOtpScreen = ({ navigation }: any) => {
-    const [mobile, setMobile] = useState<IMobileState>({
-        value: "9001547464",
-        disable: true
+    const [mobile, setMobile] = useState<IMobileState>(() => {
+        let val = '9001547464'
+        return {
+            value: val,
+            disable: val.length < 10 ?? false
+        }
     })
 
     const phoneHandler = useCallback((text: string) => {
@@ -24,12 +27,7 @@ const GetOtpScreen = ({ navigation }: any) => {
     const getOtpHandler = useCallback((phone: string) => {
         navigation.push(AuthScreens.VERIFY_OTP, { phone })
     }, [])
-    useEffect(() => {
-        setMobile((_) => {
-            let val = '9001547464'
-            return { value: val, disable: val.length <= 12 ?? false }
-        })
-    }, [])
+
     return (
         <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
             <View

@@ -17,5 +17,6 @@ export const colors = {
     colorTextPlaceholder: '#9A9A9A',
     colorErrorRed: '#C93F34',
     colorLink: '#0e559c',
+    colorFocus:'rgba(255, 151, 68, 1)'
 
 }

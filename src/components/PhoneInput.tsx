@@ -12,6 +12,7 @@ interface PhoneInputProps {
 
 const RNPhoneInput = (props: PhoneInputProps) => {
     const { onChangeValue, defaultValue } = props;
+
     return (
         <PhoneInput
             containerStyle={styles.container}
@@ -19,7 +20,7 @@ const RNPhoneInput = (props: PhoneInputProps) => {
             placeholder="10 digit mobile number"
             onChangeFormattedText={onChangeValue}
             defaultValue={defaultValue}
-            autoFocus
+        // autoFocus
         />
     )
 }

@@ -10,7 +10,7 @@ interface ButtonProps {
     buttonStyle?: StyleProp<ViewStyle>;
     startIcon?: ImageSourcePropType | undefined;
     endIcon?: ImageSourcePropType | undefined;
-    onPressButton?: ((event: GestureResponderEvent) => void) | undefined;
+    onPressButton?: ((event: GestureResponderEvent) => void) | undefined | any;
     disabled?: boolean;
 }
 

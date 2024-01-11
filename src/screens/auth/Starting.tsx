@@ -3,7 +3,7 @@ import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { colors } from 'src/assets/Colors'
 import { Images } from 'src/assets/image'
 import Button from 'src/components/Button'
-import { AuthScreens } from 'utils/Constants'
+import { AuthScreens } from 'utils/Constant'
 import { scaler } from 'utils/Scaler'
 
 const GetStartScreen = ({ navigation }: any) => {

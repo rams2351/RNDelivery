@@ -7,7 +7,7 @@ import VerifyOtp from 'screens/auth/Otp/VerifyOtp'
 import SignUp from 'screens/auth/Signup/SignUp'
 import Home from 'screens/Dashboard/Home'
 import GetStartScreen from 'src/screens/auth/Starting'
-import { AuthScreens, DashboardScreens } from 'src/utils/Constants'
+import { AuthScreens, DashboardScreens } from 'utils/Constant'
 
 const Navigator = () => {
     const IS_LOGIN = false

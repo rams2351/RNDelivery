@@ -8,7 +8,7 @@ import { colors } from 'src/assets/Colors'
 import { Images } from 'src/assets/image'
 import Button from 'src/components/Button'
 import { actions } from 'src/redux/slices/reducer'
-import { AuthScreens } from 'utils/Constants'
+import { AuthScreens } from 'utils/Constant'
 import { scaler } from 'utils/Scaler'
 
 interface IOtpState {
@@ -62,7 +62,7 @@ const VerifyOtp = ({ route, navigation }: any) => {
 
                         editable
                         onCodeChanged={code => setOtp((d) => ({ disable: code.length == 4 ? false : true, value: code }))}
-                        autoFocusOnLoad={false}
+                        // autoFocusOnLoad={false}
                         codeInputFieldStyle={styles.underlineStyleBase}
                         codeInputHighlightStyle={styles.underlineStyleHighLighted}
                     />
