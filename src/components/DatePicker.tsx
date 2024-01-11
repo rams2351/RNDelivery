@@ -51,9 +51,6 @@ const DatePicker = (props: IDatePickerProps) => {
         onChangeValue(DateFormatter(e))
     }, [])
 
-    //@ts-ignore
-    console.log(errors['dob']?.ref?.name === 'dob', 'in date picker')
-
 
     return (
         <>
