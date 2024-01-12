@@ -6,17 +6,18 @@ export const colors = {
     colorBlack: '#000',
     colorBlackText: "#061D32",
     colorD: "rgba(0,0,0,0.5)",
-    colorRed: "#FF3B3B",
+    colorRed: "rgba(250, 74, 12, 1)",
     colorBackground: "rgba(242, 242, 242, 1)",
     colorTextInputBackground: "#F6F6F6",
     colorGreyText: "#C2C2C2",
     colorPlaceholder: "#7D7F85",
     transparent: "transparent",
     colorGreyInactive: "#797979",
-    colorGreyMore: "#A5A5A5",
+    colorGreyMore: "rgba(173, 173, 175, 1)",
     colorTextPlaceholder: '#9A9A9A',
     colorErrorRed: '#C93F34',
     colorLink: '#0e559c',
-    colorFocus:'rgba(255, 151, 68, 1)'
+    colorFocus: 'rgba(255, 151, 68, 1)',
+
 
 }

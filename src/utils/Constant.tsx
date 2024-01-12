@@ -8,5 +8,8 @@ export const AuthScreens = {
 }
 
 export const DashboardScreens = {
-    HOME: 'home'
+    HOME: 'home',
+    FAVORITE: 'favorite',
+    PROFILE: 'profile',
+    ORDERS: 'orders'
 }

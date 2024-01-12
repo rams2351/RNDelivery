@@ -5,9 +5,11 @@ import { Form, FormProvider, useForm } from 'react-hook-form'
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useDispatch } from 'react-redux'
 import Button from 'src/components/Button'
 import DatePicker from 'src/components/DatePicker'
 import RnInput from 'src/components/RnInput'
+import { actions } from 'src/redux/slices/reducer'
 import { scaler } from 'utils/Scaler'
 import * as yup from 'yup'
 //@ts-ignore
@@ -20,6 +22,7 @@ const formSchema = yup.object().shape({
 })
 
 const SignUp = () => {
+    const dispatch = useDispatch()
 
     const methods = useForm({
         mode: 'onSubmit',
@@ -30,7 +33,7 @@ const SignUp = () => {
 
     const handleSubmits = useCallback((data: any) => {
         console.log(data, 'in fn');
-
+        dispatch(actions.setLogin(true))
     }, [])
 
     return (
