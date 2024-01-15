@@ -19,17 +19,12 @@ interface IApiResponse {
     [key: string]: any
 }
 
-const Config = {
-    BASE_URL: config.BASE_URL,
-    API_VERSION: '/api/v1/',
-    APP_VERSION: 0.1
-}
+
 
 export const TOKEN_EXPIRED: MutableRefObject<boolean | null> = React.createRef()
 
 
 function interceptResponse(response: AxiosResponse<any>): any {
-    console.log(config.NOCO_DB_TOKEN, 'hello');
 
     try {
         if (JSON.stringify(response.data).startsWith("<") || JSON.stringify(response.data).startsWith("\"<")) {
@@ -52,11 +47,11 @@ function interceptResponse(response: AxiosResponse<any>): any {
 }
 
 const api = axios.create({
-    baseURL: Config.BASE_URL + Config.API_VERSION,
+    baseURL: config.BASE_URL,
     timeout: 1000 * 30,
     headers: {
         'Accept': "application/json",
-        'X-Platform-Type': 'app',
+        // 'X-Platform-Type': 'app',
         // 'APP-VERSION': Config.APP_VERSION,
         'xc-auth': config.NOCO_DB_TOKEN
     }
@@ -94,9 +89,10 @@ async function callApi(url: string, method?: Method, body?: any) {
     try {
         const header = {
             "Content-Type": (isMultipart) ? "multipart/form-data" : "application/json",
-            Authorization: authToken ? ("Bearer " + authToken) : undefined,
+            // Authorization: authToken ? ("Bearer " + authToken) : undefined,
             "X-Platform-Type": 'android',
-            "Accept-Language": 'en'
+            "Accept-Language": 'en',
+            'xc-token': config.XC_TOKEN,
         }
         return apiRequest(url, header as any, body, method)
     } catch (error: any) {
@@ -106,5 +102,5 @@ async function callApi(url: string, method?: Method, body?: any) {
 
 
 export const testing = () => {
-    callApi('vw6bdfrm92pcnguv', 'GET')
+    return callApi('vw6bdfrm92pcnguv', 'GET')
 }

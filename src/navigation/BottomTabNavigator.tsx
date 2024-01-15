@@ -83,7 +83,8 @@ const styles = StyleSheet.create({
         borderTopWidth: 0,
         shadowColor: colors.colorGreyMore,
         shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 1,
-        shadowRadius: 15
+        shadowOpacity: 0,
+        shadowRadius: 15,
+        backfaceVisibility: 'hidden'
     }
 })
