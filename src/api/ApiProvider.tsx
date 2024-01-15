@@ -29,7 +29,7 @@ export const TOKEN_EXPIRED: MutableRefObject<boolean | null> = React.createRef()
 
 
 function interceptResponse(response: AxiosResponse<any>): any {
-    console.log(response, 'hello');
+    console.log(config.NOCO_DB_TOKEN, 'hello');
 
     try {
         if (JSON.stringify(response.data).startsWith("<") || JSON.stringify(response.data).startsWith("\"<")) {
@@ -58,7 +58,7 @@ const api = axios.create({
         'Accept': "application/json",
         'X-Platform-Type': 'app',
         // 'APP-VERSION': Config.APP_VERSION,
-        'xc-auth': config.TOKEN
+        'xc-auth': config.NOCO_DB_TOKEN
     }
 });
 

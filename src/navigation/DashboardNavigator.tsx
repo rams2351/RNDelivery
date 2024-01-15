@@ -14,8 +14,11 @@ const DashboardScreensArray = [
 const DashboardNavigator = () => {
     const StackNavigator = createStackNavigator();
     return (
-        <StackNavigator.Navigator screenOptions={{}} initialRouteName='BottomNavigation' >
-            {DashboardScreensArray.map((d, i) => (<StackNavigator.Screen name={d.name} component={d.component} key={i} />))}
+        <StackNavigator.Navigator screenOptions={{
+            headerShown: false,
+        }} initialRouteName='BottomNavigation' >
+            {DashboardScreensArray.map((d, i) => (<StackNavigator.Screen name={d.name}
+                component={d.component} key={i} />))}
         </StackNavigator.Navigator>
 
     )

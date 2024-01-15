@@ -1,11 +1,18 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useDispatch } from 'react-redux'
+import { actions } from 'src/redux/slices/reducer'
 
 const Favorite = () => {
+    const dispatch = useDispatch()
     return (
-        <View>
-            <Text>Favorite</Text>
-        </View>
+        <SafeAreaView>
+
+            <TouchableOpacity onPress={() => dispatch(actions.setLogin(false))}>
+                <Text>Favorite</Text>
+            </TouchableOpacity>
+        </SafeAreaView>
     )
 }
 

@@ -39,7 +39,7 @@ const BottomTabNavigator = () => {
 
     return (
         <BottomNavigator.Navigator initialRouteName={DashboardScreens.HOME} screenOptions={{
-            tabBarStyle: { backgroundColor: colors.colorBackground, borderTopWidth: 0 },
+            tabBarStyle: styles.tabBarContainer,
             tabBarShowLabel: false,
             headerShown: false
         }}>
@@ -74,6 +74,14 @@ const styles = StyleSheet.create({
     },
     focusedIcon: {
         shadowColor: colors.colorRed,
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 1,
+        shadowRadius: 15
+    },
+    tabBarContainer: {
+        backgroundColor: colors.colorBackground,
+        borderTopWidth: 0,
+        shadowColor: colors.colorGreyMore,
         shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 1,
         shadowRadius: 15

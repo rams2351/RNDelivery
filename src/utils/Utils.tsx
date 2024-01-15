@@ -31,3 +31,19 @@ export function DateFormatter(inputDate: string | Date) {
     return `${day}/${month}/${year}`;
 }
 
+
+export const CurrencyFormatter = (price: string | number) => {
+    let curr = new Intl.NumberFormat('en-INR', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 2,
+    })
+    let newCurr = price
+    if (typeof (price) === 'string') {
+        newCurr = parseInt(price)
+    }
+
+    return curr.format(newCurr as number) ?? newCurr
+}
+
+
