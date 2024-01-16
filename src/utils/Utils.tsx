@@ -46,4 +46,9 @@ export const CurrencyFormatter = (price: string | number) => {
     return curr.format(newCurr as number) ?? newCurr
 }
 
+export const NameFormatter = (name: string) => {
+    let newStr = name[0].toUpperCase()
+    return newStr + name.slice(1)
+}
+
 

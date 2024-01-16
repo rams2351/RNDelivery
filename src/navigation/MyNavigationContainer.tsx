@@ -1,4 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack'
+import { colors } from 'assets'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import OtpScreen from 'screens/auth/Otp/GetOtp'
@@ -40,8 +41,15 @@ const Navigator = () => {
         <>
             {isLoading ? <Loader /> : null}
             {isLogin ? <DashboardNavigator /> : (
-                <AuthStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={AuthScreens.GET_STARTED_SCREEN}>
-                    {AuthScreensArray.map((d, i) => (<AuthStack.Screen name={d.name} component={d.component} key={i} />))}
+                <AuthStack.Navigator
+                    screenOptions={{
+                        headerShown: false,
+                        cardStyle: { backgroundColor: colors.colorBackground }
+                    }} initialRouteName={AuthScreens.GET_STARTED_SCREEN}>
+                    {AuthScreensArray.map((d, i) => (<AuthStack.Screen
+                        name={d.name}
+                        component={d.component}
+                        key={i} />))}
                 </AuthStack.Navigator>
             )}
         </>

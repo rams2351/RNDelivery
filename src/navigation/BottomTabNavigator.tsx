@@ -7,10 +7,10 @@ import UserSvg from 'assets/svg/UserSvg'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import Home from 'screens/Dashboard/Home'
-import Favorite from 'screens/Favorite/Favorite'
+import Favorite from 'screens/Favorite/Fovorite'
 import Orders from 'screens/Orders/Orders'
 import Profile from 'screens/Profile/Profile'
-import { DashboardScreens, scaler } from 'utils'
+import { DashboardScreens, NameFormatter, scaler } from 'utils'
 
 const BottomNavigationScreenArray = [
     {
@@ -38,11 +38,12 @@ const BottomTabNavigator = () => {
     const BottomNavigator = createBottomTabNavigator();
 
     return (
-        <BottomNavigator.Navigator initialRouteName={DashboardScreens.HOME} screenOptions={{
-            tabBarStyle: styles.tabBarContainer,
-            tabBarShowLabel: false,
-            headerShown: false
-        }}>
+        <BottomNavigator.Navigator initialRouteName={DashboardScreens.HOME}
+            screenOptions={{
+                tabBarStyle: styles.tabBarContainer,
+                tabBarShowLabel: false,
+                headerStyle: { backgroundColor: colors.colorBackground, borderWidth: 0, borderBottomColor: colors.colorBackground }
+            }}>
             {BottomNavigationScreenArray.map((d, i) => (
                 <BottomNavigator.Screen
                     key={i}
@@ -51,7 +52,9 @@ const BottomTabNavigator = () => {
                     options={({ navigation }) => {
                         const index = navigation.getState().index
                         return {
-                            tabBarIcon: () => <View style={[styles.iconsContainer, index === i ? styles.focusedIcon : {}]} >{d.icon({ color: index === i ? colors.colorRed : colors.colorGreyMore })}</View>
+                            tabBarIcon: () => <View style={[styles.iconsContainer, index === i ? styles.focusedIcon : {}]} >{d.icon({ color: index === i ? colors.colorRed : colors.colorGreyMore })}</View>,
+                            title: NameFormatter(d.name),
+
                         }
                     }}
                 />))}
@@ -85,6 +88,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0,
         shadowRadius: 15,
-        backfaceVisibility: 'hidden'
+        backfaceVisibility: 'hidden',
     }
 })

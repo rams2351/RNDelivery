@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         // paddingLeft: scaler(35),
-        paddingTop: scaler(50)
+        // paddingTop: scaler(50)
     },
     deliciousText: {
         fontSize: scaler(35),
@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     logoTextContainer: {
         display: 'flex',
         flexDirection: 'row',
-        marginTop: scaler(8),
         paddingHorizontal: scaler(20)
     }
 })

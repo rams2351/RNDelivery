@@ -6,15 +6,15 @@ import Button from 'src/components/Button'
 import { actions } from 'src/redux/slices/reducer'
 import { scaler } from 'utils'
 
-const Profile = () => {
+const Favorite = () => {
     const dispatch = useDispatch()
     return (
         <View style={{ backgroundColor: colors.colorBackground, flex: 1 }}>
             <View style={styles.container}>
 
-                <Image source={Images.user} style={styles.image} />
-                <Text style={styles.text}>No User yet</Text>
-                <Text numberOfLines={2} style={styles.textDescription}>Hit the orange button down below to create an order</Text>
+                <Image source={Images.heart} style={styles.image} />
+                <Text style={styles.text}>No Favorites yet</Text>
+                <Text numberOfLines={2} style={styles.textDescription}>Hit the orange button down below to add Favorite</Text>
 
             </View>
             <Button
@@ -22,7 +22,7 @@ const Profile = () => {
                     dispatch(actions.setUserData(null))
                     dispatch(actions.setLogin(false))
                 }}
-                title={'Login'}
+                title={'Add to Favorites'}
                 buttonStyle={{
                     marginHorizontal: scaler(20),
                     marginBottom: scaler(20)
@@ -32,15 +32,14 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default Favorite
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-
+        justifyContent: 'center'
     },
     image: {
         height: scaler(100),

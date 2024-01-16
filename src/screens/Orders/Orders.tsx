@@ -1,35 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
-import { requestLocationPermission } from 'utils/GeoLocation';
+import { colors, Images } from 'assets'
+import React from 'react'
+import { Image, StyleSheet, Text, View } from 'react-native'
+import { useDispatch } from 'react-redux'
+import Button from 'src/components/Button'
+import { scaler } from 'utils'
 
-const Orders = () => {
-    const [location, setLocation] = useState<any>(null)
-    useEffect(() => {
-        async function fetchLocation() {
-            const hasPermission = await requestLocationPermission();
-            if (hasPermission) {
-                const hello = Geolocation.getCurrentPosition(
-                    position => {
-                        const { latitude, longitude } = position.coords;
-                        setLocation({ latitude, longitude })
-                    },
-                    error => Alert.alert('Error', JSON.stringify(error)),
-                    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-                );
-            }
-        }
-
-        fetchLocation();
-    }, [])
+const Orders = ({ navigation }: any) => {
+    const dispatch = useDispatch()
     return (
-        <View style={{ marginTop: 50 }}>
-            <TouchableOpacity>
+        <View style={{ backgroundColor: colors.colorBackground, flex: 1 }}>
+            <View style={styles.container}>
 
-                <Text>Orders {location?.latitude}</Text>
-            </TouchableOpacity>
+                <Image source={Images.ic_order_bg} style={styles.image} />
+                <Text style={styles.text}>No Orders yet</Text>
+                <Text numberOfLines={2} style={styles.textDescription}>Hit the orange button down below to create an order</Text>
+
+            </View>
+            <Button
+                onPressButton={() => {
+                    navigation.push('other')
+                }}
+                title={'Start ordering'}
+                buttonStyle={{
+                    marginHorizontal: scaler(20),
+                    marginBottom: scaler(20)
+                }}
+            />
         </View>
     )
 }
 
 export default Orders
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    image: {
+        height: scaler(100),
+        width: scaler(100),
+    },
+    text: {
+        fontSize: scaler(25),
+        fontWeight: '700',
+        color: colors.colorBlackText,
+        marginTop: scaler(10)
+    },
+    textDescription: {
+        paddingHorizontal: scaler(70),
+        textAlign: 'center',
+        marginTop: scaler(15),
+        fontSize: scaler(14),
+        // fontWeight: '600',
+        color: colors.colorGreyMore
+    }
+})
