@@ -1,11 +1,20 @@
 export interface AppState {
-     auth:AuthSlice
+    auth: AuthSlice,
+    extra: ExtraSlice,
+    user:UserSlice
 }
 
 
 export interface AuthSlice {
-    user: any
     isLogin: boolean;
+}
+
+export interface ExtraSlice{
+    loading: boolean;
+}
+
+export interface UserSlice{
+    user: any;
 }
 
 export interface Action<P = any, T = any> {

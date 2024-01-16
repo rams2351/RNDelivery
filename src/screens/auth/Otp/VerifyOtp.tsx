@@ -8,6 +8,7 @@ import { colors } from 'src/assets/Colors'
 import { Images } from 'src/assets/image'
 import Button from 'src/components/Button'
 import { actions } from 'src/redux/slices/reducer'
+import { AppState } from 'src/types/interface'
 import { AuthScreens } from 'utils/Constant'
 import { scaler } from 'utils/Scaler'
 
@@ -24,18 +25,25 @@ const VerifyOtp = ({ route, navigation }: any) => {
     const [loading, setLoading] = useState<boolean>(false)
     const phone = route?.params?.phone?.slice(3)
     const dispatch = useDispatch()
-    const state = useSelector((state: any) => state.auth)
-    console.log(state)
 
+
+    const { userData } = useSelector((state: AppState) => {
+        return {
+            userData: state.user.user
+        }
+    })
     const getOtpHandler = useCallback((otp: string) => {
-        console.log(otp);
         if (otp === '1234') {
-            dispatch(actions.setLogin(true))
-            navigation.push(AuthScreens.SIGN_UP)
+            // dispatch(actions.setLogin(true))
+            if (userData?.Id) {
+                dispatch(actions.setLogin(true))
+            } else {
+                navigation.push(AuthScreens.SIGN_UP, { phone: route?.params?.phone })
+            }
         } else {
 
         }
-    }, [])
+    }, [userData])
     return (
         <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
             <View
@@ -59,10 +67,9 @@ const VerifyOtp = ({ route, navigation }: any) => {
                         style={{ width: '90%', height: scaler(100) }}
                         pinCount={4}
                         code={otp.value}
-
                         editable
                         onCodeChanged={code => setOtp((d) => ({ disable: code.length == 4 ? false : true, value: code }))}
-                        // autoFocusOnLoad={false}
+                        autoFocusOnLoad={false}
                         codeInputFieldStyle={styles.underlineStyleBase}
                         codeInputHighlightStyle={styles.underlineStyleHighLighted}
                     />

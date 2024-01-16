@@ -1,17 +1,24 @@
 import React, { useEffect } from 'react';
-import { Text, View } from 'react-native';
-import { testing } from "src/api";
+import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { actions } from 'src/redux/slices/reducer';
 
 const Profile = () => {
-
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        testing()
+
     }, [])
     return (
-        <View>
-            <Text>Profile</Text>
-        </View>
+        <SafeAreaView>
+
+            <View>
+                <TouchableOpacity onPress={() => dispatch(actions.validateUser(`(phone,eq,9001547465)`))}>
+
+                    <Text>Profile</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
     )
 }
 

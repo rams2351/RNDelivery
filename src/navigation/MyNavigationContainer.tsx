@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import OtpScreen from 'screens/auth/Otp/GetOtp'
 import VerifyOtp from 'screens/auth/Otp/VerifyOtp'
 import SignUp from 'screens/auth/Signup/SignUp'
+import Loader from 'src/components/Loader'
 import GetStartScreen from 'src/screens/auth/Starting'
 import { AppState } from 'src/types/interface'
 import { AuthScreens } from 'utils'
@@ -28,11 +29,17 @@ const AuthScreensArray = [
 ]
 
 const Navigator = () => {
-    const IS_LOGIN = useSelector((state: AppState) => state.auth.isLogin)
     const AuthStack = createStackNavigator()
+    const { isLoading, isLogin } = useSelector((state: AppState) => {
+        return {
+            isLoading: state.extra.loading,
+            isLogin: state.auth.isLogin
+        }
+    })
     return (
         <>
-            {IS_LOGIN ? <DashboardNavigator /> : (
+            {isLoading ? <Loader /> : null}
+            {isLogin ? <DashboardNavigator /> : (
                 <AuthStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={AuthScreens.GET_STARTED_SCREEN}>
                     {AuthScreensArray.map((d, i) => (<AuthStack.Screen name={d.name} component={d.component} key={i} />))}
                 </AuthStack.Navigator>

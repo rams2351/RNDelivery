@@ -9,7 +9,10 @@ const Favorite = () => {
     return (
         <SafeAreaView>
 
-            <TouchableOpacity onPress={() => dispatch(actions.setLogin(false))}>
+            <TouchableOpacity onPress={() => {
+                dispatch(actions.setUserData(null))
+                dispatch(actions.setLogin(false))
+            }}>
                 <Text>Favorite</Text>
             </TouchableOpacity>
         </SafeAreaView>

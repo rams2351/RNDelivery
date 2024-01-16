@@ -1,6 +1,6 @@
 import { colors, Images } from 'assets'
 import React, { useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ItemDisplayCard from 'src/components/DisplayCard'
 import CategoryTab from 'src/components/home/CategoryTab'
@@ -38,7 +38,7 @@ const Home = () => {
                         img={Images.ic_food_1}
                         title={'hello this is food item'}
                         price={'2100'}
-                        onPressItem={(e) => console.log('firstly pressed item', e)}
+                        onPressItem={(e) => Linking.openSettings()}
                     />
                     <ItemDisplayCard
                         img={Images.ic_food_2}

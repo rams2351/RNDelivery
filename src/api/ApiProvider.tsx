@@ -1,8 +1,7 @@
 import axios, { AxiosRequestHeaders, AxiosResponse, InternalAxiosRequestConfig, Method } from "axios";
 import React, { MutableRefObject } from "react";
-import { _showErrorMessage } from "utils";
-
 import { config } from "./config";
+
 
 interface header extends AxiosRequestHeaders {
     Accept?: string;
@@ -24,83 +23,89 @@ interface IApiResponse {
 export const TOKEN_EXPIRED: MutableRefObject<boolean | null> = React.createRef()
 
 
-function interceptResponse(response: AxiosResponse<any>): any {
-
+function interceptResponse(res: AxiosResponse<any, any>): any {
     try {
-        if (JSON.stringify(response.data).startsWith("<") || JSON.stringify(response.data).startsWith("\"<")) {
-            // DeviceEventEmitter.emit('STOP_LOADER_EVENT');
+        if (JSON.stringify(res?.data).startsWith("<") || JSON.stringify(res?.data).startsWith("\"<")) {
             setTimeout(() => {
-                _showErrorMessage('Internal Server Error')
-            }, 500);
-        } else if (response?.data?.status == 401) {
+                console.log('if');
+                console.log('Internal Server Error')
+            }, 500)
+        } else if (res?.data?.status == 401) {
+            console.log('else if');
+
             if (!TOKEN_EXPIRED.current) {
                 TOKEN_EXPIRED.current = true
-                // DeviceEventEmitter.emit("TOKEN_EXPIRED")
-                _showErrorMessage(response?.data?.message)
             }
-        } else {
-            return response?.data
         }
-    } finally {
-
+        else {
+            return res?.data
+        }
     }
+    finally {
+    }
+
+
 }
 
 const api = axios.create({
     baseURL: config.BASE_URL,
     timeout: 1000 * 30,
     headers: {
-        'Accept': "application/json",
-        // 'X-Platform-Type': 'app',
-        // 'APP-VERSION': Config.APP_VERSION,
-        'xc-auth': config.NOCO_DB_TOKEN
+        'cache-control': 'no-cache',
+        'xc-token': config.XC_TOKEN,
     }
 });
 
 
 api.interceptors.request.use(async function (requestConfig: InternalAxiosRequestConfig<any>) {
-    return requestConfig
+    const isMultipart = (requestConfig.data && requestConfig.data instanceof FormData) ? true : false
+
+    try {
+        if (requestConfig.headers) {
+            requestConfig.headers['Content-Type'] = (isMultipart) ? "multipart/form-data" : "application/json"
+        }
+    } finally {
+        return requestConfig
+    }
 })
 
 api.interceptors.response.use(
     async function (response) {
         //@ts-ignore
-        return interceptResponse.call(response)
+        return interceptResponse(response)
     },
     async function (error) {
         //@ts-ignore
-        return interceptResponse.call(error?.response)
+        return interceptResponse(error?.response)
     }
 );
+const objectToParamString = (obj: any) => {
+    return (obj) ? Object.entries(obj).map(([k, v]: any) => v ? (`${k}=${encodeURIComponent(v)}`) : "").join("&") : '';
+}
 
-async function apiRequest(url: string, header: header, body: any, method?: Method): Promise<IApiResponse> {
+export async function callApi(url: string, method?: Method, body?: any): Promise<IApiResponse> {
+    if (method == 'GET' && body) {
+        url = url + '?' + objectToParamString(body)
+        body = undefined
+    }
     return api.request({
-        method,
-        url,
+        method: method,
+        url: url,
         data: body,
-        headers: header,
-        params: { offset: '0', limit: '25', where: '' }
     })
 }
 
-async function callApi(url: string, method?: Method, body?: any) {
-    const isMultipart = (body && body instanceof FormData) ? true : false
-    const authToken = ''
-    try {
-        const header = {
-            "Content-Type": (isMultipart) ? "multipart/form-data" : "application/json",
-            // Authorization: authToken ? ("Bearer " + authToken) : undefined,
-            "X-Platform-Type": 'android',
-            "Accept-Language": 'en',
-            'xc-token': config.XC_TOKEN,
-        }
-        return apiRequest(url, header as any, body, method)
-    } catch (error: any) {
-        throw new Error(error)
-    }
-}
+
 
 
 export const testing = () => {
     return callApi('vw6bdfrm92pcnguv', 'GET')
+}
+
+export const _validateUser = (body: any) => {
+    return callApi('vw6bdfrm92pcnguv/find-one?where=', 'GET', { where: body })
+}
+
+export const _addUser = async (body: any) => {
+    return callApi('vw6bdfrm92pcnguv', 'POST', body)
 }

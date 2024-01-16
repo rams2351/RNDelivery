@@ -2,9 +2,11 @@ import React, { useCallback, useState } from 'react'
 import { Image, Platform, StyleSheet, Text, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useDispatch } from 'react-redux'
 import { colors, Images } from 'src/assets'
 import Button from 'src/components/Button'
 import RNPhoneInput from 'src/components/PhoneInput'
+import { actions } from 'src/redux/slices/reducer'
 import { AuthScreens } from 'utils/Constant'
 import { scaler } from 'utils/Scaler'
 
@@ -20,12 +22,19 @@ const GetOtpScreen = ({ navigation }: any) => {
         }
     })
 
+    const dispatch = useDispatch()
+
     const phoneHandler = useCallback((text: string) => {
         setMobile((_) => ({ value: text, disable: text.length <= 12 ?? false }))
     }, [])
 
     const getOtpHandler = useCallback((phone: string) => {
-        navigation.push(AuthScreens.VERIFY_OTP, { phone })
+        let ph = phone
+        if (phone.length === 10) {
+            ph = '+91' + phone
+        }
+        dispatch(actions.validateUser(`(phone,eq,${ph.slice(3)})`))
+        navigation.push(AuthScreens.VERIFY_OTP, { phone: ph })
     }, [])
 
     return (

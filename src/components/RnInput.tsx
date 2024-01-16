@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         marginLeft: scaler(5)
     },
     errorContainer: {
-        marginBottom: scaler(10)
+        marginBottom: scaler(20)
     },
     errorMsg: {
         color: colors.colorErrorRed,

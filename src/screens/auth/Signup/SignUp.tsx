@@ -1,8 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { colors, Images } from 'assets'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Form, FormProvider, useForm } from 'react-hook-form'
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import Geolocation from 'react-native-geolocation-service'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch } from 'react-redux'
@@ -10,8 +11,10 @@ import Button from 'src/components/Button'
 import DatePicker from 'src/components/DatePicker'
 import RnInput from 'src/components/RnInput'
 import { actions } from 'src/redux/slices/reducer'
+import { requestLocationPermission } from 'utils/GeoLocation'
 import { scaler } from 'utils/Scaler'
 import * as yup from 'yup'
+
 //@ts-ignore
 
 const formSchema = yup.object().shape({
@@ -21,20 +24,49 @@ const formSchema = yup.object().shape({
     dob: yup.string().required('Date of birth is required!')
 })
 
-const SignUp = () => {
-    const dispatch = useDispatch()
+const SignUp = (props: any) => {
+    const { route, navigation } = props
 
+    const [location, setLocation] = useState<any>(null)
+    const dispatch = useDispatch()
+    const code = route?.params?.phone?.slice(0, 3)
+    const phone = route?.params?.phone?.slice(3)
     const methods = useForm({
         mode: 'onSubmit',
         resolver: yupResolver(formSchema)
     })
-    const { getValues, handleSubmit } = methods
-    // console.log(getValues());
+    const { handleSubmit } = methods
 
     const handleSubmits = useCallback((data: any) => {
-        console.log(data, 'in fn');
-        dispatch(actions.setLogin(true))
+        // dispatch(actions.setLogin(true))
+        const payload = {
+            ...data,
+            phone,
+            countryCode: code,
+            address: location
+        }
+        console.log(payload)
+        // return
+        dispatch(actions.signUpUser(payload))
+    }, [location])
+
+    useEffect(() => {
+        async function fetchLocation() {
+            const hasPermission = await requestLocationPermission()
+            if (hasPermission) {
+                Geolocation.getCurrentPosition(
+                    position => {
+                        const { latitude, longitude } = position.coords;
+                        setLocation({ latitude, longitude })
+                    },
+                    error => Alert.alert('Error', JSON.stringify(error)),
+                    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+                );
+            }
+        }
+        fetchLocation()
     }, [])
+
 
     return (
         <SafeAreaView edges={['top']} style={styles.safeAreaContainer} >
@@ -97,7 +129,7 @@ const SignUp = () => {
                             <TouchableOpacity><Text style={[styles.alreadyAccount, { fontSize: scaler(16), marginBottom: scaler(0), color: colors.colorPrimary, marginLeft: scaler(2) }]}>Login</Text></TouchableOpacity>
                         </View> */}
 
-                                        <Button title="Sign up" onPressButton={submit} />
+                                        <Button title="Continue" onPressButton={submit} />
                                     </View>
                                 </>)
                             }}
