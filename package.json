@@ -35,7 +35,7 @@
     "react-native-screens": "^3.29.0",
     "react-native-size-matters": "^0.4.2",
     "react-native-svg": "^14.1.0",
-    "react-native-toast-message": "^2.2.0",
+    "react-native-toast-notifications": "^3.4.0",
     "react-native-ultimate-config": "^6.0.1",
     "react-native-vector-icons": "^10.0.3",
     "react-redux": "^9.0.4",

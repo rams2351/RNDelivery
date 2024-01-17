@@ -1,12 +1,20 @@
-import { colors, Images } from 'assets'
-import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
-import { useDispatch } from 'react-redux'
-import Button from 'src/components/Button'
-import { scaler } from 'utils'
+import { colors, Images } from 'assets';
+import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
+import { useDispatch } from 'react-redux';
+import Button from 'src/components/Button';
+import { scaler } from 'src/utils/Scaler';
+import { _showInfoMessage } from 'utils';
 
 const Orders = ({ navigation }: any) => {
     const dispatch = useDispatch()
+    const toast = useToast()
+
+    const showToast = () => {
+        _showInfoMessage('hello success')
+    }
+
     return (
         <View style={{ backgroundColor: colors.colorBackground, flex: 1 }}>
             <View style={styles.container}>
@@ -17,9 +25,12 @@ const Orders = ({ navigation }: any) => {
 
             </View>
             <Button
-                onPressButton={() => {
-                    navigation.push('other')
-                }}
+                // onPressButton={() => Toast.show({
+                //     type: 'success',
+                //     text1: 'Hello',
+                //     text2: 'This is some something 👋'
+                // })}
+                onPressButton={showToast}
                 title={'Start ordering'}
                 buttonStyle={{
                     marginHorizontal: scaler(20),

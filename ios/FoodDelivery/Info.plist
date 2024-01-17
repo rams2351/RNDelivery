@@ -30,9 +30,8 @@
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
-
 		<key>NSLocationWhenInUseUsageDescription</key>
-<string>Please add location for delivery</string>
+		<string>Please add location for delivery</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>

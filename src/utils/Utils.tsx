@@ -1,24 +1,15 @@
-import Toast from 'react-native-toast-message';
+import { Toast } from "react-native-toast-notifications"
 
 export const _showSuccessMessage = (msg: string) => {
-    Toast.show({
-        type: 'success',
-        text1: msg
-    })
+    Toast.show(msg, { type: 'success' })
 }
 
 export const _showErrorMessage = (msg: string) => {
-    Toast.show({
-        type: 'error',
-        text1: msg
-    })
+    Toast.show(msg, { type: 'danger' })
 }
 
 export const _showInfoMessage = (msg: string) => {
-    Toast.show({
-        type: 'info',
-        text1: msg
-    })
+    Toast.show(msg)
 }
 
 export function DateFormatter(inputDate: string | Date) {

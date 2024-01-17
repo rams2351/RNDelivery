@@ -3,7 +3,6 @@ import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import Button from 'src/components/Button'
-import { actions } from 'src/redux/slices/reducer'
 import { scaler } from 'utils'
 
 const Favorite = () => {
@@ -19,8 +18,7 @@ const Favorite = () => {
             </View>
             <Button
                 onPressButton={() => {
-                    dispatch(actions.setUserData(null))
-                    dispatch(actions.setLogin(false))
+
                 }}
                 title={'Add to Favorites'}
                 buttonStyle={{

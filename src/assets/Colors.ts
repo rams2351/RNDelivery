@@ -19,6 +19,7 @@ export const colors = {
     colorErrorRed: '#C93F34',
     colorLink: '#0e559c',
     colorFocus: 'rgba(255, 151, 68, 1)',
+    colorSuccess:'rgba(91, 199, 53, 1)'
 
 
 }
