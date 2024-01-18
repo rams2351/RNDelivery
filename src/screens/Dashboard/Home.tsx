@@ -1,13 +1,15 @@
 import { colors, Images } from 'assets/alllll'
 import React, { useEffect, useState } from 'react'
-import { Image, Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
-import ItemDisplayCard from 'src/components/DisplayCard'
 import CategoryTab from 'src/components/home/CategoryTab'
 import SearchBar from 'src/components/home/SearchBar'
+import ItemDisplayCard from 'src/components/ItemDisplayCard'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
+import { DashboardScreens } from 'utils/Constant'
+import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
 const Home = () => {
@@ -45,15 +47,14 @@ const Home = () => {
                 <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    style={{}}
                     contentContainerStyle={{ paddingHorizontal: 30 }}
                 >
                     {products.map((d, i) => (<ItemDisplayCard
                         key={i}
-                        img={d?.img[0].signedUrl}
+                        img={d.img[0].signedUrl}
                         title={d.name}
                         price={d?.price}
-                        onPressItem={(e) => Linking.openSettings()}
+                        onPressItem={(e) => NavigationService.push(DashboardScreens.PRODUCT_DETAIL, { id: d?.Id })}
                     />))}
 
                 </ScrollView>

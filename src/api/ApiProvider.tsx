@@ -1,5 +1,8 @@
 import axios, { AxiosRequestHeaders, AxiosResponse, Method } from "axios";
 import React, { MutableRefObject } from "react";
+import { AuthScreens } from "utils/Constant";
+import { NavigationService } from "utils/NavigationService";
+import { _showErrorMessage } from "utils/Utils";
 import { config } from "./config";
 
 
@@ -32,7 +35,8 @@ function interceptResponse(res: AxiosResponse) {
             }, 500)
         } else if (res?.data?.status == 401) {
             console.log('else if');
-
+            _showErrorMessage('Unauthorize please login with your credentials!')
+            NavigationService.navigate(AuthScreens.GET_STARTED_SCREEN)
             if (!TOKEN_EXPIRED.current) {
                 TOKEN_EXPIRED.current = true
             }

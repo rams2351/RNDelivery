@@ -38,5 +38,6 @@ function* getProductDetail({ payload }: Action<any>):Generator<any,any,any> {
 
 
 export default function* watchProducts() {
-    yield takeLeading(actions.getAllProducts.toString(),getAllProducts)
+    yield takeLeading(actions.getAllProducts.toString(), getAllProducts)
+    yield takeLeading(actions.getProductDetail.toString(),getProductDetail)
 }

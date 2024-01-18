@@ -19,7 +19,7 @@ const Favorite = () => {
             </View>
             <Button
                 onPressButton={() => {
-                    dispatch(actions.getAllProducts())
+                    dispatch(actions.getProductDetail(`(Id,eq,${1})`))
                 }}
                 title={'Add to Favorites'}
                 buttonStyle={{

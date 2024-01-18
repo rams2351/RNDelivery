@@ -12,7 +12,7 @@ const persistConfig: PersistConfig<any> = {
     version: 1,
     // storage: new MMKVLoader().withEncryption().initialize(),
     storage: new MMKVLoader().initialize(),
-    whitelist:['auth']
+    whitelist:['auth','user','products']
 }
 
 const rootReducer :any = combineReducers({

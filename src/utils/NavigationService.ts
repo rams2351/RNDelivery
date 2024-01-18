@@ -11,7 +11,6 @@ const navigate = (name: string, params: any = {}, merge: boolean = true) => {
 };
 
 const push = (name: string, params: any = {}) => {
-    console.log(navigationRef,'in push');
     navigationRef?.current?.dispatch(StackActions.push(name, params));
 };
 

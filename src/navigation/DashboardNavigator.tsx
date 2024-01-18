@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import Favorite from 'screens/Favorite/Fovorite'
+import ProductDetail from 'screens/ProductDetail'
 import { DashboardScreens, scaler } from 'utils/all'
 import BottomTabNavigator from './BottomTabNavigator'
 
@@ -12,7 +12,7 @@ const DashboardScreensArray = [
     },
     {
         name: DashboardScreens.PRODUCT_DETAIL,
-        component: Favorite
+        component: ProductDetail
     }
 ]
 

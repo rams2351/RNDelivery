@@ -20,5 +20,6 @@ export const Images = {
     ic_food_4: require('./images/food_4.png'),
     ic_order_bg: require('./images/ordersBg.png'),
     ic_user1: require('./images/User1.png'),
-    ic_left_icon:require('./images/chevron-left.png')
+    ic_left_icon: require('./images/chevron-left.png'),
+    ic_right_icon:require('./images/chevron-right.png')
 }

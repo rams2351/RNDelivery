@@ -13,8 +13,9 @@ interface ItemDisplayCardProp {
 
 const ItemDisplayCard: React.FC<ItemDisplayCardProp> = (props) => {
     const { img, title, onPressItem, price } = props
+
     return (
-        <TouchableOpacity style={styles.container} onPress={onPressItem}>
+        <TouchableOpacity style={styles.container} onPress={onPressItem} activeOpacity={0.6}>
             <Image src={img} style={styles.image} />
             <View style={styles.textContainer}>
                 <Text numberOfLines={3} style={styles.text}>{title}</Text>
