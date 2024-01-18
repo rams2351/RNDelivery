@@ -1,8 +1,8 @@
-import { colors } from 'assets'
+import { colors } from 'assets/alllll'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
-import { scaler } from 'utils'
+import { scaler } from 'utils/all'
 
 const CustomToast = (props: ToastProps) => {
     return (

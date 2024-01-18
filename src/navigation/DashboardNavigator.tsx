@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import Favorite from 'screens/Favorite/Fovorite'
-import { scaler } from 'utils'
+import { DashboardScreens, scaler } from 'utils/all'
 import BottomTabNavigator from './BottomTabNavigator'
 
 const DashboardScreensArray = [
@@ -11,7 +11,7 @@ const DashboardScreensArray = [
         component: BottomTabNavigator
     },
     {
-        name: 'other',
+        name: DashboardScreens.PRODUCT_DETAIL,
         component: Favorite
     }
 ]
@@ -21,7 +21,6 @@ const DashboardNavigator = () => {
     return (
         <StackNavigator.Navigator screenOptions={{
             headerShown: false,
-            cardStyle: { backgroundColor: 'green' }
         }} initialRouteName='BottomNavigation' >
             {DashboardScreensArray.map((d, i) => (
                 <StackNavigator.Screen

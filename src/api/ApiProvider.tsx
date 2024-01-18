@@ -1,4 +1,4 @@
-import axios, { AxiosRequestHeaders, AxiosResponse, InternalAxiosRequestConfig, Method } from "axios";
+import axios, { AxiosRequestHeaders, AxiosResponse, Method } from "axios";
 import React, { MutableRefObject } from "react";
 import { config } from "./config";
 
@@ -23,7 +23,7 @@ interface IApiResponse {
 export const TOKEN_EXPIRED: MutableRefObject<boolean | null> = React.createRef()
 
 
-function interceptResponse(res: AxiosResponse<any, any>): any {
+function interceptResponse(res: AxiosResponse) {
     try {
         if (JSON.stringify(res?.data).startsWith("<") || JSON.stringify(res?.data).startsWith("\"<")) {
             setTimeout(() => {
@@ -42,6 +42,7 @@ function interceptResponse(res: AxiosResponse<any, any>): any {
         }
     }
     finally {
+        return res?.data
     }
 
 
@@ -57,7 +58,7 @@ const api = axios.create({
 });
 
 
-api.interceptors.request.use(async function (requestConfig: InternalAxiosRequestConfig<any>) {
+api.interceptors.request.use(async function (requestConfig) {
     const isMultipart = (requestConfig.data && requestConfig.data instanceof FormData) ? true : false
 
     try {
@@ -71,12 +72,11 @@ api.interceptors.request.use(async function (requestConfig: InternalAxiosRequest
 
 api.interceptors.response.use(
     async function (response) {
-        //@ts-ignore
-        return interceptResponse(response)
+        return interceptResponse.call(response, response)
     },
     async function (error) {
         //@ts-ignore
-        return interceptResponse(error?.response)
+        return await interceptResponse.call(error?.response)
     }
 );
 const objectToParamString = (obj: any) => {
@@ -88,7 +88,9 @@ export async function callApi(url: string, method?: Method, body?: any): Promise
         url = url + '?' + objectToParamString(body)
         body = undefined
     }
-    return api.request({
+
+
+    return await api.request({
         method: method,
         url: url,
         data: body,
@@ -99,13 +101,22 @@ export async function callApi(url: string, method?: Method, body?: any): Promise
 
 
 export const testing = () => {
-    return callApi('vw6bdfrm92pcnguv', 'GET')
+    return callApi('mb53d0474hdwdy8/views/vw6bdfrm92pcnguv', 'GET')
 }
 
 export const _validateUser = (body: any) => {
-    return callApi('vw6bdfrm92pcnguv/find-one?where=', 'GET', { where: body })
+    return callApi('mb53d0474hdwdy8/views/vw6bdfrm92pcnguv/find-one?where=', 'GET', { where: body })
 }
 
 export const _addUser = async (body: any) => {
-    return callApi('vw6bdfrm92pcnguv', 'POST', body)
+    return callApi('mb53d0474hdwdy8/views/vw6bdfrm92pcnguv', 'POST', body)
+}
+
+export const _getAllProducts = async () => {
+    return callApi('msa8dpk9qcum5x5/views/vwijvawnuny1a96u', 'GET')
+}
+
+export const _getProduct = async (body: any) => {
+    return callApi('msa8dpk9qcum5x5/views/vwijvawnuny1a96u/find-one?where=', 'GET', { where: body })
+
 }

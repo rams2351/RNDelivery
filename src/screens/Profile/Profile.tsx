@@ -1,12 +1,13 @@
-import { Images } from 'assets'
+import { Images } from 'assets/alllll'
 import React, { useCallback } from 'react'
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { colors } from 'src/assets/Colors'
 import Card from 'src/components/Card'
 import { actions } from 'src/redux/slices/reducer'
+import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'src/utils/Constant'
-import { scaler } from 'utils'
+import { scaler } from 'utils/all'
 
 const OptionList = [
     {
@@ -34,9 +35,13 @@ const OptionList = [
 
 const Profile = ({ navigation }: any) => {
     const dispatch = useDispatch()
+    const { user } = useSelector((state: AppState) => {
+        return {
+            user: state.user.user
+        }
+    })
 
     const navigationHandler = useCallback((route: string) => {
-        console.log(route, 'in fn')
         if (route === 'logout') {
             dispatch(actions.setUserData(null))
             dispatch(actions.setLogin(false))
@@ -51,9 +56,9 @@ const Profile = ({ navigation }: any) => {
                 <Card cardStyle={styles.imageTextContainer}>
                     <Image source={Images.ic_user1} style={styles.imageContainer} />
                     <View style={styles.textContainer}>
-                        <Text style={styles.textName}>hello name</Text>
-                        <Text style={styles.textDesc}  >Ram@gmail.com  </Text>
-                        <Text style={styles.textDesc}>9001547464</Text>
+                        <Text style={styles.textName}>{user?.firstName + " " + user?.lastName}</Text>
+                        <Text style={styles.textDesc}  >{user?.email} </Text>
+                        <Text style={styles.textDesc}>{"+" + user?.countryCode + " " + user?.phone}</Text>
                         <Text style={styles.textDesc}>1st floor,taj plaza, tdi sector 117,mohali punjab dafdsfadsfadfdfdfdf adfdfdf  adfadfdfdfd</Text>
                     </View>
                 </Card>

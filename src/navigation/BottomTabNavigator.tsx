@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { colors } from 'assets'
+import { colors } from 'assets/alllll'
 import FavoriteSvg from 'assets/svg/FavoriteSvg'
 import HomeSvg from 'assets/svg/HomeSvg'
 import OrdersSvg from 'assets/svg/OrdersSvg'
@@ -10,7 +10,9 @@ import Home from 'screens/Dashboard/Home'
 import Favorite from 'screens/Favorite/Fovorite'
 import Orders from 'screens/Orders/Orders'
 import Profile from 'screens/Profile/Profile'
-import { DashboardScreens, NameFormatter, scaler } from 'utils'
+import { DashboardScreens, NameFormatter, scaler } from 'utils/all'
+
+
 
 const BottomNavigationScreenArray = [
     {

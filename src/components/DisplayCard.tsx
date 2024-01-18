@@ -1,11 +1,11 @@
 import { colors } from 'assets/Colors';
 import React from 'react';
-import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { CurrencyFormatter } from 'utils';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CurrencyFormatter } from 'utils/all';
 import { scaler } from 'utils/Scaler';
 
 interface ItemDisplayCardProp {
-    img: ImageSourcePropType | undefined;
+    img: string;
     title: string;
     price: string;
     onPressItem: (e: any) => void;
@@ -15,7 +15,7 @@ const ItemDisplayCard: React.FC<ItemDisplayCardProp> = (props) => {
     const { img, title, onPressItem, price } = props
     return (
         <TouchableOpacity style={styles.container} onPress={onPressItem}>
-            <Image source={img} style={styles.image} />
+            <Image src={img} style={styles.image} />
             <View style={styles.textContainer}>
                 <Text numberOfLines={3} style={styles.text}>{title}</Text>
                 <Text style={styles.price}>{CurrencyFormatter(price)}</Text>

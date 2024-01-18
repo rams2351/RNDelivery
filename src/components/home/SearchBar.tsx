@@ -1,4 +1,4 @@
-import { colors, Images } from 'assets'
+import { colors, Images } from 'assets/alllll'
 import React from 'react'
 import { Image, StyleSheet, TextInput, View } from 'react-native'
 import { scaler } from 'utils/Scaler'

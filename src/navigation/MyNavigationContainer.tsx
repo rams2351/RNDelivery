@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack'
-import { colors } from 'assets'
+import { colors } from 'assets/alllll'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import OtpScreen from 'screens/auth/Otp/GetOtp'
@@ -8,7 +8,7 @@ import SignUp from 'screens/auth/Signup/SignUp'
 import Loader from 'src/components/Loader'
 import GetStartScreen from 'src/screens/auth/Starting'
 import { AppState } from 'src/types/interface'
-import { AuthScreens } from 'utils'
+import { AuthScreens } from 'utils/all'
 import DashboardNavigator from './DashboardNavigator'
 
 const AuthScreensArray = [

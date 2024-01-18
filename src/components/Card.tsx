@@ -1,7 +1,7 @@
-import { colors } from 'assets';
+import { colors } from 'assets/alllll';
 import React, { ReactElement, useMemo } from 'react';
 import { StyleProp, StyleSheet, TouchableOpacity } from 'react-native';
-import { scaler } from 'utils';
+import { scaler } from 'utils/all';
 
 interface CardPropsType {
     children?: React.ReactNode | ReactElement;

@@ -1,9 +1,10 @@
-import { colors, Images } from 'assets'
+import { colors, Images } from 'assets/alllll'
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import Button from 'src/components/Button'
-import { scaler } from 'utils'
+import { actions } from 'src/redux/slices/reducer'
+import { scaler } from 'utils/all'
 
 const Favorite = () => {
     const dispatch = useDispatch()
@@ -18,7 +19,7 @@ const Favorite = () => {
             </View>
             <Button
                 onPressButton={() => {
-
+                    dispatch(actions.getAllProducts())
                 }}
                 title={'Add to Favorites'}
                 buttonStyle={{

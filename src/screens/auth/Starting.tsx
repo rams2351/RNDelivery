@@ -7,7 +7,6 @@ import { AuthScreens } from 'utils/Constant'
 import { scaler } from 'utils/Scaler'
 
 const GetStartScreen = ({ navigation }: any) => {
-    console.log(typeof (navigation))
     const onPressGetStarted = useCallback(() => {
         navigation.push(AuthScreens.GET_OTP)
     }, [])

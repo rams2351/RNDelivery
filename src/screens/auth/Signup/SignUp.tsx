@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { colors, Images } from 'assets'
+import { colors, Images } from 'assets/alllll'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Form, FormProvider, useForm } from 'react-hook-form'
 import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
@@ -38,15 +38,12 @@ const SignUp = (props: any) => {
     const { handleSubmit } = methods
 
     const handleSubmits = useCallback((data: any) => {
-        // dispatch(actions.setLogin(true))
         const payload = {
             ...data,
             phone,
             countryCode: code,
             address: location
         }
-        console.log(payload)
-        // return
         dispatch(actions.signUpUser(payload))
     }, [location])
 

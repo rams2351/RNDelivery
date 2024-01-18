@@ -1,14 +1,29 @@
-import { colors, Images } from 'assets'
-import React, { useState } from 'react'
+import { colors, Images } from 'assets/alllll'
+import React, { useEffect, useState } from 'react'
 import { Image, Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useDispatch, useSelector } from 'react-redux'
 import ItemDisplayCard from 'src/components/DisplayCard'
 import CategoryTab from 'src/components/home/CategoryTab'
 import SearchBar from 'src/components/home/SearchBar'
+import { actions } from 'src/redux/slices/reducer'
+import { AppState } from 'src/types/interface'
 import { scaler } from 'utils/Scaler'
 
 const Home = () => {
     const [activeTab, setActiveTab] = useState<string>('Foods')
+    const { products, user } = useSelector((state: AppState) => {
+        return {
+            products: state.products.products,
+            user: state.user.user
+        }
+    })
+
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(actions.getAllProducts())
+    }, [])
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.colorBackground }} edges={['top']}>
             <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -34,12 +49,13 @@ const Home = () => {
                     style={{}}
                     contentContainerStyle={{ paddingHorizontal: 30 }}
                 >
-                    <ItemDisplayCard
-                        img={Images.ic_food_1}
-                        title={'hello this is food item'}
-                        price={'2100'}
+                    {products.map((d, i) => (<ItemDisplayCard
+                        key={i}
+                        img={d?.img[0].signedUrl}
+                        title={d.name}
+                        price={d?.price}
                         onPressItem={(e) => Linking.openSettings()}
-                    />
+                    />))}
                     <ItemDisplayCard
                         img={Images.ic_food_2}
                         title={'hello this is food item'}
