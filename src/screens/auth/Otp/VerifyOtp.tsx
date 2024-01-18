@@ -26,12 +26,12 @@ const VerifyOtp = ({ route, navigation }: any) => {
     const phone = route?.params?.phone?.slice(3)
     const dispatch = useDispatch()
 
+    console.log(route?.params);
 
-    const { userData } = useSelector((state: AppState) => {
-        return {
-            userData: state.user.user
-        }
-    })
+    const { userData } = useSelector((state: AppState) => ({
+        userData: state.user.user
+    }
+    ))
     const getOtpHandler = useCallback((otp: string) => {
         if (otp === '1234') {
             // dispatch(actions.setLogin(true))
@@ -69,7 +69,7 @@ const VerifyOtp = ({ route, navigation }: any) => {
                         code={otp.value}
                         editable
                         onCodeChanged={code => setOtp((d) => ({ disable: code.length == 4 ? false : true, value: code }))}
-                        autoFocusOnLoad={false}
+                        autoFocusOnLoad
                         codeInputFieldStyle={styles.underlineStyleBase}
                         codeInputHighlightStyle={styles.underlineStyleHighLighted}
                     />

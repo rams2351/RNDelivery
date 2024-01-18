@@ -12,12 +12,11 @@ import { scaler } from 'utils/Scaler'
 
 const Home = () => {
     const [activeTab, setActiveTab] = useState<string>('Foods')
-    const { products, user } = useSelector((state: AppState) => {
-        return {
-            products: state.products.products,
-            user: state.user.user
-        }
-    })
+    const { products, user } = useSelector((state: AppState) => ({
+        products: state.products.products,
+        user: state.user.user
+    }
+    ))
 
     const dispatch = useDispatch()
     useEffect(() => {
@@ -56,24 +55,7 @@ const Home = () => {
                         price={d?.price}
                         onPressItem={(e) => Linking.openSettings()}
                     />))}
-                    <ItemDisplayCard
-                        img={Images.ic_food_2}
-                        title={'hello this is food item'}
-                        price={'2100'}
-                        onPressItem={(e) => console.log('firstly pressed item', e)}
-                    />
-                    <ItemDisplayCard
-                        img={Images.ic_food_3}
-                        title={'hello this is food item'}
-                        price={'2100'}
-                        onPressItem={(e) => console.log('firstly pressed item', e)}
-                    />
-                    <ItemDisplayCard
-                        img={Images.ic_food_4}
-                        title={'hello this is food item'}
-                        price={'2100'}
-                        onPressItem={(e) => console.log('firstly pressed item', e)}
-                    />
+
                 </ScrollView>
 
             </ScrollView>

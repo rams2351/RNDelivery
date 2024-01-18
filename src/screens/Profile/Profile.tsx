@@ -35,11 +35,9 @@ const OptionList = [
 
 const Profile = ({ navigation }: any) => {
     const dispatch = useDispatch()
-    const { user } = useSelector((state: AppState) => {
-        return {
-            user: state.user.user
-        }
-    })
+    const { user } = useSelector((state: AppState) => ({
+        user: state.user.user
+    }))
 
     const navigationHandler = useCallback((route: string) => {
         if (route === 'logout') {

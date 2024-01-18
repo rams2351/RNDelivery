@@ -2,12 +2,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { Provider } from 'react-redux';
+import { NavigationService } from 'utils/NavigationService';
 import CustomToast from './components/CustomToast';
 import Navigator from './navigation/MyNavigationContainer';
 import { store } from './redux/store';
 
 function App(): React.JSX.Element {
-
   return (
     <ToastProvider
       placement='top'
@@ -21,7 +21,7 @@ function App(): React.JSX.Element {
       renderToast={(e) => <CustomToast {...e} />}
     >
       <Provider store={store}>
-        <NavigationContainer>
+        <NavigationContainer ref={NavigationService.setNavigationRef}>
           <Navigator />
         </NavigationContainer>
       </Provider>

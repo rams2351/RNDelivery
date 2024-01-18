@@ -31,12 +31,12 @@ const AuthScreensArray = [
 
 const Navigator = () => {
     const AuthStack = createStackNavigator()
-    const { isLoading, isLogin } = useSelector((state: AppState) => {
-        return {
+    const { isLoading, isLogin } = useSelector((state: AppState) => (
+        {
             isLoading: state.extra.loading,
             isLogin: state.auth.isLogin
-        }
-    })
+        })
+    )
     return (
         <>
             {isLoading ? <Loader /> : null}

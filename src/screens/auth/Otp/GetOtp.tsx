@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux'
 import Button from 'src/components/Button'
 import RNPhoneInput from 'src/components/PhoneInput'
 import { actions } from 'src/redux/slices/reducer'
-import { AuthScreens } from 'utils/Constant'
 import { scaler } from 'utils/Scaler'
 
 interface IMobileState { value: string; disable: boolean; }
@@ -33,8 +32,8 @@ const GetOtpScreen = ({ navigation }: any) => {
         if (phone.length === 10) {
             ph = '+91' + phone
         }
-        dispatch(actions.validateUser(`(phone,eq,${ph.slice(3)})`))
-        navigation.push(AuthScreens.VERIFY_OTP, { phone: ph })
+        dispatch(actions.validateUser(ph))
+        // navigation.push(AuthScreens.VERIFY_OTP, { phone: ph })
     }, [])
 
     return (
