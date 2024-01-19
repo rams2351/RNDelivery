@@ -122,5 +122,8 @@ export const _getAllProducts = async () => {
 
 export const _getProduct = async (body: any) => {
     return callApi('msa8dpk9qcum5x5/views/vwijvawnuny1a96u/find-one?where=', 'GET', { where: body })
+}
 
+export const _updateWishlist = async (body: any) => {
+    return callApi(`mb53d0474hdwdy8/views/vw6bdfrm92pcnguv/${body?.id}`, 'PATCH', body)
 }

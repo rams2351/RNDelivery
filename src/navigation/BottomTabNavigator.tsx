@@ -56,7 +56,7 @@ const BottomTabNavigator = () => {
                         return {
                             tabBarIcon: () => <View style={[styles.iconsContainer, index === i ? styles.focusedIcon : {}]} >{d.icon({ color: index === i ? colors.colorRed : colors.colorGreyMore })}</View>,
                             title: NameFormatter(d.name),
-
+                            headerTitleStyle: { color: colors.colorPrimary, fontWeight: '700' }
                         }
                     }}
                 />))}

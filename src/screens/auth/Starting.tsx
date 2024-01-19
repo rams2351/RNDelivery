@@ -4,11 +4,12 @@ import { colors } from 'src/assets/Colors'
 import { Images } from 'src/assets/image'
 import Button from 'src/components/Button'
 import { AuthScreens } from 'utils/Constant'
+import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
 const GetStartScreen = ({ navigation }: any) => {
     const onPressGetStarted = useCallback(() => {
-        navigation.push(AuthScreens.GET_OTP)
+        NavigationService.push(AuthScreens.GET_OTP)
     }, [])
     return (
         <>

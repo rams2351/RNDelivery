@@ -1,7 +1,7 @@
 import { Images } from 'assets/alllll'
 import React, { useCallback } from 'react'
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { colors } from 'src/assets/Colors'
 import Card from 'src/components/Card'
 import { actions } from 'src/redux/slices/reducer'
@@ -37,7 +37,7 @@ const Profile = ({ navigation }: any) => {
     const dispatch = useDispatch()
     const { user } = useSelector((state: AppState) => ({
         user: state.user.user
-    }))
+    }), shallowEqual)
 
     const navigationHandler = useCallback((route: string) => {
         if (route === 'logout') {

@@ -10,6 +10,7 @@ import Button from 'src/components/Button'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { AuthScreens } from 'utils/Constant'
+import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
 interface IOtpState {
@@ -38,7 +39,7 @@ const VerifyOtp = ({ route, navigation }: any) => {
             if (userData?.Id) {
                 dispatch(actions.setLogin(true))
             } else {
-                navigation.push(AuthScreens.SIGN_UP, { phone: route?.params?.phone })
+                NavigationService.push(AuthScreens.SIGN_UP, { phone: route?.params?.phone })
             }
         } else {
 

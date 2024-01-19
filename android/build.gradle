@@ -19,5 +19,5 @@ buildscript {
 }
 
 apply plugin: "com.facebook.react.rootproject"
-apply from: "../../node_modules/react-native/react.gradle"
-apply from: "../../node_modules/react-native-ultimate-config/android/rnuc.gradle"
+// apply from: "../../node_modules/react-native/react.gradle"
+// apply from: "../../node_modules/react-native-ultimate-config/android/rnuc.gradle"

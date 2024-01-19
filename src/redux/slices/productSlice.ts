@@ -3,7 +3,7 @@ import { Action, ProductsSlice } from "src/types/interface";
 
 const initialState: ProductsSlice = {
     products: [],
-    productDetail:null
+    productDetail: null,
 }
 
 export const productSlice = createSlice({
@@ -15,7 +15,8 @@ export const productSlice = createSlice({
         },
         setProductDetail: (state, { payload }: Action<any>) => {
             state.productDetail=payload
-        }
+        },
+
     }
 })
 

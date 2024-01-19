@@ -1,7 +1,7 @@
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
 import FavoriteSvg from 'assets/svg/FavoriteSvg'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,8 +18,9 @@ const ProductDetail = ({ route, navigation }: any) => {
     const id = route?.params?.id
 
     const product = useSelector((state: AppState) => state.products.productDetail)
-    console.log(product, 'id in product detail', id)
+    const user = useSelector((state: AppState) => state.user.user)
 
+    const wishListed = user?.wishlist?.includes(id)
 
     useEffect(() => {
         if (product?.Id === id) {
@@ -28,13 +29,34 @@ const ProductDetail = ({ route, navigation }: any) => {
         dispatch(actions.getProductDetail(`(Id,eq,${id})`))
     }, [id, product])
 
+
+    const wishlistHandler = useCallback(() => {
+        let filtered = user.wishlist ?? []
+        if (filtered) {
+            if (filtered.includes(product.Id)) {
+                filtered = filtered.filter((_: any) => _ != product.Id)
+            } else {
+                filtered = [...filtered, product.Id]
+            }
+        } else {
+            filtered = [product.Id]
+        }
+        dispatch(actions.updateWishlist({ id: user.Id, list: filtered }))
+
+    }, [product, user])
+
     return (
         <SafeAreaView style={styles.safeAreaView}>
             <View style={styles.header}>
                 <TouchableOpacity
                     onPress={() => NavigationService.goBack()}
-                ><Image source={Images.ic_right_icon} style={styles.backIcon} /></TouchableOpacity>
-                <TouchableOpacity><FavoriteSvg color={colors.colorBlack} style={styles.favIcon} /></TouchableOpacity>
+                ><Image source={Images.ic_right_icon} style={styles.backIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={wishlistHandler}>
+                    {wishListed ? <FavoriteSvg color={colors.colorRed} fill={colors.colorRed} style={styles.favIcon} /> :
+                        <FavoriteSvg color={colors.colorBlack} style={styles.favIcon} />
+                    }
+                </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.imageTextContainer}>

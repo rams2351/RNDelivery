@@ -1,5 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
+import { LogBox } from 'react-native';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { Provider } from 'react-redux';
 import { NavigationService } from 'utils/NavigationService';
@@ -8,6 +9,11 @@ import Navigator from './navigation/MyNavigationContainer';
 import { store } from './redux/store';
 
 function App(): React.JSX.Element {
+  LogBox.ignoreLogs([
+    // See: https://github.com/react-navigation/react-navigation/issues/7839
+    'Sending \`onAnimatedValueUpdate\` with no listeners registered.',
+
+  ]);
   return (
     <ToastProvider
       placement='top'

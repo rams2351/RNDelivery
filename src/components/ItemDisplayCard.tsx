@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         marginBottom: scaler(15),
         justifyContent: 'flex-end',
         alignItems: 'center',
-        marginRight: scaler(30)
+        // marginRight: scaler(30)
     },
     image: {
         height: scaler(110),

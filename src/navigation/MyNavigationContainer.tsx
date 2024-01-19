@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import { colors } from 'assets/alllll'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { shallowEqual, useSelector } from 'react-redux'
 import OtpScreen from 'screens/auth/Otp/GetOtp'
 import VerifyOtp from 'screens/auth/Otp/VerifyOtp'
 import SignUp from 'screens/auth/Signup/SignUp'
@@ -35,7 +35,7 @@ const Navigator = () => {
         {
             isLoading: state.extra.loading,
             isLogin: state.auth.isLogin
-        })
+        }), shallowEqual
     )
     return (
         <>

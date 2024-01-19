@@ -1,8 +1,7 @@
 import { colors, Images } from 'assets/alllll'
-import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import CategoryTab from 'src/components/home/CategoryTab'
 import SearchBar from 'src/components/home/SearchBar'
 import ItemDisplayCard from 'src/components/ItemDisplayCard'
@@ -12,55 +11,83 @@ import { DashboardScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
+const { width } = Dimensions.get('screen')
+const padding = 30
+
 const Home = () => {
     const [activeTab, setActiveTab] = useState<string>('Foods')
     const { products, user } = useSelector((state: AppState) => ({
         products: state.products.products,
         user: state.user.user
     }
-    ))
+    ), shallowEqual)
+
+    const scrollViewRef = useRef<FlatList>(null)
+
 
     const dispatch = useDispatch()
     useEffect(() => {
+        // if (!products?.length) {
         dispatch(actions.getAllProducts())
+        // }s
     }, [])
 
+    const onScrollProduct = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+
+        const containerWidth = e?.nativeEvent?.contentSize?.width;
+        const itemsQty = containerWidth / 257;
+        const re = containerWidth - e.nativeEvent.contentOffset.x
+        console.log(e.nativeEvent, itemsQty);
+        if (scrollViewRef.current) {
+            // scrollViewRef.current.scrollToItem({ item: 1, animated: true })
+        }
+    }, [scrollViewRef])
+
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: colors.colorBackground }} edges={['top']}>
-            <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-                <View style={styles.logoTextContainer}>
-                    <View style={styles.imageContainer}><Image source={Images.logo} style={styles.image} /></View>
-                    <View>
-                        <Text style={styles.deliciousText}>Delicious </Text>
-                        <Text style={styles.deliciousText}>food for you</Text>
-                    </View>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+            <View style={styles.logoTextContainer}>
+                <View style={styles.imageContainer}><Image source={Images.logo} style={styles.image} /></View>
+                <View>
+                    <Text style={styles.deliciousText}>Delicious </Text>
+                    <Text style={styles.deliciousText}>food for you</Text>
                 </View>
+            </View>
 
-                <SearchBar />
+            <SearchBar />
 
-                <CategoryTab
-                    tabList={['Foods', 'Drinks', 'Snacks', 'Sauces', 'Burgers', 'Pizza']}
-                    onChangeTab={(e) => setActiveTab(e)}
-                    activeTab={activeTab}
-                />
+            <CategoryTab
+                tabList={['Foods', 'Drinks', 'Snacks', 'Sauces', 'Burgers', 'Pizza']}
+                onChangeTab={(e) => setActiveTab(e)}
+                activeTab={activeTab}
+            />
 
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 30 }}
-                >
-                    {products.map((d, i) => (<ItemDisplayCard
+            <FlatList
+                ref={scrollViewRef}
+                // onScrollEndDrag={(e) => onScrollProduct(e)}
+                // snapToOffsets={products?.map((_, i) => i * width - padding * 20)}
+                keyExtractor={(_, i) => i?.toString()}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                // style={styles.scroll}
+                // contentContainerStyle={{ paddingHorizontal: products?.length > 1 ? padding : 0 }}
+                contentContainerStyle={styles.scroll}
+                ItemSeparatorComponent={
+                    () => { return <View style={{ width: padding }} /> }
+                }
+                data={products}
+                renderItem={({ item: d, index: i }) => (
+                    <ItemDisplayCard
                         key={i}
                         img={d.img[0].signedUrl}
                         title={d.name}
                         price={d?.price}
                         onPressItem={(e) => NavigationService.push(DashboardScreens.PRODUCT_DETAIL, { id: d?.Id })}
-                    />))}
+                    />
+                )}
+            />
 
-                </ScrollView>
 
-            </ScrollView>
-        </SafeAreaView>
+        </ScrollView>
     )
 }
 
@@ -68,9 +95,12 @@ export default Home
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
+        paddingTop: scaler(20),
         // paddingLeft: scaler(35),
         // paddingTop: scaler(50)
+        backgroundColor: colors.colorBackground
+
     },
     deliciousText: {
         fontSize: scaler(35),
@@ -100,6 +130,10 @@ const styles = StyleSheet.create({
     logoTextContainer: {
         display: 'flex',
         flexDirection: 'row',
-        paddingHorizontal: scaler(20)
-    }
+        paddingHorizontal: scaler(20),
+    },
+    scroll: {
+        paddingLeft: 30,
+        paddingRight: 30
+    },
 })

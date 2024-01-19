@@ -5,7 +5,7 @@ const HomeSvg = (props: SvgProps) => (
         width={24}
         height={24}
         viewBox="0 0 24 24"
-        fill="none"
+        fill={props?.fill ?? "none"}
         {...props}
     >
         <Path

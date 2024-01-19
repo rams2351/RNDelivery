@@ -7,14 +7,17 @@ const navigationRef: React.MutableRefObject<NavigationContainerRef<any> | null> 
 const setNavigationRef = (ref: any) => navigationRef.current = ref;
 
 const navigate = (name: string, params: any = {}, merge: boolean = true) => {
+    navigationRef?.current?.removeListener
     navigationRef?.current?.navigate({ name, params, merge });
 };
 
 const push = (name: string, params: any = {}) => {
+    navigationRef?.current?.removeListener
     navigationRef?.current?.dispatch(StackActions.push(name, params));
 };
 
 const getCurrentScreen = (): Route<string, any> | undefined => {
+    navigationRef?.current?.removeListener
     return navigationRef?.current?.getCurrentRoute();
 };
 
@@ -34,6 +37,7 @@ const replace = (name: string, params: any = {}) => {
 
 const goBack = () => {
     try {
+    navigationRef?.current?.removeListener
         navigationRef?.current?.goBack();
     } catch (e: any) {
         _showErrorMessage(e)
@@ -41,6 +45,7 @@ const goBack = () => {
 }
 
 const getNavigation = () => {
+    navigationRef?.current?.removeListener
     return navigationRef?.current
 }
 
