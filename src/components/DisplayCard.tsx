@@ -1,31 +1,41 @@
+import { Images } from 'assets/image'
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { colors } from 'src/assets/Colors'
 import { scaler } from 'utils/Scaler'
 import { CurrencyFormatter } from 'utils/Utils'
-
+//@ts-ignore
+import CardView from 'react-native-cardview'
 const DisplayCard = (props: any) => {
     const { name, img, price, onPress, Id: id } = props
 
     return (
-        <TouchableOpacity style={styles.container} activeOpacity={0.5} onPress={(e) => onPress ? onPress(id) : null}>
-            <View style={styles.imageContainer}>
-                <Image src={img[0]?.signedUrl} style={styles.image} />
-            </View>
-            <View style={{
-                display: 'flex',
-                flexShrink: 1,
-                paddingHorizontal: scaler(13),
-
-            }} >
-                <Text style={styles.text} numberOfLines={1} >{name}</Text>
-                <View>
-                    <Text style={styles.price} >{CurrencyFormatter(price)}</Text>
-
+        <CardView
+            cardElevation={3}
+            cardMaxElevation={2}
+            cornerRadius={15}
+            style={styles.container}
+        >
+            <TouchableOpacity activeOpacity={0.5} style={styles.touchable} onPress={(e) => onPress ? onPress(id) : null}>
+                <View style={styles.imageContainer}>
+                    <Image source={Images.active_user} src={img[0]?.signedUrl} style={styles.image} />
                 </View>
-            </View>
+                <View style={{
+                    display: 'flex',
+                    flexShrink: 1,
+                    paddingHorizontal: scaler(13),
 
-        </TouchableOpacity>
+                }} >
+                    <Text style={styles.text} numberOfLines={1} >{name}</Text>
+                    <View>
+                        <Text style={styles.price} >{CurrencyFormatter(price)}</Text>
+
+                    </View>
+                </View>
+
+            </TouchableOpacity>
+        </CardView>
+
     )
 }
 
@@ -35,15 +45,12 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.colorWhite,
         padding: scaler(15),
-        borderRadius: 25,
-        shadowColor: colors.colorBlack,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
-        display: 'flex',
-        flexDirection: 'row',
         marginBottom: scaler(20),
-        alignItems: 'center'
+    },
+    touchable: {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'row',
     },
     image: {
         height: scaler(70),
@@ -60,6 +67,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 5,
         resizeMode: 'contain',
+        zIndex: 55
     },
     text: {
         flexWrap: 'wrap',

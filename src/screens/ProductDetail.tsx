@@ -61,12 +61,12 @@ const ProductDetail = ({ route, navigation }: any) => {
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.imageTextContainer}>
                     <View style={styles.imageContainer}>
-                        <Image src={product.img[0]?.signedUrl} style={styles.image} />
+                        <Image source={Images.orders} src={product?.img[0]?.signedUrl} style={styles.image} />
                     </View>
                     <View style={{ display: 'flex', width: '80%', paddingBottom: scaler(5) }}>
-                        {product?.category?.veg == 1 ? <Image style={styles.backIcon} src="https://img.icons8.com/fluency/48/vegetarian-food-symbol.png" alt="vegetarian-food-symbol" />
+                        {product?.veg == 1 ? <Image source={Images.orders} style={styles.backIcon} src="https://img.icons8.com/fluency/48/vegetarian-food-symbol.png" alt="vegetarian-food-symbol" />
                             :
-                            <Image style={styles.backIcon} src="https://img.icons8.com/fluency/48/non-vegetarian-food-symbol.png" alt="non-vegetarian-food-symbol" />
+                            <Image style={styles.backIcon} source={Images.orders} src="https://img.icons8.com/fluency/48/non-vegetarian-food-symbol.png" alt="non-vegetarian-food-symbol" />
                         }
                     </View>
                     <Text numberOfLines={3} style={styles.text}>{product?.name}</Text>

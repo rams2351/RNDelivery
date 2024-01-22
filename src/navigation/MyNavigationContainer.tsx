@@ -31,15 +31,14 @@ const AuthScreensArray = [
 
 const Navigator = () => {
     const AuthStack = createStackNavigator()
-    const { isLoading, isLogin } = useSelector((state: AppState) => (
+    const { isLogin } = useSelector((state: AppState) => (
         {
-            isLoading: state.extra.loading,
             isLogin: state.auth.isLogin
         }), shallowEqual
     )
     return (
         <>
-            {isLoading ? <Loader /> : null}
+
             {isLogin ? <DashboardNavigator /> : (
                 <AuthStack.Navigator
                     screenOptions={{
@@ -52,6 +51,7 @@ const Navigator = () => {
                         key={i} />))}
                 </AuthStack.Navigator>
             )}
+            <Loader />
         </>
     )
 }

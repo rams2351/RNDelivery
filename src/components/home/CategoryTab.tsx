@@ -16,7 +16,7 @@ const CategoryTab: React.FC<CategoryTabProps> = (props) => {
     const scrollToValidPoint = (i: number, e: GestureResponderEvent) => {
         const { pageX, locationX } = e.nativeEvent
         const width = Dimensions.get('screen').width
-        console.log("pageX", pageX)
+        // console.log("pageX", pageX)
         // console.log("locationX", locationX)
         const scrollX = i == 0 ? 0 : pageX + 50
         if (scrollViewRef.current) {

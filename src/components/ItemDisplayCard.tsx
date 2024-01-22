@@ -1,8 +1,11 @@
 import { colors } from 'assets/Colors';
+import { Images } from 'assets/image';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CurrencyFormatter } from 'utils/all';
 import { scaler } from 'utils/Scaler';
+//@ts-ignore
+import CardView from 'react-native-cardview';
 
 interface ItemDisplayCardProp {
     img: string;
@@ -15,13 +18,30 @@ const ItemDisplayCard: React.FC<ItemDisplayCardProp> = (props) => {
     const { img, title, onPressItem, price } = props
 
     return (
-        <TouchableOpacity style={styles.container} onPress={onPressItem} activeOpacity={0.6}>
-            <Image src={img} style={styles.image} />
-            <View style={styles.textContainer}>
-                <Text numberOfLines={3} style={styles.text}>{title}</Text>
-                <Text style={styles.price}>{CurrencyFormatter(price)}</Text>
-            </View>
+        <TouchableOpacity onPress={onPressItem} activeOpacity={0.8}>
+            <CardView
+                cardElevation={3}
+                cardMaxElevation={2}
+                cornerRadius={25}
+                style={styles.container}
+                onPress={onPressItem}
+                activeOpacity={0.6}
+            >
+                <View style={{
+                    flex: 1, justifyContent: 'flex-end',
+                    alignItems: 'center',
+
+                }} >
+                    <View style={styles.textContainer}>
+                        <Text numberOfLines={3} style={styles.text}>{title}</Text>
+                        <Text style={styles.price}>{CurrencyFormatter(price)}</Text>
+                    </View>
+                </View>
+            </CardView>
+
+            <Image source={Images.user} src={img} style={styles.image} />
         </TouchableOpacity>
+
     )
 }
 
@@ -32,27 +52,13 @@ const styles = StyleSheet.create({
         height: scaler(230),
         width: scaler(190),
         backgroundColor: colors.colorWhite,
-        borderRadius: 30,
-        shadowColor: colors.colorGreyMore,
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 10,
         display: 'flex',
         position: 'relative',
-        marginTop: scaler(60),
-        marginBottom: scaler(15),
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        // marginRight: scaler(30)
     },
     image: {
         height: scaler(110),
         width: scaler(110),
         borderRadius: 90,
-        shadowColor: 'green',
-        shadowOffset: { width: 10, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 10,
         position: 'absolute',
         top: -40,
         left: 45,

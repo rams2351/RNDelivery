@@ -36,8 +36,26 @@ function* getProductDetail({ payload }: Action<any>):Generator<any,any,any> {
     }
 }
 
+function* getProductByCategory({ payload }: Action<any>):Generator<any,any,any> {
+    yield put(actions.setLoading(true))
+
+    try {
+        let res = yield call(ApiProvider._getProductsByCategory, payload)
+         if (res) {
+            yield put(actions.setProducts(res))
+        }
+   yield put(actions.setLoading(false))
+    }
+    catch (err) {
+        console.log(err, 'in  getProductCategory detail saga');
+        _showErrorMessage('Something went wrong in getProductDetail')
+
+    }
+}
+
 
 export default function* watchProducts() {
     yield takeLeading(actions.getAllProducts.toString(), getAllProducts)
-    yield takeLeading(actions.getProductDetail.toString(),getProductDetail)
+    yield takeLeading(actions.getProductDetail.toString(), getProductDetail)
+    yield takeLeading(actions.getProductsByCategory.toString(),getProductByCategory)
 }

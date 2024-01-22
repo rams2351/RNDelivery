@@ -1,5 +1,6 @@
+import { useFocusEffect } from '@react-navigation/native'
 import { colors, Images } from 'assets/alllll'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
@@ -17,6 +18,9 @@ const Favorite = () => {
         products: state.products.products
     }), shallowEqual)
     const wishListedProducts = products?.filter((d, i) => user?.wishlist?.includes(d?.Id))
+    useFocusEffect(useCallback(() => {
+        dispatch(actions.getAllProducts())
+    }, []))
     return (
         <View style={{ backgroundColor: colors.colorBackground, flex: 1 }}>
             {
@@ -43,7 +47,7 @@ const Favorite = () => {
                 title={'Add to Favorites'}
                 buttonStyle={{
                     marginHorizontal: scaler(20),
-                    marginBottom: scaler(20)
+                    marginVertical: scaler(20)
                 }}
             />
 

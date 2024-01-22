@@ -10,7 +10,8 @@ import Home from 'screens/Dashboard/Home'
 import Favorite from 'screens/Favorite/Fovorite'
 import Orders from 'screens/Orders/Orders'
 import Profile from 'screens/Profile/Profile'
-import { DashboardScreens, NameFormatter, scaler } from 'utils/all'
+import Header from 'src/components/Header'
+import { DashboardScreens, NameFormatter } from 'utils/all'
 
 
 
@@ -44,7 +45,8 @@ const BottomTabNavigator = () => {
             screenOptions={{
                 tabBarStyle: styles.tabBarContainer,
                 tabBarShowLabel: false,
-                headerStyle: { backgroundColor: colors.colorBackground, borderWidth: 0, borderBottomColor: colors.colorBackground }
+                headerStyle: { backgroundColor: colors.colorBackground, borderWidth: 0, borderBottomColor: colors.colorBackground },
+                header: (e) => <Header {...e} />
             }}>
             {BottomNavigationScreenArray.map((d, i) => (
                 <BottomNavigator.Screen
@@ -69,19 +71,21 @@ export default BottomTabNavigator
 
 const styles = StyleSheet.create({
     iconsContainer: {
-        height: scaler(30),
-        width: scaler(30),
+        // height: scaler(35),
+        // width: scaler(35),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 50,
+        // borderRadius: 50,
+        // backgroundColor: colors.colorBackground
 
     },
     focusedIcon: {
         shadowColor: colors.colorRed,
-        shadowOffset: { width: 2, height: 2 },
+        shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 1,
-        shadowRadius: 15
+        shadowRadius: 15,
+        elevation: 10
     },
     tabBarContainer: {
         backgroundColor: colors.colorBackground,
@@ -91,5 +95,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0,
         shadowRadius: 15,
         backfaceVisibility: 'hidden',
+        // paddingVertical: scaler(15)
     }
 })

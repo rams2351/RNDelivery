@@ -27,8 +27,6 @@ const VerifyOtp = ({ route, navigation }: any) => {
     const phone = route?.params?.phone?.slice(3)
     const dispatch = useDispatch()
 
-    console.log(route?.params);
-
     const { userData } = useSelector((state: AppState) => ({
         userData: state.user.user
     }

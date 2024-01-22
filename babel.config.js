@@ -20,7 +20,7 @@ module.exports = api => {
   if (env != 'development') {
   }
   return {
-    presets: ['module:@react-native/babel-preset'],
+    presets: ['module:metro-react-native-babel-preset'],
     plugins: [...plugins],
   };
 };

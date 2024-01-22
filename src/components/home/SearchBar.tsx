@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: scaler(18),
+        elevation: 15
     },
     input: {
         paddingVertical: scaler(15),

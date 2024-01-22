@@ -127,3 +127,7 @@ export const _getProduct = async (body: any) => {
 export const _updateWishlist = async (body: any) => {
     return callApi(`mb53d0474hdwdy8/views/vw6bdfrm92pcnguv/${body?.id}`, 'PATCH', body)
 }
+
+export const _getProductsByCategory = async (body: any) => {
+    return callApi(`msa8dpk9qcum5x5/views/${body}`, 'GET')
+}

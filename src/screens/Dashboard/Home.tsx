@@ -1,5 +1,6 @@
+import { useFocusEffect } from '@react-navigation/native'
 import { colors, Images } from 'assets/alllll'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import CategoryTab from 'src/components/home/CategoryTab'
@@ -15,7 +16,7 @@ const { width } = Dimensions.get('screen')
 const padding = 30
 
 const Home = () => {
-    const [activeTab, setActiveTab] = useState<string>('Foods')
+    const [activeTab, setActiveTab] = useState<string>('All')
     const { products, user } = useSelector((state: AppState) => ({
         products: state.products.products,
         user: state.user.user
@@ -26,18 +27,45 @@ const Home = () => {
 
 
     const dispatch = useDispatch()
-    useEffect(() => {
-        // if (!products?.length) {
-        dispatch(actions.getAllProducts())
-        // }s
-    }, [])
+    useFocusEffect(useCallback(() => {
+        if (!products?.length) {
+            dispatch(actions.getAllProducts())
+        }
+        dispatch(actions.getUser(user?.Id))
+    }, [products])
+    )
 
+    const handleCategoryChange = useCallback((type: string) => {
+        setActiveTab(type)
+        scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
+        switch (type) {
+            case 'Foods':
+                dispatch(actions.getProductsByCategory(`vwpyg4ipcnsg09jz`))
+                break;
+            case 'Drinks':
+                dispatch(actions.getProductsByCategory(`vw2wey7ikifg03dz`))
+                break;
+            case 'Snacks':
+                dispatch(actions.getProductsByCategory(`vwpihhyum05e7iic`))
+                break;
+            case 'Burgers':
+                dispatch(actions.getProductsByCategory(`vwnrk04bf970xsmx`))
+                break;
+            case 'Pizza':
+                dispatch(actions.getProductsByCategory(`vwphdvbk8l4a0hfm`))
+                break;
+            default:
+                dispatch(actions.getAllProducts())
+                break;
+
+        }
+    }, [])
     const onScrollProduct = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
 
         const containerWidth = e?.nativeEvent?.contentSize?.width;
         const itemsQty = containerWidth / 257;
         const re = containerWidth - e.nativeEvent.contentOffset.x
-        console.log(e.nativeEvent, itemsQty);
+        // console.log(e.nativeEvent, itemsQty);
         if (scrollViewRef.current) {
             // scrollViewRef.current.scrollToItem({ item: 1, animated: true })
         }
@@ -56,20 +84,16 @@ const Home = () => {
             <SearchBar />
 
             <CategoryTab
-                tabList={['Foods', 'Drinks', 'Snacks', 'Sauces', 'Burgers', 'Pizza']}
-                onChangeTab={(e) => setActiveTab(e)}
+                tabList={['All', 'Foods', 'Drinks', 'Snacks', 'Burgers', 'Pizza']}
+                onChangeTab={(e) => handleCategoryChange(e)}
                 activeTab={activeTab}
             />
 
             <FlatList
                 ref={scrollViewRef}
-                // onScrollEndDrag={(e) => onScrollProduct(e)}
-                // snapToOffsets={products?.map((_, i) => i * width - padding * 20)}
                 keyExtractor={(_, i) => i?.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                // style={styles.scroll}
-                // contentContainerStyle={{ paddingHorizontal: products?.length > 1 ? padding : 0 }}
                 contentContainerStyle={styles.scroll}
                 ItemSeparatorComponent={
                     () => { return <View style={{ width: padding }} /> }
@@ -134,6 +158,7 @@ const styles = StyleSheet.create({
     },
     scroll: {
         paddingLeft: 30,
-        paddingRight: 30
+        paddingRight: 30,
+        paddingVertical: scaler(50)
     },
 })
