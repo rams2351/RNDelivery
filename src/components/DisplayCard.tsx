@@ -1,9 +1,10 @@
 import { Images } from 'assets/image'
 import React from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { colors } from 'src/assets/Colors'
 import { scaler } from 'utils/Scaler'
 import { CurrencyFormatter } from 'utils/Utils'
+import Text from './Text'
 //@ts-ignore
 import CardView from 'react-native-cardview'
 const DisplayCard = (props: any) => {

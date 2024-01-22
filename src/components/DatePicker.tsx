@@ -1,10 +1,11 @@
 import { colors, Images } from 'assets/alllll';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, StyleSheet, TextInput, View } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { DateFormatter } from 'utils/all';
 import { scaler } from 'utils/Scaler';
+import Text from './Text';
 
 interface IDatePickerProps {
     defaultValue?: string;

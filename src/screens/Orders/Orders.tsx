@@ -1,9 +1,10 @@
 import { colors, Images } from 'assets/alllll';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
 import { useDispatch } from 'react-redux';
 import Button from 'src/components/Button';
+import Text from 'src/components/Text';
 import { scaler } from 'src/utils/Scaler';
 import { _showInfoMessage } from 'utils/all';
 

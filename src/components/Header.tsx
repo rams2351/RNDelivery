@@ -1,9 +1,10 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs'
 import { colors } from 'assets/Colors'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { scaler } from 'utils/Scaler'
+import Text from './Text'
 
 const Header = (props: BottomTabHeaderProps) => {
 
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: scaler(15),
         color: colors.colorPrimary,
-        fontWeight: '700'
+        fontWeight: '800'
+
     }
 })

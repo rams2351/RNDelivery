@@ -1,9 +1,10 @@
 import { colors } from 'assets/Colors';
 import { Images } from 'assets/image';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CurrencyFormatter } from 'utils/all';
 import { scaler } from 'utils/Scaler';
+import Text from './Text';
 //@ts-ignore
 import CardView from 'react-native-cardview';
 

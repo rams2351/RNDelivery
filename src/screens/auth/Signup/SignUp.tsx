@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { colors, Images } from 'assets/alllll'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Form, FormProvider, useForm } from 'react-hook-form'
-import { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, View } from 'react-native'
 import Geolocation from 'react-native-geolocation-service'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -10,11 +10,11 @@ import { useDispatch } from 'react-redux'
 import Button from 'src/components/Button'
 import DatePicker from 'src/components/DatePicker'
 import RnInput from 'src/components/RnInput'
+import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { requestLocationPermission } from 'utils/GeoLocation'
 import { scaler } from 'utils/Scaler'
 import * as yup from 'yup'
-
 //@ts-ignore
 
 const formSchema = yup.object().shape({

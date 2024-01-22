@@ -1,9 +1,9 @@
 import { colors } from 'assets/alllll';
 import React, { useMemo, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Image, ImageProps, KeyboardType, StyleProp, StyleSheet, Text, TextInput, View, ViewStyle } from 'react-native';
+import { Image, ImageProps, KeyboardType, StyleProp, StyleSheet, TextInput, View, ViewStyle } from 'react-native';
 import { scaler } from 'utils/Scaler';
-
+import Text from './Text';
 interface InputProps {
     name: string;
     placeholder?: string;

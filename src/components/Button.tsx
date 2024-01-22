@@ -1,8 +1,8 @@
 import React, { ReactElement, ReactNode } from 'react';
-import { GestureResponderEvent, Image, ImageSourcePropType, StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
+import { GestureResponderEvent, Image, ImageSourcePropType, StyleProp, StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 import { colors } from 'src/assets/Colors';
 import { scaler } from '../utils/Scaler';
-
+import Text from './Text';
 interface ButtonProps {
     title?: string | ReactElement | ReactNode;
     containerStyle?: StyleProp<ViewStyle>;
@@ -29,7 +29,7 @@ const Button = (props: ButtonProps) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: startIcon || endIcon ? 'flex-start' : 'center',
-            paddingVertical: scaler(20),
+            paddingVertical: scaler(17),
             borderRadius: scaler(25),
             flexDirection: 'row',
             ...StyleSheet.flatten(props.buttonStyle)

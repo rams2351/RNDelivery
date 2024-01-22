@@ -1,10 +1,11 @@
 import { useFocusEffect } from '@react-navigation/native'
 import { colors, Images } from 'assets/alllll'
 import React, { useCallback } from 'react'
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
 import DisplayCard from 'src/components/DisplayCard'
+import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
@@ -47,7 +48,8 @@ const Favorite = () => {
                 title={'Add to Favorites'}
                 buttonStyle={{
                     marginHorizontal: scaler(20),
-                    marginVertical: scaler(20)
+                    marginVertical: scaler(5),
+                    marginBottom: scaler(20)
                 }}
             />
 

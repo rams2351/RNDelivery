@@ -1,12 +1,13 @@
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import React, { useCallback, useState } from 'react'
-import { ActivityIndicator, Image, Platform, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Image, Platform, StyleSheet, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useDispatch, useSelector } from 'react-redux'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { colors } from 'src/assets/Colors'
 import { Images } from 'src/assets/image'
 import Button from 'src/components/Button'
+import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { AuthScreens } from 'utils/Constant'
@@ -30,7 +31,7 @@ const VerifyOtp = ({ route, navigation }: any) => {
     const { userData } = useSelector((state: AppState) => ({
         userData: state.user.user
     }
-    ))
+    ), shallowEqual)
     const getOtpHandler = useCallback((otp: string) => {
         if (otp === '1234') {
             // dispatch(actions.setLogin(true))
@@ -44,7 +45,7 @@ const VerifyOtp = ({ route, navigation }: any) => {
         }
     }, [userData])
     return (
-        <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
             <View
                 style={styles.container}>
                 <Image source={Images.logo} />
@@ -78,7 +79,7 @@ const VerifyOtp = ({ route, navigation }: any) => {
 
                     <Button
                         title={loading ? <ActivityIndicator color={colors.colorPrimary} /> : 'Continue'}
-                        buttonStyle={{}}
+                        buttonStyle={{ marginBottom: scaler(20) }}
                         textStyle={{ fontWeight: '700' }}
                         disabled={otp.disable}
                         onPressButton={() => getOtpHandler(otp.value)}

@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         borderColor: colors.colorPrimary,
         backgroundColor: colors.colorWhite,
         width: '100%',
-        marginTop: scaler(10)
+        marginTop: scaler(10),
     },
     input: {
         backgroundColor: colors.colorWhite

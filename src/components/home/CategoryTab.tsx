@@ -1,7 +1,8 @@
 import { colors } from 'assets/alllll';
 import React, { useRef } from 'react';
-import { Dimensions, FlatList, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, GestureResponderEvent, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { scaler } from 'utils/all';
+import Text from '../Text';
 
 interface CategoryTabProps {
     tabList: any[];
@@ -12,7 +13,7 @@ interface CategoryTabProps {
 const CategoryTab: React.FC<CategoryTabProps> = (props) => {
     const { tabList, onChangeTab, activeTab } = props;
     const scrollViewRef = useRef<FlatList>(null)
-
+    if (activeTab === 'All') scrollViewRef?.current?.scrollToIndex({ animated: true, index: 0 })
     const scrollToValidPoint = (i: number, e: GestureResponderEvent) => {
         const { pageX, locationX } = e.nativeEvent
         const width = Dimensions.get('screen').width
@@ -46,22 +47,6 @@ const CategoryTab: React.FC<CategoryTabProps> = (props) => {
                 </TouchableOpacity>
             }}
             ref={scrollViewRef} />
-        // <ScrollView
-        //     ref={scrollViewRef}
-        //     horizontal
-
-        // >
-        //     {tabList?.map((d, i) => (
-        //         <TouchableOpacity onLayout={e => {
-        //             // console.log("i", e.nativeEvent.layout.width)
-        //         }} style={styles.container} key={i} onPress={(e) => {
-        //             onChangeTab(d)
-        //         }}>
-        //             <Text style={[styles.text, activeTab === d ? styles.activeText : {}]}>{d}</Text>
-        //             {activeTab === d ? <View style={styles.underline} /> : null}
-        //         </TouchableOpacity>
-        //     ))}
-        // </ScrollView>
     )
 }
 
@@ -69,7 +54,7 @@ export default CategoryTab
 
 const styles = StyleSheet.create({
     scrollArea: {
-        height: scaler(30),
+        height: scaler(45),
         paddingHorizontal: scaler(20)
 
     },
@@ -90,7 +75,7 @@ const styles = StyleSheet.create({
     underline: {
         borderBottomWidth: scaler(3),
         borderColor: colors.colorFocus,
-        marginTop: scaler(5),
+        marginTop: scaler(1),
         borderRadius: 10
     }
 })

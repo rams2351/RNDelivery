@@ -1,11 +1,12 @@
 import { colors, Images } from 'assets/alllll'
 import React, { useCallback, useState } from 'react'
-import { Image, Platform, StyleSheet, Text, View } from 'react-native'
+import { Image, Platform, StyleSheet, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch } from 'react-redux'
 import Button from 'src/components/Button'
 import RNPhoneInput from 'src/components/PhoneInput'
+import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { scaler } from 'utils/Scaler'
 

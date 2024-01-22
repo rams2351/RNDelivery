@@ -1,17 +1,17 @@
 import { useFocusEffect } from '@react-navigation/native'
 import { colors, Images } from 'assets/alllll'
 import React, { useCallback, useRef, useState } from 'react'
-import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, View } from 'react-native'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import CategoryTab from 'src/components/home/CategoryTab'
 import SearchBar from 'src/components/home/SearchBar'
 import ItemDisplayCard from 'src/components/ItemDisplayCard'
+import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
-
 const { width } = Dimensions.get('screen')
 const padding = 30
 
@@ -28,14 +28,16 @@ const Home = () => {
 
     const dispatch = useDispatch()
     useFocusEffect(useCallback(() => {
-        if (!products?.length) {
-            dispatch(actions.getAllProducts())
-        }
+        dispatch(actions.getAllProducts())
+        setActiveTab('All')
+        scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
         dispatch(actions.getUser(user?.Id))
-    }, [products])
+    }, [])
     )
 
     const handleCategoryChange = useCallback((type: string) => {
+        console.log(type);
+
         setActiveTab(type)
         scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
         switch (type) {
@@ -119,18 +121,16 @@ export default Home
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         paddingTop: scaler(20),
-        // paddingLeft: scaler(35),
-        // paddingTop: scaler(50)
         backgroundColor: colors.colorBackground
 
     },
     deliciousText: {
-        fontSize: scaler(35),
+        fontSize: scaler(30),
         fontWeight: '700',
         paddingRight: scaler(80),
         color: colors.colorPrimary,
+        lineHeight: 45,
     },
     image: {
         height: scaler(50),

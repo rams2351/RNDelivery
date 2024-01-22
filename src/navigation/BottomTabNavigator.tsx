@@ -11,7 +11,7 @@ import Favorite from 'screens/Favorite/Fovorite'
 import Orders from 'screens/Orders/Orders'
 import Profile from 'screens/Profile/Profile'
 import Header from 'src/components/Header'
-import { DashboardScreens, NameFormatter } from 'utils/all'
+import { DashboardScreens, NameFormatter, scaler } from 'utils/all'
 
 
 
@@ -56,7 +56,7 @@ const BottomTabNavigator = () => {
                     options={({ navigation }) => {
                         const index = navigation.getState().index
                         return {
-                            tabBarIcon: () => <View style={[styles.iconsContainer, index === i ? styles.focusedIcon : {}]} >{d.icon({ color: index === i ? colors.colorRed : colors.colorGreyMore })}</View>,
+                            tabBarIcon: () => <View style={[styles.iconsContainer, index === i ? styles.focusedIcon : {}]} >{d.icon({ color: index === i ? colors.colorRed : colors.colorGreyMore, height: 30, width: 30 })}</View>,
                             title: NameFormatter(d.name),
                             headerTitleStyle: { color: colors.colorPrimary, fontWeight: '700' }
                         }
@@ -71,21 +71,18 @@ export default BottomTabNavigator
 
 const styles = StyleSheet.create({
     iconsContainer: {
-        // height: scaler(35),
-        // width: scaler(35),
+        // backgroundColor: colors.colorBackground,
+        // marginTop: 20,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        // borderRadius: 50,
-        // backgroundColor: colors.colorBackground
-
     },
     focusedIcon: {
         shadowColor: colors.colorRed,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 1,
         shadowRadius: 15,
-        elevation: 10
+        elevation: 10,
     },
     tabBarContainer: {
         backgroundColor: colors.colorBackground,
@@ -95,6 +92,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0,
         shadowRadius: 15,
         backfaceVisibility: 'hidden',
+        height: scaler(70)
         // paddingVertical: scaler(15)
     }
 })
