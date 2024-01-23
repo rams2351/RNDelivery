@@ -1,7 +1,8 @@
 import { useFocusEffect } from '@react-navigation/native'
 import { colors, Images } from 'assets/alllll'
-import React, { useCallback } from 'react'
-import { Image, ScrollView, StyleSheet, View } from 'react-native'
+import React, { createRef, RefObject, useCallback, useState } from 'react'
+import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
 import DisplayCard from 'src/components/DisplayCard'
@@ -18,18 +19,72 @@ const Favorite = () => {
         user: state.user.user,
         products: state.products.products
     }), shallowEqual)
+    const swipeRef: RefObject<Swipeable> = createRef()
+    let rowRefs = new Map();
     const wishListedProducts = products?.filter((d, i) => user?.wishlist?.includes(d?.Id))
+    const [swipedItem, setSwipedItem] = useState<any>(null)
+
+    console.log(wishListedProducts);
+
+    const removeWishListed = useCallback((d: any) => {
+        let filtered = user?.wishlist?.filter((_: any) => _ != d.Id)
+        dispatch(actions.updateWishlist({ id: user.Id, list: filtered }))
+    }, [wishListedProducts])
+
+
+    const rightSwipeActions = useCallback((e: any, f: any) => {
+        return (
+            <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingHorizontal: scaler(50) }}>
+                <TouchableOpacity style={{ backgroundColor: colors.colorPrimary, padding: 15, borderRadius: 50 }} onPress={() => {
+                    removeWishListed(swipedItem)
+                }}>
+                    <Image source={Images.ic_delete} style={styles.cartImage} />
+                </TouchableOpacity>
+            </View>
+        )
+    }, [swipedItem])
     useFocusEffect(useCallback(() => {
         dispatch(actions.getAllProducts())
     }, []))
+
+
     return (
         <View style={{ backgroundColor: colors.colorBackground, flex: 1 }}>
             {
                 user?.wishlist?.length ? (
                     <>
-                        <ScrollView contentContainerStyle={{ padding: scaler(30) }}>
+                        <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginVertical: scaler(10) }}>
+                            <Image source={Images.ic_swipe_text} style={{ width: '80%', height: 25 }} />
+                        </View>
+                        <FlatList
+                            style={{ padding: scaler(5) }}
+                            data={wishListedProducts}
+                            keyExtractor={(_: any, i: number) => i.toString()}
+                            renderItem={({ item, index }) => (
+                                <Swipeable
+                                    renderRightActions={rightSwipeActions}
+                                    ref={ref => {
+                                        if (ref && !rowRefs.get(index)) {
+                                            rowRefs.set(index, ref);
+                                            //@ts-ignore
+                                            swipeRef.current = ref
+                                        }
+                                    }}
+                                    onSwipeableWillOpen={(direction) => {
+                                        [...rowRefs.entries()].forEach(([key, ref]) => {
+                                            if (key !== index && ref) ref.close();
+                                        });
+                                        setSwipedItem(item)
+                                    }}
+                                >
+                                    <View style={{ padding: scaler(10) }}>
+                                        <DisplayCard onPress={(e: any) => NavigationService.push(DashboardScreens.PRODUCT_DETAIL, { id: e })} {...item} />
+                                    </View>
+                                </Swipeable>)}
+                        />
+                        {/* <ScrollView contentContainerStyle={{ padding: scaler(30) }}>
                             {wishListedProducts.map((d: any, i: number) => (<DisplayCard key={i} {...d} onPress={(e: any) => NavigationService.push(DashboardScreens.PRODUCT_DETAIL, { id: e })} />))}
-                        </ScrollView>
+                        </ScrollView> */}
                     </>
                 ) : (
                     <View style={styles.container}>
@@ -83,5 +138,9 @@ const styles = StyleSheet.create({
         fontSize: scaler(14),
         // fontWeight: '600',
         color: colors.colorGreyMore
-    }
+    },
+    cartImage: {
+        height: scaler(25),
+        width: scaler(25)
+    },
 })

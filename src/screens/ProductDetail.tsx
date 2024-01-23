@@ -12,7 +12,7 @@ import { AppState } from 'src/types/interface'
 import { scaler } from 'src/utils/Scaler'
 import { DashboardScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
-import { CurrencyFormatter } from 'utils/Utils'
+import { CurrencyFormatter, _showSuccessMessage } from 'utils/Utils'
 
 const ProductDetail = ({ route, navigation }: any) => {
 
@@ -26,7 +26,6 @@ const ProductDetail = ({ route, navigation }: any) => {
     const [qty, setQty] = useState<number>(1)
     const isAddedToCart = user?.cart?.filter((_: any) => _.Id === product?.Id)?.[0]?.Id
     const cartItem = user?.cart?.filter((_: any) => _?.Id === product?.Id)?.[0]
-    console.log(cartItem, '====')
 
 
     useEffect(() => {
@@ -59,6 +58,7 @@ const ProductDetail = ({ route, navigation }: any) => {
         }
         const cartItems = [...user?.cart, payload]
         dispatch(actions.updateCart({ id: user?.Id, list: cartItems }))
+        _showSuccessMessage(<Text style={{ fontWeight: '600' }}>Item added successfully!</Text>)
 
     }, [user, qty, product])
 

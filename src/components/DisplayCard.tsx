@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.colorWhite,
         padding: scaler(15),
-        marginBottom: scaler(20),
+        // margin: scaler(20),
     },
     touchable: {
         display: 'flex',

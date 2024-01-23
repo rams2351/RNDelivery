@@ -1,14 +1,14 @@
 import { Toast } from "react-native-toast-notifications"
 
-export const _showSuccessMessage = (msg: string) => {
+export const _showSuccessMessage = (msg: string | JSX.Element) => {
     Toast.show(msg, { type: 'success' })
 }
 
-export const _showErrorMessage = (msg: string) => {
+export const _showErrorMessage = (msg: string | JSX.Element) => {
     Toast.show(msg, { type: 'danger' })
 }
 
-export const _showInfoMessage = (msg: string) => {
+export const _showInfoMessage = (msg: string | JSX.Element) => {
     Toast.show(msg)
 }
 

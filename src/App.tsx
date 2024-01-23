@@ -17,7 +17,7 @@ function App(): React.JSX.Element {
   return (
     <ToastProvider
       placement='top'
-      duration={3000}
+      duration={2000}
       animationType={'zoom-in'}
       animationDuration={250}
       offset={50} // offset for both top and bottom toasts
