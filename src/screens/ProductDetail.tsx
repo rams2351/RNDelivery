@@ -1,7 +1,7 @@
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
 import FavoriteSvg from 'assets/svg/FavoriteSvg'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +10,7 @@ import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { scaler } from 'src/utils/Scaler'
+import { DashboardScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
 import { CurrencyFormatter } from 'utils/Utils'
 
@@ -22,6 +23,11 @@ const ProductDetail = ({ route, navigation }: any) => {
     const user = useSelector((state: AppState) => state.user.user)
 
     const wishListed = user?.wishlist?.includes(id)
+    const [qty, setQty] = useState<number>(1)
+    const isAddedToCart = user?.cart?.filter((_: any) => _.Id === product?.Id)?.[0]?.Id
+    const cartItem = user?.cart?.filter((_: any) => _?.Id === product?.Id)?.[0]
+    console.log(cartItem, '====')
+
 
     useEffect(() => {
         if (product?.Id === id) {
@@ -45,6 +51,36 @@ const ProductDetail = ({ route, navigation }: any) => {
         dispatch(actions.updateWishlist({ id: user.Id, list: filtered }))
 
     }, [product, user])
+
+    const addToCartHandler = useCallback(() => {
+        let payload = {
+            ...product,
+            qty
+        }
+        const cartItems = [...user?.cart, payload]
+        dispatch(actions.updateCart({ id: user?.Id, list: cartItems }))
+
+    }, [user, qty, product])
+
+    const qtyHandler = useCallback((id: string, qty: number, type: string) => {
+        let newQty = qty;
+        if (type === "+") {
+            newQty += 1
+        } else {
+            newQty -= 1
+        }
+        setQty(newQty)
+
+        let pay = user?.cart.map((d: any) => {
+            if (d.Id == id) {
+                return {
+                    ...d,
+                    qty: newQty
+                }
+            } else return d
+        })
+        dispatch(actions.updateCart({ id: user?.Id, list: pay }))
+    }, [user, product])
 
     return (
         <SafeAreaView style={styles.safeAreaView}>
@@ -83,13 +119,36 @@ const ProductDetail = ({ route, navigation }: any) => {
                     <Text style={styles.desc} >{product?.description}</Text>
                 </View>
             </ScrollView>
-            <Button
-                title={'Add to Cart'}
-                buttonStyle={{
-                    marginHorizontal: scaler(20),
-                    marginVertical: scaler(5)
-                }}
-            />
+            <View style={{
+                marginHorizontal: scaler(20),
+                marginVertical: scaler(15),
+            }}>
+                {
+                    isAddedToCart ?
+                        (<View style={styles.buttonContainer}>
+                            <View style={styles.groupButtonContainer}>
+                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qty > 1 ? qtyHandler(product?.Id, cartItem?.qty, '-',) : null} disabled={qty == 1}>
+                                    <Text style={styles.actionText}>-</Text>
+                                </TouchableOpacity>
+                                <View style={styles.qtyContainer}><Text style={styles.qtyText}>{cartItem?.qty}</Text></View>
+                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qtyHandler(product?.Id, cartItem?.qty, '+')}>
+                                    <Text style={styles.actionText}>+</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <Button title="Go to Cart"
+                                // startIcon={Images.ic_order_bg}
+                                onPressButton={() => NavigationService.push(DashboardScreens.CART)}
+                                buttonStyle={{ paddingHorizontal: 20, height: scaler(35), paddingVertical: 0 }} />
+
+                        </View>)
+                        : (<Button
+                            onPressButton={addToCartHandler}
+                            title={isAddedToCart ? 'Go to' : 'Add to Cart'}
+                            buttonStyle={{}}
+                        />)
+                }
+            </View>
+
         </SafeAreaView>
     )
 }
@@ -166,5 +225,50 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: colors.colorBlack,
         marginBottom: scaler(5)
+    },
+    groupButtonContainer: {
+        // borderWidth: scaler(1),
+        // borderColor: colors.colorFocus,
+        borderRadius: scaler(10),
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        overflow: 'hidden'
+    },
+    buttonContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    actionButton: {
+        backgroundColor: colors.colorPrimary,
+        width: scaler(45),
+        height: scaler(35),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: colors.colorPrimary,
+        borderWidth: 1,
+        overflow: 'hidden'
+    },
+    qtyContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: scaler(45),
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: colors.colorPrimary,
+
+    },
+    actionText: {
+        fontSize: scaler(15),
+        fontWeight: '700',
+        color: colors.colorWhite
+    },
+    qtyText: {
+        fontSize: scaler(15),
+        fontWeight: '600',
     }
 })

@@ -12,5 +12,6 @@ export const DashboardScreens = {
     FAVORITE: 'favorite',
     PROFILE: 'profile',
     ORDERS: 'orders',
-    PRODUCT_DETAIL: 'productDetail'
+    PRODUCT_DETAIL: 'productDetail',
+    CART: 'cart'
 }

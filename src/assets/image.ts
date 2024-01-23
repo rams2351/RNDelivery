@@ -21,5 +21,6 @@ export const Images = {
     ic_order_bg: require('./images/ordersBg.png'),
     ic_user1: require('./images/User1.png'),
     ic_left_icon: require('./images/chevron-left.png'),
-    ic_right_icon:require('./images/chevron-right.png')
+    ic_right_icon: require('./images/chevron-right.png'),
+    ic_cart_white:require('./images/cart_white.png')
 }

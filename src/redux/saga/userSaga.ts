@@ -75,10 +75,29 @@ function* updateWishlist({payload:{list,id}}:Action<any>): Generator<any, any, a
     }
 }
 
+function* updateCartList({ payload:{list,id} }: Action<any>): Generator<any, any, any>{
+    yield put(actions.setLoading(true))
+    let pay = { cart: JSON.stringify(list), id: id }
+    try {
+        let res = yield call(ApiProvider._updateWishlist,pay)
+         if (res) {
+                 yield put(actions.setUserData(res))
+        }   else {
+             console.log('something went wrong');
+            }
+            yield put(actions.setLoading(false))
+
+    } catch (error) {
+        console.log("Catch Error", error);
+        yield put(actions.setLoading(false));
+    }
+}
+
 
 export default function* watchUsers() {
     yield takeLeading(actions.validateUser.toString(), validateUser)
     yield takeLeading(actions.signUpUser.toString(), signUpUser)
     yield takeLeading(actions.updateWishlist.toString(), updateWishlist)
-    yield takeLeading(actions.getUser.toString(),getUser)
+    yield takeLeading(actions.getUser.toString(), getUser)
+    yield takeLeading(actions.updateCart.toString(),updateCartList)
 }

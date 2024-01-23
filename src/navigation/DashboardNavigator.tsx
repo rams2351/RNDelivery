@@ -1,6 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet } from 'react-native'
+import Cart from 'screens/Cart/Cart'
 import ProductDetail from 'screens/ProductDetail'
 import { DashboardScreens, scaler } from 'utils/all'
 import BottomTabNavigator from './BottomTabNavigator'
@@ -13,6 +14,10 @@ const DashboardScreensArray = [
     {
         name: DashboardScreens.PRODUCT_DETAIL,
         component: ProductDetail
+    },
+    {
+        name: DashboardScreens.CART,
+        component: Cart
     }
 ]
 

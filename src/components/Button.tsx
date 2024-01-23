@@ -43,14 +43,14 @@ const Button = (props: ButtonProps) => {
     })
 
     return (
-        <TouchableOpacity style={styles.button} onPress={onPressButton} disabled={disabled}>
+        <TouchableOpacity style={styles.button} onPress={onPressButton} disabled={disabled} activeOpacity={0.7}>
             {startIcon ?
                 <Image source={startIcon} style={styles.icon} />
                 : null
             }
             {<Text style={styles.title}>{title}</Text>}
             {endIcon ?
-                <Image source={startIcon} style={styles.icon} />
+                <Image source={endIcon} style={styles.icon} />
                 : null
             }
         </TouchableOpacity>

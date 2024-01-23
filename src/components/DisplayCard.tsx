@@ -8,7 +8,7 @@ import Text from './Text'
 //@ts-ignore
 import CardView from 'react-native-cardview'
 const DisplayCard = (props: any) => {
-    const { name, img, price, onPress, Id: id } = props
+    const { name, img, price, onPress, Id: id, qty } = props
 
     return (
         <CardView
@@ -27,10 +27,10 @@ const DisplayCard = (props: any) => {
                     paddingHorizontal: scaler(13),
 
                 }} >
-                    <Text style={styles.text} numberOfLines={1} >{name}</Text>
+                    <Text style={[styles.text, qty ? { marginBottom: 5 } : {}]} numberOfLines={1} >{name}</Text>
                     <View>
-                        <Text style={styles.price} >{CurrencyFormatter(price)}</Text>
-
+                        <Text style={styles.price} >{qty ? CurrencyFormatter(qty * price) : CurrencyFormatter(price)}</Text>
+                        {qty ? <Text style={styles.qtyText}>Qty-{qty}</Text> : null}
                     </View>
                 </View>
 
@@ -82,6 +82,8 @@ const styles = StyleSheet.create({
         fontSize: scaler(15),
         fontWeight: '700',
         color: colors.colorPrimary,
-
     },
+    qtyText: {
+        fontWeight: '600'
+    }
 })
