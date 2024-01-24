@@ -7,6 +7,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/Button';
+import CustomHeader from 'src/components/CustomHeader';
 import DisplayCard from 'src/components/DisplayCard';
 import Text from 'src/components/Text';
 import { actions } from 'src/redux/slices/reducer';
@@ -61,16 +62,7 @@ const Cart = () => {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.colorBackground }}>
-            <View style={styles.container}>
-                <TouchableOpacity
-                    onPress={() => NavigationService.goBack()}
-                ><Image source={Images.ic_right_icon} style={styles.backIcon} />
-                </TouchableOpacity>
-                <View style={{ flex: 1, }}>
-                    <Text style={styles.text}>Cart</Text>
-                </View>
-                <View style={styles.backIcon} />
-            </View>
+            <CustomHeader title='Cart' />
             <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginVertical: scaler(10) }}>
                 <Image source={Images.ic_swipe_text} style={{ width: '80%', height: 25 }} />
             </View>
@@ -105,6 +97,7 @@ const Cart = () => {
                 <Button
                     title="Checkout"
                     buttonStyle={{}}
+                    onPressButton={() => NavigationService.push(DashboardScreens.CHECKOUT)}
                 />
             </View>
         </SafeAreaView>
@@ -114,21 +107,6 @@ const Cart = () => {
 export default Cart
 
 const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: scaler(15),
-        backgroundColor: colors.colorBackground
-    },
-    text: {
-        fontSize: scaler(15),
-        color: colors.colorPrimary,
-        fontWeight: '800',
-        textAlign: 'center',
-
-    },
     cartContainer: {
         position: 'absolute',
         backgroundColor: colors.colorPrimary,
@@ -140,10 +118,6 @@ const styles = StyleSheet.create({
     cartImage: {
         height: scaler(25),
         width: scaler(25)
-    },
-    backIcon: {
-        height: scaler(28),
-        width: scaler(28)
     },
     buttonPriceContainer: {
         marginVertical: scaler(15),

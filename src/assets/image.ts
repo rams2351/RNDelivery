@@ -24,6 +24,14 @@ export const Images = {
     ic_right_icon: require('./images/chevron-right.png'),
     ic_cart_white: require('./images/cart_white.png'),
     ic_swipe_text: require('./images/swipe_text.png'),
-    ic_delete:require('./images/Trash.png'),
+    ic_delete: require('./images/Trash.png'),
+    ic_bank: require('./images/bank.png'),
+    ic_card: require('./images/card.png'),
+    ic_paypal: require('./images/paypal.png'),
+    ic_check: require('./images/check.png'),
+    ic_uncheck: require('./images/uncheck.png'),
+    ic_success_gif:require('./images/successGif.gif')
+
+
 
 }

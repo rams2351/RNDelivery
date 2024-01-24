@@ -13,5 +13,8 @@ export const DashboardScreens = {
     PROFILE: 'profile',
     ORDERS: 'orders',
     PRODUCT_DETAIL: 'productDetail',
-    CART: 'cart'
+    CART: 'cart',
+    CHECKOUT: 'checkout',
+    BOTTOM_NAVIGATOR: 'BottomNavigation',
+    PAYMENT_SUCCESS: 'paymentSuccess'
 }

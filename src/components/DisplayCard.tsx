@@ -1,5 +1,5 @@
 import { Images } from 'assets/image'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { colors } from 'src/assets/Colors'
 import { scaler } from 'utils/Scaler'
@@ -7,8 +7,37 @@ import { CurrencyFormatter } from 'utils/Utils'
 import Text from './Text'
 //@ts-ignore
 import CardView from 'react-native-cardview'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+import { actions } from 'src/redux/slices/reducer'
+import { AppState } from 'src/types/interface'
 const DisplayCard = (props: any) => {
     const { name, img, price, onPress, Id: id, qty } = props
+
+    const { user } = useSelector((state: AppState) => ({ user: state.user.user }), shallowEqual)
+    const dispatch = useDispatch()
+
+
+
+    const qtyHandler = useCallback((id: string, qty: number, type: string) => {
+        let newQty = qty;
+        if (type === "+") {
+            newQty += 1
+        } else {
+            newQty -= 1
+        }
+
+        let pay = user?.cart.map((d: any) => {
+            if (d.Id == id) {
+                return {
+                    ...d,
+                    qty: newQty
+                }
+            } else return d
+        })
+        console.log(pay);
+
+        dispatch(actions.updateCart({ id: user?.Id, list: pay }))
+    }, [user])
 
     return (
         <CardView
@@ -25,12 +54,27 @@ const DisplayCard = (props: any) => {
                     display: 'flex',
                     flexShrink: 1,
                     paddingHorizontal: scaler(13),
+                    marginTop: 2
 
                 }} >
                     <Text style={[styles.text, qty ? { marginBottom: 5 } : {}]} numberOfLines={1} >{name}</Text>
-                    <View>
+                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                         <Text style={styles.price} >{qty ? CurrencyFormatter(qty * price) : CurrencyFormatter(price)}</Text>
-                        {qty ? <Text style={styles.qtyText}>Qty-{qty}</Text> : null}
+                        {qty ?
+                            <TouchableOpacity style={styles.groupButtonContainer} onPress={() => { }} activeOpacity={1}>
+                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qty > 1 ? qtyHandler(id, qty, '-',) : null} disabled={qty == 1}>
+                                    <Text style={styles.actionText}>-</Text>
+                                </TouchableOpacity>
+                                <View style={styles.qtyContainer}>
+                                    <Text style={styles.qtyText}>{qty}</Text>
+                                </View>
+                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qtyHandler(id, qty, '+')}>
+                                    <Text style={styles.actionText}>+</Text>
+                                </TouchableOpacity>
+                            </TouchableOpacity>
+
+
+                            : null}
                     </View>
                 </View>
 
@@ -46,7 +90,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.colorWhite,
         padding: scaler(15),
-        // margin: scaler(20),
     },
     touchable: {
         display: 'flex',
@@ -83,7 +126,42 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: colors.colorPrimary,
     },
+    groupButtonContainer: {
+        borderRadius: scaler(10),
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        overflow: 'hidden'
+    },
+
+    actionButton: {
+        backgroundColor: colors.colorPrimary,
+        width: scaler(25),
+        height: scaler(25),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: colors.colorPrimary,
+        borderWidth: 1,
+        overflow: 'hidden'
+    },
+    qtyContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: scaler(25),
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: colors.colorPrimary,
+
+    },
+    actionText: {
+        fontSize: scaler(15),
+        fontWeight: '700',
+        color: colors.colorWhite
+    },
     qtyText: {
-        fontWeight: '600'
+        fontSize: scaler(12),
+        fontWeight: '500',
     }
 })

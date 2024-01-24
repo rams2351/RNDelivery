@@ -36,8 +36,6 @@ const Home = () => {
     )
 
     const handleCategoryChange = useCallback((type: string) => {
-        console.log(type);
-
         setActiveTab(type)
         scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
         switch (type) {

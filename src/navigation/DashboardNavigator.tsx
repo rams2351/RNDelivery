@@ -2,13 +2,15 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import Cart from 'screens/Cart/Cart'
+import Checkout from 'screens/Checkout/Checkout'
+import PaymentSuccess from 'screens/Payment/PaymentSuccess'
 import ProductDetail from 'screens/ProductDetail'
 import { DashboardScreens, scaler } from 'utils/all'
 import BottomTabNavigator from './BottomTabNavigator'
 
 const DashboardScreensArray = [
     {
-        name: 'BottomNavigation',
+        name: DashboardScreens.BOTTOM_NAVIGATOR,
         component: BottomTabNavigator
     },
     {
@@ -18,6 +20,14 @@ const DashboardScreensArray = [
     {
         name: DashboardScreens.CART,
         component: Cart
+    },
+    {
+        name: DashboardScreens.CHECKOUT,
+        component: Checkout
+    },
+    {
+        name: DashboardScreens.PAYMENT_SUCCESS,
+        component: PaymentSuccess
     }
 ]
 

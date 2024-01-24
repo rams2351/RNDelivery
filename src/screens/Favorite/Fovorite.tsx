@@ -98,7 +98,7 @@ const Favorite = () => {
             }
             <Button
                 onPressButton={() => {
-                    dispatch(actions.getProductDetail(`(Id,eq,${1})`))
+                    NavigationService.replace('BottomNavigation', { screen: DashboardScreens.HOME })
                 }}
                 title={'Add to Favorites'}
                 buttonStyle={{
