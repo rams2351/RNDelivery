@@ -1,8 +1,9 @@
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
 import React, { useCallback, useState } from 'react'
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Icon from 'react-native-vector-icons/Ionicons'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
 import CardView from 'src/components/CardView'
@@ -66,31 +67,57 @@ const Checkout = () => {
         <>
             <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: colors.colorBackground }} >
                 <CustomHeader title='Checkout' />
-                <View style={styles.container}>
-                    <Text style={styles.methodText}>Payment Method</Text>
+                <ScrollView >
 
-                    <CardView
-                        cardElevation={3}
-                        cardMaxElevation={2}
-                        cornerRadius={15}
-                        style={styles.cardContainer}
-                    >
-                        {
-                            Methods.map((d, i) => (<View key={i}>
-                                <TouchableOpacity key={i} style={styles.methodsContainer} activeOpacity={0.5} onPress={() => setPaymentMethod(d.name)} >
-                                    {paymentMethod === d.name ? <Image source={Images.ic_check} style={[styles.paymentImage]} /> : <Image source={Images.ic_uncheck} style={[styles.paymentImage]} />}
+                    <View style={styles.container}>
+                        <Text style={styles.methodText}>Delivered to:</Text>
+
+                        <CardView
+                            cardElevation={3}
+                            cardMaxElevation={2}
+                            cornerRadius={15}
+                            style={styles.deliveredContainer}
+                        >
+                            <View style={styles.addressContainer}>
+                                <Icon name="location" size={20} color={colors.colorFocus} style={{}} />
+                                <Text style={styles.addressText}> {user?.firstName + " " + (user?.address ?? '') + ", " + user?.phone}</Text>
+                            </View>
+
+                            <View style={styles.underline} />
+                            <View>
+                                <Icon.Button name='add' style={{}} />
+                            </View>
+
+                        </CardView>
+                    </View>
+
+                    <View style={styles.container}>
+                        <Text style={styles.methodText}>Payment Method</Text>
+
+                        <CardView
+                            cardElevation={3}
+                            cardMaxElevation={2}
+                            cornerRadius={15}
+                            style={styles.cardContainer}
+                        >
+                            {
+                                Methods.map((d, i) => (<View key={i}>
+                                    <TouchableOpacity key={i} style={styles.methodsContainer} activeOpacity={0.5} onPress={() => setPaymentMethod(d.name)} >
+                                        {paymentMethod === d.name ? <Image source={Images.ic_check} style={[styles.paymentImage]} /> : <Image source={Images.ic_uncheck} style={[styles.paymentImage]} />}
 
 
-                                    <View style={[styles.imageContainer, { backgroundColor: d.color }]}>
-                                        <Image source={d.icon} style={styles.paymentImage} />
-                                    </View>
-                                    <Text style={styles.paymentText}>{d.name}</Text>
-                                </TouchableOpacity>
-                                <View style={styles.underline} />
-                            </View>))
-                        }
-                    </CardView>
-                </View>
+                                        <View style={[styles.imageContainer, { backgroundColor: d.color }]}>
+                                            <Image source={d.icon} style={styles.paymentImage} />
+                                        </View>
+                                        <Text style={styles.paymentText}>{d.name}</Text>
+                                    </TouchableOpacity>
+                                    <View style={styles.underline} />
+                                </View>))
+                            }
+                        </CardView>
+                    </View>
+
+                </ScrollView>
                 <View style={styles.totalContainer}>
                     <Text style={styles.methodText}>Total</Text>
                     <Text style={styles.methodText}>{CurrencyFormatter(total)}</Text>
@@ -103,6 +130,11 @@ const Checkout = () => {
                     onPressButton={paymentHandler}
                 />
             </SafeAreaView>
+            {/* <Modal visible={false} style={{ backgroundColor: 'blue', flex: 1 }} >
+                <SafeAreaView edges={['top', 'bottom']}>
+                    <Text>hello</Text>
+                </SafeAreaView>
+            </Modal> */}
         </>
     )
 }
@@ -159,5 +191,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginHorizontal: scaler(25),
 
+    },
+    addressContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: scaler(10),
+        flexShrink: 1
+    },
+    deliveredContainer: {
+        backgroundColor: colors.colorWhite,
+        padding: scaler(15),
+    },
+    addressText: {
+        fontWeight: '500',
+        marginLeft: scaler(5)
     }
 })

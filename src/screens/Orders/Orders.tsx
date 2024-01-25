@@ -1,6 +1,7 @@
 import { colors, Images } from 'assets/alllll';
 import React from 'react';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/Button';
 import CardView from 'src/components/CardView';
@@ -42,6 +43,7 @@ const Orders = ({ navigation }: any) => {
                                     </View>
                                     <View>
                                         {/* <Image /> */}
+                                        <Icon name='home' />
                                     </View>
                                 </CardView>
                             </View>
