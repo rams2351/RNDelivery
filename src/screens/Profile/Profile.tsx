@@ -57,8 +57,8 @@ const Profile = ({ navigation }: any) => {
                     <View style={styles.textContainer}>
                         <Text style={styles.textName}>{user?.firstName + " " + user?.lastName}</Text>
                         <Text style={styles.textDesc}  >{user?.email} </Text>
-                        <Text style={styles.textDesc}>{"+" + user?.countryCode + " " + user?.phone}</Text>
-                        <Text style={styles.textDesc}>1st floor,taj plaza, tdi sector 117,mohali punjab dafdsfadsfadfdfdfdf adfdfdf  adfadfdfdfd</Text>
+                        <Text style={styles.textDesc}>{user?.countryCode + " " + user?.phone}</Text>
+                        <Text style={styles.textDesc}>{user?.address}</Text>
                     </View>
                 </Card>
 

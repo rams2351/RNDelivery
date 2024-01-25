@@ -43,3 +43,18 @@ export const NameFormatter = (name: string) => {
 }
 
 
+export function getCurrentDateTime() {
+    const now = new Date();
+
+    // Get the date
+    const date = now.toLocaleDateString(); // Format: MM/DD/YYYY
+
+    // Get the time
+    const time = now.toLocaleTimeString(); // Format: HH:MM:SS
+
+    // Get the day
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const day = daysOfWeek[now.getDay()]; // GetDay returns 0 for Sunday, 1 for Monday, and so on.
+
+    return { date, time, day };
+}

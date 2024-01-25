@@ -1,32 +1,52 @@
 import { colors, Images } from 'assets/alllll';
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import { useToast } from 'react-native-toast-notifications';
+import { FlatList, Image, StyleSheet, View } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/Button';
+import CardView from 'src/components/CardView';
 import Text from 'src/components/Text';
 import { AppState } from 'src/types/interface';
 import { scaler } from 'src/utils/Scaler';
-import { DashboardScreens, _showInfoMessage } from 'utils/all';
+import { DashboardScreens } from 'utils/all';
 import { NavigationService } from 'utils/NavigationService';
 
 const Orders = ({ navigation }: any) => {
     const dispatch = useDispatch()
-    const toast = useToast()
-
-    const showToast = () => {
-        _showInfoMessage('hello success')
-    }
-
     const { user } = useSelector((state: AppState) => ({
         user: state.user.user
     }), shallowEqual)
+    const orders = user?.orders
 
     return (
         <View style={{ backgroundColor: colors.colorBackground, flex: 1 }}>
-            {user?.orders?.length ? (
+            {orders?.length ? (
                 <>
+                    <FlatList
+                        data={orders}
+                        style={{ padding: 10 }}
+                        keyExtractor={(d, i) => i.toString()}
+                        ItemSeparatorComponent={() => <View style={{ marginVertical: scaler(10) }} />}
+                        renderItem={({ item }) => (
+                            <View>
+                                <CardView
+                                    cardElevation={3}
+                                    cardMaxElevation={2}
+                                    cornerRadius={15}
+                                    style={styles.cardStyle}
+                                >
+                                    <View>
+                                        {/* <Text>Status-# Preparing in {item.products[0].prepTime} mins</Text> */}
 
+                                        <Text>Date: {item.orderTime.date}</Text>
+                                        <Text>Items: {item.products?.length}</Text>
+                                    </View>
+                                    <View>
+                                        {/* <Image /> */}
+                                    </View>
+                                </CardView>
+                            </View>
+                        )}
+                    />
                 </>
             ) : (
                 <>
@@ -75,5 +95,10 @@ const styles = StyleSheet.create({
         fontSize: scaler(14),
         // fontWeight: '600',
         color: colors.colorGreyMore
+    },
+    cardStyle: {
+        backgroundColor: colors.colorWhite,
+        padding: scaler(15),
+        marginHorizontal: scaler(10)
     }
 })

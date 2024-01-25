@@ -24,7 +24,7 @@ const PaymentSuccess = ({ navigation }: any) => {
                 <Image source={Images.ic_success_gif} style={styles.image} />
                 <Text style={styles.text}>Payment Success</Text>
             </View>
-            <Button title="Continue shopping" buttonStyle={{
+            <Button title="Continue ordering" buttonStyle={{
                 marginHorizontal: scaler(20),
                 marginBottom: scaler(20)
 

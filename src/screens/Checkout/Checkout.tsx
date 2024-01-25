@@ -13,7 +13,7 @@ import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
-import { CurrencyFormatter } from 'utils/Utils'
+import { CurrencyFormatter, getCurrentDateTime } from 'utils/Utils'
 
 const Methods = [
     {
@@ -45,7 +45,6 @@ const Checkout = () => {
     cart?.forEach((_: any) => {
         total += _.price * _.qty
     })
-
     const paymentHandler = useCallback(() => {
         dispatch(actions.setLoading(true))
 
@@ -54,10 +53,11 @@ const Checkout = () => {
             NavigationService.push(DashboardScreens.PAYMENT_SUCCESS)
             let pay = []
             if (user?.orders?.length) {
-                pay = [...user.orders, { ...cart }]
+                pay = [...user.orders, { products: cart, orderTime: getCurrentDateTime() }]
             } else {
-                pay = [{ ...cart }]
+                pay = [{ products: cart, orderTime: getCurrentDateTime() }]
             }
+
             dispatch(actions.setLoading(false))
             dispatch(actions.updateOrders({ id: user.Id, list: pay }))
         }, 5000)
@@ -76,7 +76,7 @@ const Checkout = () => {
                         style={styles.cardContainer}
                     >
                         {
-                            Methods.map((d, i) => (<>
+                            Methods.map((d, i) => (<View key={i}>
                                 <TouchableOpacity key={i} style={styles.methodsContainer} activeOpacity={0.5} onPress={() => setPaymentMethod(d.name)} >
                                     {paymentMethod === d.name ? <Image source={Images.ic_check} style={[styles.paymentImage]} /> : <Image source={Images.ic_uncheck} style={[styles.paymentImage]} />}
 
@@ -87,7 +87,7 @@ const Checkout = () => {
                                     <Text style={styles.paymentText}>{d.name}</Text>
                                 </TouchableOpacity>
                                 <View style={styles.underline} />
-                            </>))
+                            </View>))
                         }
                     </CardView>
                 </View>

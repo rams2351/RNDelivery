@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { colors, Images } from 'assets/alllll'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Form, FormProvider, useForm } from 'react-hook-form'
-import { Alert, Image, ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 import Geolocation from 'react-native-geolocation-service'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -21,7 +21,8 @@ const formSchema = yup.object().shape({
     firstName: yup.string().required('First name is required!'),
     lastName: yup.string().required('Last name is required!'),
     email: yup.string().required('Email is required!'),
-    dob: yup.string().required('Date of birth is required!')
+    dob: yup.string().required('Date of birth is required!'),
+    address: yup.string().required('Address is required!')
 })
 
 const SignUp = (props: any) => {
@@ -42,7 +43,7 @@ const SignUp = (props: any) => {
             ...data,
             phone,
             countryCode: code,
-            address: location
+            location
         }
         dispatch(actions.signUpUser(payload))
     }, [location])
@@ -78,7 +79,7 @@ const SignUp = (props: any) => {
                 >
                     <View
                         style={styles.logoTextContainer}>
-                        <Image source={Images.logo} />
+                        {/* <Image source={Images.logo} /> */}
                         <Text style={styles.otpText}>Customer Details</Text>
                         <View style={styles.underline} />
                     </View>
@@ -117,17 +118,19 @@ const SignUp = (props: any) => {
                                         <DatePicker
                                             title='Date of birth'
                                             onChangeValue={e => console.log((e))} />
+
+                                        <RnInput
+                                            title='Address'
+                                            name="address"
+                                            onChangeValue={(e) => console.log(e)}
+                                            placeholder="Address"
+                                            icon={Images.user}
+                                        />
                                     </View>
 
-                                    <View style={styles.buttonContainer}>
 
-                                        {/* <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: scaler(13) }}>
-                            <Text style={styles.alreadyAccount}>Already have an account? </Text>
-                            <TouchableOpacity><Text style={[styles.alreadyAccount, { fontSize: scaler(16), marginBottom: scaler(0), color: colors.colorPrimary, marginLeft: scaler(2) }]}>Login</Text></TouchableOpacity>
-                        </View> */}
+                                    <Button title="Continue" onPressButton={submit} buttonStyle={styles.buttonContainer} />
 
-                                        <Button title="Continue" onPressButton={submit} />
-                                    </View>
                                 </>)
                             }}
                         />
@@ -156,13 +159,14 @@ const styles = StyleSheet.create({
         minHeight: '100%'
     },
     logoTextContainer: {
-        height: '30%',
+        // height: '30%',
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40,
         backgroundColor: colors.colorWhite,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        paddingVertical: scaler(15)
     },
 
     heading: {
@@ -189,7 +193,8 @@ const styles = StyleSheet.create({
     },
     formContainer: {
         marginTop: scaler(30),
-        paddingHorizontal: scaler(15)
+        paddingHorizontal: scaler(15),
+        flex: 1
     },
     alreadyAccount: {
         fontSize: scaler(13),
@@ -199,10 +204,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     buttonContainer: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        paddingBottom: scaler(25),
-        paddingHorizontal: scaler(15)
+        marginBottom: scaler(25),
+        marginHorizontal: scaler(15),
+
     }
 })
