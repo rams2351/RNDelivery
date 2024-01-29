@@ -82,9 +82,6 @@ const Favorite = () => {
                                     </View>
                                 </Swipeable>)}
                         />
-                        {/* <ScrollView contentContainerStyle={{ padding: scaler(30) }}>
-                            {wishListedProducts.map((d: any, i: number) => (<DisplayCard key={i} {...d} onPress={(e: any) => NavigationService.push(DashboardScreens.PRODUCT_DETAIL, { id: e })} />))}
-                        </ScrollView> */}
                     </>
                 ) : (
                     <View style={styles.container}>
@@ -104,7 +101,7 @@ const Favorite = () => {
                 buttonStyle={{
                     marginHorizontal: scaler(20),
                     marginVertical: scaler(5),
-                    marginBottom: scaler(20)
+                    // marginBottom: scaler(20)
                 }}
             />
 

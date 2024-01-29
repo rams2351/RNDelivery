@@ -1,9 +1,10 @@
 import { Images } from 'assets/alllll'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { colors } from 'src/assets/Colors'
 import Card from 'src/components/Card'
+import Popup from 'src/components/Popup'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
@@ -40,35 +41,56 @@ const Profile = ({ navigation }: any) => {
         user: state.user.user
     }), shallowEqual)
 
+    const [modalOpen, setModalOpen] = useState<boolean>(false)
     const navigationHandler = useCallback((route: string) => {
         if (route === 'logout') {
-            dispatch(actions.setUserData(null))
-            dispatch(actions.setLogin(false))
+            setModalOpen(true)
         } else {
-            navigation.navigate('BottomNavigation', { screen: route })
+            navigation.push('BottomNavigation', { screen: route })
         }
+    }, [])
+    const logoutHandler = useCallback(() => {
+        dispatch(actions.setUserData(null))
+        dispatch(actions.setLogin(false))
     }, [])
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={{ padding: scaler(20) }}>
                 <Text style={[styles.textName, { marginVertical: scaler(10) }]}>Personal Detail</Text>
-                <Card cardStyle={styles.imageTextContainer}>
-                    <Image source={Images.ic_user1} style={styles.imageContainer} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.textName}>{user?.firstName + " " + user?.lastName}</Text>
-                        <Text style={styles.textDesc}  >{user?.email} </Text>
-                        <Text style={styles.textDesc}>{user?.countryCode + " " + user?.phone}</Text>
-                        <Text style={styles.textDesc}>{user?.address}</Text>
+                <Card style={[{ marginBottom: scaler(10) }]}>
+                    <View style={styles.imageTextContainer}>
+
+                        <Image source={Images.ic_user1} style={styles.imageContainer} />
+                        <View style={styles.textContainer}>
+                            <Text style={styles.textName}>{user?.firstName + " " + user?.lastName}</Text>
+                            <Text style={styles.textDesc}  >{user?.email} </Text>
+                            <Text style={styles.textDesc}>{user?.countryCode + " " + user?.phone}</Text>
+                            <Text style={styles.textDesc}>{user?.address}</Text>
+                        </View>
                     </View>
                 </Card>
 
                 {OptionList.map((d, i) => (
-                    <Card key={i} cardStyle={{}} onPressCard={() => d.route.length ? navigationHandler(d.route) : null}>
+                    <Card key={i} style={{ marginVertical: scaler(10) }} onPressCard={() => d.route.length ? navigationHandler(d.route) : null}>
                         <View style={[styles.imageTextContainer, styles.additional]}>
                             <Text style={styles.textName}>{d.name}</Text>
                             <Image source={Images.ic_left_icon} style={{ height: scaler(18), width: scaler(18) }} />
                         </View>
                     </Card>))}
+
+                <Popup
+                    isOpen={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    title={'Logout'}
+                    leftButtonText={'Cancel'}
+                    rightButtonText="Logout"
+                    leftButtonAction={() => setModalOpen(false)}
+                    rightButtonAction={logoutHandler}
+                >
+                    <View style={styles.modalContainer}>
+                        <Text style={styles.modalText}>Are you want to Logout from the Food App?</Text>
+                    </View>
+                </Popup>
             </View>
         </ScrollView>
     )
@@ -111,5 +133,14 @@ const styles = StyleSheet.create({
         padding: 6,
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+    modalContainer: {
+        padding: scaler(15),
+        display: 'flex',
+        flexShrink: 1
+    },
+    modalText: {
+        fontWeight: '600',
+        color: colors.colorGreyInactive
     }
 })

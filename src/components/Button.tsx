@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from 'react';
-import { GestureResponderEvent, Image, ImageSourcePropType, StyleProp, StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
+import { GestureResponderEvent, Image, ImageSourcePropType, StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { colors } from 'src/assets/Colors';
 import { scaler } from '../utils/Scaler';
 import Text from './Text';
@@ -15,7 +15,7 @@ interface ButtonProps {
 }
 
 const Button = (props: ButtonProps) => {
-    const { title, startIcon, endIcon, onPressButton, disabled } = props
+    const { title, startIcon, endIcon, onPressButton, disabled, containerStyle } = props
 
     const styles = StyleSheet.create({
         title: {
@@ -39,21 +39,26 @@ const Button = (props: ButtonProps) => {
             width: scaler(20),
             objectFit: 'contain',
             marginHorizontal: scaler(30)
+        },
+        container: {
+            ...StyleSheet.flatten(containerStyle)
         }
     })
 
     return (
-        <TouchableOpacity style={styles.button} onPress={onPressButton} disabled={disabled} activeOpacity={0.7}>
-            {startIcon ?
-                <Image source={startIcon} style={styles.icon} />
-                : null
-            }
-            {<Text style={styles.title}>{title}</Text>}
-            {endIcon ?
-                <Image source={endIcon} style={styles.icon} />
-                : null
-            }
-        </TouchableOpacity>
+        <View style={styles.container}>
+            <TouchableOpacity style={styles.button} onPress={onPressButton} disabled={disabled} activeOpacity={0.7}>
+                {startIcon ?
+                    <Image source={startIcon} style={styles.icon} />
+                    : null
+                }
+                {<Text style={styles.title}>{title}</Text>}
+                {endIcon ?
+                    <Image source={endIcon} style={styles.icon} />
+                    : null
+                }
+            </TouchableOpacity>
+        </View>
     )
 }
 

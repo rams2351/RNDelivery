@@ -21,8 +21,10 @@ const PaymentSuccess = ({ navigation }: any) => {
     return (
         <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: colors.colorBackground }}>
             <View style={styles.container}>
-                <Image source={Images.ic_success_gif} style={styles.image} />
-                <Text style={styles.text}>Payment Success</Text>
+                <View style={styles.imageContainer}>
+                    <Image source={Images.ic_success_gif} style={styles.image} />
+                </View>
+                <Text style={styles.text}>Order Placed Successfully!</Text>
             </View>
             <Button title="Continue ordering" buttonStyle={{
                 marginHorizontal: scaler(20),
@@ -42,19 +44,25 @@ const styles = StyleSheet.create({
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+    },
+    imageContainer: {
+        borderRadius: 100,
+        borderWidth: 5,
+        borderColor: 'green',
+        overflow: 'hidden'
     },
     image: {
         borderRadius: 100,
         height: scaler(150),
         width: scaler(150),
-        borderWidth: 5,
-        borderColor: 'green'
+
     },
     text: {
         fontSize: scaler(25),
         fontWeight: '600',
         color: 'green',
-        marginTop: scaler(25)
+        marginTop: scaler(25),
+        paddingHorizontal: scaler(15)
     }
 })

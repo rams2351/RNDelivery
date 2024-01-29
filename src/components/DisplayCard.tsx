@@ -50,13 +50,7 @@ const DisplayCard = (props: any) => {
                 <View style={styles.imageContainer}>
                     <Image source={Images.active_user} src={img[0]?.signedUrl} style={styles.image} />
                 </View>
-                <View style={{
-                    display: 'flex',
-                    flexShrink: 1,
-                    paddingHorizontal: scaler(13),
-                    marginTop: 2
-
-                }} >
+                <View style={styles.container1} >
                     <Text style={[styles.text, qty ? { marginBottom: 5 } : {}]} numberOfLines={1} >{name}</Text>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                         <Text style={styles.price} >{qty ? CurrencyFormatter(qty * price) : CurrencyFormatter(price)}</Text>
@@ -163,5 +157,12 @@ const styles = StyleSheet.create({
     qtyText: {
         fontSize: scaler(12),
         fontWeight: '500',
+    },
+    container1: {
+        display: 'flex',
+        flexShrink: 1,
+        paddingHorizontal: scaler(13),
+        marginTop: 2
+
     }
 })

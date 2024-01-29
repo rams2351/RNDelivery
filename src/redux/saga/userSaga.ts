@@ -57,8 +57,10 @@ function* getUser({ payload }: Action<any>): Generator<any, any, any>{
     }
 }
 
-function* updateWishlist({payload:{list,id}}:Action<any>): Generator<any, any, any>{
-    yield put(actions.setLoading(true))
+function* updateWishlist({payload:{list,id,loader}}:Action<any>): Generator<any, any, any>{
+    // yield put(actions.setLoading(true))
+    loader(true)
+
     let pay = { wishlist: JSON.stringify(list), id: id }
     try {
         let res = yield call(ApiProvider._updateWishlist,pay)
@@ -66,11 +68,13 @@ function* updateWishlist({payload:{list,id}}:Action<any>): Generator<any, any, a
                  yield put(actions.setUserData(res))
         }   else {
              console.log('something went wrong');
-            }
+         }
+        loader(false)
             yield put(actions.setLoading(false))
 
     } catch (error) {
         console.log("Catch Error", error);
+        loader(false)
         yield put(actions.setLoading(false));
     }
 }

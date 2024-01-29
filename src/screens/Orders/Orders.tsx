@@ -1,14 +1,15 @@
 import { colors, Images } from 'assets/alllll';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/Button';
-import CardView from 'src/components/CardView';
+import Card from 'src/components/Card';
 import Text from 'src/components/Text';
 import { AppState } from 'src/types/interface';
 import { scaler } from 'src/utils/Scaler';
-import { DashboardScreens } from 'utils/all';
+import { AddMinutesToTime, DashboardScreens, getCurrentDateTime, GetCurrentTime, TimeFormatter } from 'utils/all';
 import { NavigationService } from 'utils/NavigationService';
 
 const Orders = ({ navigation }: any) => {
@@ -18,35 +19,40 @@ const Orders = ({ navigation }: any) => {
     }), shallowEqual)
     const orders = user?.orders
 
+    const getStatus = useCallback((item: any) => {
+        if (item.orderTime.date === getCurrentDateTime().date) {
+            return AddMinutesToTime(item.orderTime.time, item?.timeToDeliver) > GetCurrentTime() ? 'Delivered' : 'On the way'
+        } else {
+            return 'Delivered'
+        }
+    }, [])
+
     return (
         <View style={{ backgroundColor: colors.colorBackground, flex: 1 }}>
             {orders?.length ? (
                 <>
                     <FlatList
-                        data={orders}
+                        data={orders.slice().reverse()}
                         style={{ padding: 10 }}
                         keyExtractor={(d, i) => i.toString()}
-                        ItemSeparatorComponent={() => <View style={{ marginVertical: scaler(10) }} />}
+                        showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => (
-                            <View>
-                                <CardView
-                                    cardElevation={3}
-                                    cardMaxElevation={2}
-                                    cornerRadius={15}
-                                    style={styles.cardStyle}
-                                >
+                            <Card style={styles.cardStyle}>
+                                <View style={styles.mainContainer}>
                                     <View>
-                                        {/* <Text>Status-# Preparing in {item.products[0].prepTime} mins</Text> */}
-
+                                        <Text style={styles.infoText}>Order From: {item?.orderFrom}</Text>
                                         <Text>Date: {item.orderTime.date}</Text>
                                         <Text>Items: {item.products?.length}</Text>
+                                        {getStatus(item) === 'On the way' ? <Text >Delivered in {TimeFormatter(item?.timeToDeliver + 15)}</Text> : null}
+                                        <Text style={[styles.infoText, { color: getStatus(item) === 'Delivered' ? colors.colorSuccess : colors.colorFocus }]}>Status: {getStatus(item)}</Text>
                                     </View>
-                                    <View>
-                                        {/* <Image /> */}
-                                        <Icon name='home' />
-                                    </View>
-                                </CardView>
-                            </View>
+                                    {
+                                        getStatus(item) === 'On the way' ? (<TouchableOpacity activeOpacity={0.5} style={styles.trackIcon} >
+                                            <Icon name='location-crosshairs' size={25} color={colors.colorPrimary} />
+                                        </TouchableOpacity>) : null
+                                    }
+                                </View>
+                            </Card>
                         )}
                     />
                 </>
@@ -99,8 +105,20 @@ const styles = StyleSheet.create({
         color: colors.colorGreyMore
     },
     cardStyle: {
-        backgroundColor: colors.colorWhite,
-        padding: scaler(15),
-        marginHorizontal: scaler(10)
+        margin: scaler(10),
+
+    },
+    mainContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start'
+
+    }, infoText: {
+        fontWeight: '600',
+        fontSize: scaler(12)
+    },
+    trackIcon: {
+        marginTop: scaler(10)
     }
 })

@@ -2,7 +2,7 @@ import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
 import FavoriteSvg from 'assets/svg/FavoriteSvg'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
@@ -12,7 +12,7 @@ import { AppState } from 'src/types/interface'
 import { scaler } from 'src/utils/Scaler'
 import { DashboardScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
-import { CurrencyFormatter, _showSuccessMessage } from 'utils/Utils'
+import { CurrencyFormatter, TimeFormatter, _showSuccessMessage } from 'utils/Utils'
 
 const ProductDetail = ({ route, navigation }: any) => {
 
@@ -24,6 +24,7 @@ const ProductDetail = ({ route, navigation }: any) => {
 
     const wishListed = user?.wishlist?.includes(id)
     const [qty, setQty] = useState<number>(1)
+    const [loader, setLoader] = useState<boolean>(false)
     const isAddedToCart = user?.cart?.filter((_: any) => _.Id === product?.Id)?.[0]?.Id
     const cartItem = user?.cart?.filter((_: any) => _?.Id === product?.Id)?.[0]
 
@@ -47,9 +48,10 @@ const ProductDetail = ({ route, navigation }: any) => {
         } else {
             filtered = [product.Id]
         }
-        dispatch(actions.updateWishlist({ id: user.Id, list: filtered }))
+        dispatch(actions.updateWishlist({ id: user.Id, list: filtered, loader: setLoader }))
 
     }, [product, user])
+
 
     const addToCartHandler = useCallback(() => {
         let payload = {
@@ -89,13 +91,13 @@ const ProductDetail = ({ route, navigation }: any) => {
                     onPress={() => NavigationService.goBack()}
                 ><Image source={Images.ic_right_icon} style={styles.backIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={wishlistHandler}>
-                    {wishListed ? <FavoriteSvg color={colors.colorRed} fill={colors.colorRed} style={styles.favIcon} /> :
+                <TouchableOpacity onPress={wishlistHandler} disabled={loader}>
+                    {loader ? <ActivityIndicator color={colors.colorPrimary} size={25} style={styles.favIcon} /> : wishListed ? <FavoriteSvg color={colors.colorRed} fill={colors.colorRed} style={styles.favIcon} /> :
                         <FavoriteSvg color={colors.colorBlack} style={styles.favIcon} />
                     }
                 </TouchableOpacity>
             </View>
-            <ScrollView contentContainerStyle={styles.container}>
+            <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false} >
                 <View style={styles.imageTextContainer}>
                     <View style={styles.imageContainer}>
                         <Image source={Images.orders} src={product?.img[0]?.signedUrl} style={styles.image} />
@@ -113,6 +115,7 @@ const ProductDetail = ({ route, navigation }: any) => {
                 <View style={{ paddingHorizontal: scaler(30) }}>
                     <Text style={styles.descHeading}>Product Details</Text>
                     <Text style={styles.desc} >{product?.origin?.name}</Text>
+                    {product?.prepTime > 0 ? <Text style={styles.desc} >Preparation time: {TimeFormatter(product?.prepTime)}</Text> : null}
                     <Text style={styles.desc} >{product?.description}</Text>
 
                     <Text style={styles.descHeading}>Delivery Information</Text>
@@ -121,7 +124,8 @@ const ProductDetail = ({ route, navigation }: any) => {
             </ScrollView>
             <View style={{
                 marginHorizontal: scaler(20),
-                marginVertical: scaler(15),
+                // marginBottom: scaler(20),
+                marginTop: isAddedToCart ? scaler(10) : 0
             }}>
                 {
                     isAddedToCart ?
@@ -138,13 +142,15 @@ const ProductDetail = ({ route, navigation }: any) => {
                             <Button title="Go to Cart"
                                 // startIcon={Images.ic_order_bg}
                                 onPressButton={() => NavigationService.push(DashboardScreens.CART)}
-                                buttonStyle={{ paddingHorizontal: 20, height: scaler(35), paddingVertical: 0 }} />
+                                buttonStyle={{ paddingHorizontal: 20, height: scaler(35), paddingVertical: 0 }}
+                            />
 
                         </View>)
                         : (<Button
                             onPressButton={addToCartHandler}
                             title={isAddedToCart ? 'Go to' : 'Add to Cart'}
                             buttonStyle={{}}
+                            containerStyle={{ paddingBottom: scaler(10) }}
                         />)
                 }
             </View>
@@ -240,6 +246,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        paddingBottom: scaler(15)
     },
     actionButton: {
         backgroundColor: colors.colorPrimary,

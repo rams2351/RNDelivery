@@ -3,10 +3,11 @@ import React from 'react';
 import { LogBox } from 'react-native';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { NavigationService } from 'utils/NavigationService';
 import CustomToast from './components/CustomToast';
 import Navigator from './navigation/MyNavigationContainer';
-import { store } from './redux/store';
+import { persistor, store } from './redux/store';
 
 function App(): React.JSX.Element {
   LogBox.ignoreLogs([
@@ -27,9 +28,11 @@ function App(): React.JSX.Element {
       renderToast={(e) => <CustomToast {...e} />}
     >
       <Provider store={store}>
-        <NavigationContainer ref={NavigationService.setNavigationRef}>
-          <Navigator />
-        </NavigationContainer>
+        <PersistGate persistor={persistor} loading={null}>
+          <NavigationContainer ref={NavigationService.setNavigationRef}>
+            <Navigator />
+          </NavigationContainer>
+        </PersistGate>
       </Provider>
     </ToastProvider>
 

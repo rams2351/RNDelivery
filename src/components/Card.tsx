@@ -1,39 +1,42 @@
-import { colors } from 'assets/alllll';
-import React, { ReactElement, useMemo } from 'react';
-import { StyleProp, StyleSheet, TouchableOpacity } from 'react-native';
-import { scaler } from 'utils/all';
+//@ts-ignore
+import CardView from 'react-native-cardview';
 
-interface CardPropsType {
-    children?: React.ReactNode | ReactElement;
-    cardStyle?: StyleProp<any>;
-    onPressCard?: (e: any) => void;
+import { colors } from 'assets/Colors';
+import React, { ReactElement, ReactNode, useMemo } from 'react';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { scaler } from 'utils/Scaler';
+
+interface CardProps {
+    style?: StyleProp<ViewStyle>;
+    children: ReactNode | ReactElement;
+    onPressCard?: () => void;
+    touchableOpacity?: number;
 }
 
-const Card: React.FC<CardPropsType> = (props) => {
-    const { children, cardStyle, onPressCard } = props
+const Card: React.FC<CardProps> = (props) => {
+    const { style, children, onPressCard, touchableOpacity } = props
 
     const styles = useMemo(() => {
         return StyleSheet.create({
             container: {
                 backgroundColor: colors.colorWhite,
-                borderRadius: scaler(20),
-                padding: scaler(15),
-                shadowColor: colors.colorBlack,
-                shadowOffset: { width: 1, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 10,
-                marginVertical: scaler(10),
-                ...StyleSheet.flatten(cardStyle)
+                ...StyleSheet.flatten(style)
             }
         })
-    }, [cardStyle])
-
+    }, [style])
     return (
-        <TouchableOpacity style={[styles.container]} disabled={!onPressCard} onPress={onPressCard}>
-            {children}
-        </TouchableOpacity>
+        <CardView
+            cardElevation={3}
+            cardMaxElevation={2}
+            cornerRadius={15}
+            style={styles.container}
+        >
+            <TouchableOpacity style={{ padding: scaler(10) }} onPress={onPressCard} disabled={!onPressCard} activeOpacity={touchableOpacity ?? 0.5}>
+                {children}
+            </TouchableOpacity>
+        </CardView>
     )
 }
 
 export default Card
-

@@ -1,20 +1,25 @@
+import { useFocusEffect } from '@react-navigation/native'
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
 import React, { useCallback, useState } from 'react'
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, View } from 'react-native'
+import Geolocation from 'react-native-geolocation-service'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
-import CardView from 'src/components/CardView'
+import Card from 'src/components/Card'
+import SummaryDetail from 'src/components/checkout/SummaryDetail'
 import CustomHeader from 'src/components/CustomHeader'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
+import { requestLocationPermission } from 'utils/GeoLocation'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
-import { CurrencyFormatter, getCurrentDateTime } from 'utils/Utils'
+import { getCurrentDateTime, _showErrorMessage } from 'utils/Utils'
 
 const Methods = [
     {
@@ -36,27 +41,55 @@ const Methods = [
 ]
 
 const Checkout = () => {
-    const [paymentMethod, setPaymentMethod] = useState<string>('Card')
+    const [paymentMethod, setPaymentMethod] = useState<string>('')
+    const [location, setLocation] = useState<any>()
     const { cart, user } = useSelector((state: AppState) => ({
         cart: state.user.user?.cart,
         user: state.user.user
     }), shallowEqual)
     const dispatch = useDispatch()
-    let total = 0
-    cart?.forEach((_: any) => {
-        total += _.price * _.qty
-    })
+
+
+    useFocusEffect(useCallback(() => {
+        if (!user?.location) {
+            async function fetchLocation() {
+                const hasPermission = await requestLocationPermission()
+                if (hasPermission) {
+                    Geolocation.getCurrentPosition(
+                        position => {
+                            const { latitude, longitude } = position.coords;
+                            setLocation({ latitude, longitude })
+                        },
+                        error => _showErrorMessage(JSON.stringify(error)),
+                        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+                    );
+                }
+            }
+            fetchLocation()
+        }
+    }, [user]))
+    console.log(paymentMethod);
+
     const paymentHandler = useCallback(() => {
+
         dispatch(actions.setLoading(true))
-
-
         setTimeout(() => {
-            NavigationService.push(DashboardScreens.PAYMENT_SUCCESS)
+            NavigationService.replace(DashboardScreens.PAYMENT_SUCCESS)
+            let totalTime = 0
+            cart.forEach((d: any) => {
+                totalTime += d.prepTime
+            });
+            let additionalData = {
+                orderTime: getCurrentDateTime(),
+                orderFrom: cart[0]?.origin.name,
+                status: 'placed',
+                deliverTo: user?.location
+            }
             let pay = []
             if (user?.orders?.length) {
-                pay = [...user.orders, { products: cart, orderTime: getCurrentDateTime() }]
+                pay = [...user.orders, { products: cart, ...additionalData }]
             } else {
-                pay = [{ products: cart, orderTime: getCurrentDateTime() }]
+                pay = [{ products: cart, ...additionalData }]
             }
 
             dispatch(actions.setLoading(false))
@@ -67,15 +100,10 @@ const Checkout = () => {
         <>
             <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: colors.colorBackground }} >
                 <CustomHeader title='Checkout' />
-                <ScrollView >
-
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.container}>
-                        <Text style={styles.methodText}>Delivered to:</Text>
-
-                        <CardView
-                            cardElevation={3}
-                            cardMaxElevation={2}
-                            cornerRadius={15}
+                        <Text style={styles.methodText}>Deliver to:</Text>
+                        <Card
                             style={styles.deliveredContainer}
                         >
                             <View style={styles.addressContainer}>
@@ -84,57 +112,59 @@ const Checkout = () => {
                             </View>
 
                             <View style={styles.underline} />
-                            <View>
+                            {/* <View>
                                 <Icon.Button name='add' style={{}} />
-                            </View>
+                            </View> */}
 
-                        </CardView>
+                        </Card>
+                    </View>
+
+                    <View style={styles.container}>
+                        <Text style={styles.methodText}>Order Summary:</Text>
+                        <Card
+                            style={styles.deliveredContainer}
+                        >
+                            <SummaryDetail list={cart} />
+
+                        </Card>
                     </View>
 
                     <View style={styles.container}>
                         <Text style={styles.methodText}>Payment Method</Text>
-
-                        <CardView
-                            cardElevation={3}
-                            cardMaxElevation={2}
-                            cornerRadius={15}
+                        <Card
                             style={styles.cardContainer}
+                            // onPressCard={() => { }}
+                            touchableOpacity={1}
                         >
                             {
-                                Methods.map((d, i) => (<View key={i}>
-                                    <TouchableOpacity key={i} style={styles.methodsContainer} activeOpacity={0.5} onPress={() => setPaymentMethod(d.name)} >
-                                        {paymentMethod === d.name ? <Image source={Images.ic_check} style={[styles.paymentImage]} /> : <Image source={Images.ic_uncheck} style={[styles.paymentImage]} />}
+                                Methods.map((d, i) => (
+                                    <TouchableOpacity key={i} onPress={() => { console.log('print') }} style={{ zIndex: 500 }} >
+                                        <TouchableOpacity key={i} style={styles.methodsContainer} activeOpacity={0.5} onPress={() => setPaymentMethod(d.name)} >
+                                            {paymentMethod === d.name ? <Image source={Images.ic_check} style={[styles.paymentImage]} /> : <Image source={Images.ic_uncheck} style={[styles.paymentImage]} />}
 
-
-                                        <View style={[styles.imageContainer, { backgroundColor: d.color }]}>
-                                            <Image source={d.icon} style={styles.paymentImage} />
-                                        </View>
-                                        <Text style={styles.paymentText}>{d.name}</Text>
-                                    </TouchableOpacity>
-                                    <View style={styles.underline} />
-                                </View>))
+                                            <View style={[styles.imageContainer, { backgroundColor: d.color }]}>
+                                                <Image source={d.icon} style={styles.paymentImage} />
+                                            </View>
+                                            <Text style={styles.paymentText}>{d.name}</Text>
+                                        </TouchableOpacity>
+                                        <View style={styles.underline} />
+                                    </TouchableOpacity>))
                             }
-                        </CardView>
+                        </Card>
                     </View>
 
                 </ScrollView>
-                <View style={styles.totalContainer}>
-                    <Text style={styles.methodText}>Total</Text>
-                    <Text style={styles.methodText}>{CurrencyFormatter(total)}</Text>
-                </View>
+
                 <Button title="Complete Order"
                     buttonStyle={{
                         marginHorizontal: scaler(20),
-                        marginBottom: scaler(20)
+                        marginBottom: scaler(10)
                     }}
                     onPressButton={paymentHandler}
+                    disabled={paymentMethod.length == 0}
                 />
             </SafeAreaView>
-            {/* <Modal visible={false} style={{ backgroundColor: 'blue', flex: 1 }} >
-                <SafeAreaView edges={['top', 'bottom']}>
-                    <Text>hello</Text>
-                </SafeAreaView>
-            </Modal> */}
+
         </>
     )
 }
@@ -143,7 +173,7 @@ export default Checkout
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: scaler(25),
+        paddingVertical: scaler(20),
         marginHorizontal: scaler(20),
         flex: 1
     },
@@ -174,7 +204,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: scaler(10),
-
     },
     paymentImage: {
         height: scaler(20),
@@ -185,13 +214,7 @@ const styles = StyleSheet.create({
         borderColor: colors.colorGreyText,
         marginBottom: scaler(10),
     },
-    totalContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginHorizontal: scaler(25),
 
-    },
     addressContainer: {
         display: 'flex',
         flexDirection: 'row',
@@ -206,5 +229,6 @@ const styles = StyleSheet.create({
     addressText: {
         fontWeight: '500',
         marginLeft: scaler(5)
-    }
+    },
+
 })

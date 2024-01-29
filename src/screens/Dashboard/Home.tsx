@@ -28,10 +28,12 @@ const Home = () => {
 
     const dispatch = useDispatch()
     useFocusEffect(useCallback(() => {
-        dispatch(actions.getAllProducts())
-        setActiveTab('All')
-        scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
-        dispatch(actions.getUser(user?.Id))
+        if (activeTab != 'All') {
+            dispatch(actions.getAllProducts())
+            setActiveTab('All')
+            scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
+            dispatch(actions.getUser(user?.Id))
+        }
     }, [])
     )
 
