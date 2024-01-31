@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic'
     },
     titleContainer: {
-        marginBottom: scaler(2),
+        marginBottom: scaler(3),
         marginLeft: scaler(3),
         fontSize: scaler(13),
         fontWeight: '500',

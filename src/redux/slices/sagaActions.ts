@@ -9,5 +9,8 @@ export const sagaActions = {
     getProductsByCategory: createAction<any>('getProductsByCategory'),
     getUser: createAction<any>('getUser'),
     updateCart: createAction<any>('updateCart'),
-    updateOrders:createAction<any>('updateOrder')
+    updateOrders: createAction<any>('updateOrder'),
+    getAllUser:createAction('getAllUser'),
+    getOrderList:createAction('getOrderList'),
+getOrders:createAction('getOrders')
 }

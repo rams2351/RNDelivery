@@ -17,9 +17,10 @@ const padding = 30
 
 const Home = () => {
     const [activeTab, setActiveTab] = useState<string>('All')
-    const { products, user } = useSelector((state: AppState) => ({
+    const { products, user, order } = useSelector((state: AppState) => ({
         products: state.products.products,
-        user: state.user.user
+        user: state.user.user,
+        order: state.user.orders
     }
     ), shallowEqual)
 
@@ -34,6 +35,8 @@ const Home = () => {
             scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
             dispatch(actions.getUser(user?.Id))
         }
+        // dispatch(actions.getOrders())
+        // dispatch(actions.setLogin(false))
     }, [])
     )
 

@@ -2,6 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { MMKVLoader } from "react-native-mmkv-storage";
 import { PersistConfig, persistReducer } from "redux-persist";
 import { authSlice } from "./auth";
+import { deliverySlice } from "./deliverySlice";
 import { extraSlice } from "./extraSlice";
 import { productSlice } from "./productSlice";
 import { sagaActions } from "./sagaActions";
@@ -20,6 +21,7 @@ const rootReducer :any = combineReducers({
     extra: extraSlice.reducer,
     user: userSlice.reducer,
     products: productSlice.reducer,
+    delivery:deliverySlice.reducer,
 
 })
 
@@ -29,6 +31,7 @@ export const actions = {
     ...sagaActions,
     ...userSlice.actions,
     ...productSlice.actions,
+    ...deliverySlice.actions,
 }
 
 export const persistedReducer = persistReducer(persistConfig,rootReducer)

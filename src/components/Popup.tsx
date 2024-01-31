@@ -44,7 +44,7 @@ const Popup: React.FC<ModalProps> = (props) => {
                             <Button title={leftButtonText} buttonStyle={[styles.button, styles.noButton]} textStyle={{ color: colors.colorPrimary, fontWeight: '500', fontSize: scaler(12) }} onPressButton={leftButtonAction} />
                             : null}
                         {rightButtonText ?
-                            <Button title={[rightButtonText]} buttonStyle={[styles.button, { marginLeft: 'auto' }]} textStyle={{ fontWeight: '500', fontSize: scaler(12) }} onPressButton={rightButtonAction} />
+                            <Button title={rightButtonText} buttonStyle={[styles.button, { marginLeft: 'auto' }]} textStyle={{ fontWeight: '500', fontSize: scaler(12) }} onPressButton={rightButtonAction} />
                             : null}
 
                     </View> : null}
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         paddingVertical: 0,
         marginVertical: 0,
         height: 35,
-        paddingHorizontal: scaler(15)
+        paddingHorizontal: scaler(15),
     },
     noButton: {
         backgroundColor: colors.colorWhite,

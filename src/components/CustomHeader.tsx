@@ -8,20 +8,21 @@ import Text from './Text'
 
 interface HeaderProps {
     title: string;
+    showLeftIcon?: boolean;
 }
 
 const CustomHeader: React.FC<HeaderProps> = (props) => {
-    const { title } = props
+    const { title, showLeftIcon = true } = props
     return (
         <View style={styles.container}>
-            <TouchableOpacity
+            {showLeftIcon ? <TouchableOpacity
                 onPress={() => NavigationService.goBack()}
             ><Image source={Images.ic_right_icon} style={styles.backIcon} />
-            </TouchableOpacity>
+            </TouchableOpacity> : null}
             <View style={{ flex: 1, }}>
-                <Text style={styles.text}>{title}</Text>
+                <Text style={[styles.text]}>{title}</Text>
             </View>
-            <View style={styles.backIcon} />
+            {showLeftIcon ? <View style={styles.backIcon} /> : null}
         </View>
     )
 }

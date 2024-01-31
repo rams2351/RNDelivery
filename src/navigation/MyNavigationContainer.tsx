@@ -10,6 +10,7 @@ import GetStartScreen from 'src/screens/auth/Starting'
 import { AppState } from 'src/types/interface'
 import { AuthScreens } from 'utils/all'
 import DashboardNavigator from './DashboardNavigator'
+import PartnerNavigator from './PartnerNavigator'
 
 const AuthScreensArray = [
     {
@@ -31,15 +32,16 @@ const AuthScreensArray = [
 
 const Navigator = () => {
     const AuthStack = createStackNavigator()
-    const { isLogin } = useSelector((state: AppState) => (
+    const { isLogin, user } = useSelector((state: AppState) => (
         {
-            isLogin: state.auth.isLogin
+            isLogin: state.auth.isLogin,
+            user: state.user.user
         }), shallowEqual
     )
     return (
         <>
 
-            {isLogin ? <DashboardNavigator /> : (
+            {isLogin ? user.deliveryPartner == 1 ? <PartnerNavigator /> : <DashboardNavigator /> : (
                 <AuthStack.Navigator
                     screenOptions={{
                         headerShown: false,

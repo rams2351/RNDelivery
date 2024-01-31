@@ -1,25 +1,23 @@
-import { useFocusEffect } from '@react-navigation/native'
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
 import React, { useCallback, useState } from 'react'
 import { Image, ScrollView, StyleSheet, View } from 'react-native'
-import Geolocation from 'react-native-geolocation-service'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
 import Card from 'src/components/Card'
+import AddNewAddress from 'src/components/checkout/AddNewAddress'
 import SummaryDetail from 'src/components/checkout/SummaryDetail'
 import CustomHeader from 'src/components/CustomHeader'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
-import { requestLocationPermission } from 'utils/GeoLocation'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
-import { getCurrentDateTime, _showErrorMessage } from 'utils/Utils'
+import { getCurrentDateTime } from 'utils/Utils'
 
 const Methods = [
     {
@@ -43,32 +41,12 @@ const Methods = [
 const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState<string>('')
     const [location, setLocation] = useState<any>()
+    const [addNewAddress, setNewAddress] = useState<boolean>(false)
     const { cart, user } = useSelector((state: AppState) => ({
         cart: state.user.user?.cart,
         user: state.user.user
     }), shallowEqual)
     const dispatch = useDispatch()
-
-
-    useFocusEffect(useCallback(() => {
-        if (!user?.location) {
-            async function fetchLocation() {
-                const hasPermission = await requestLocationPermission()
-                if (hasPermission) {
-                    Geolocation.getCurrentPosition(
-                        position => {
-                            const { latitude, longitude } = position.coords;
-                            setLocation({ latitude, longitude })
-                        },
-                        error => _showErrorMessage(JSON.stringify(error)),
-                        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-                    );
-                }
-            }
-            fetchLocation()
-        }
-    }, [user]))
-    console.log(paymentMethod);
 
     const paymentHandler = useCallback(() => {
 
@@ -80,22 +58,26 @@ const Checkout = () => {
                 totalTime += d.prepTime
             });
             let additionalData = {
+                userId: user.Id,
                 orderTime: getCurrentDateTime(),
                 orderFrom: cart[0]?.origin.name,
                 status: 'placed',
-                deliverTo: user?.location
+                deliverTo: user?.address.location,
+                paymentMethod: paymentMethod,
+                orderId: Math.floor(Math.random() * 100000000),
+                products: cart
             }
-            let pay = []
-            if (user?.orders?.length) {
-                pay = [...user.orders, { products: cart, ...additionalData }]
-            } else {
-                pay = [{ products: cart, ...additionalData }]
-            }
+            // let pay = []
+            // if (user?.orders?.length) {
+            //     pay = [...user.orders, { products: cart, ...additionalData }]
+            // } else {
+            //     pay = [{ products: cart, ...additionalData }]
+            // }
 
             dispatch(actions.setLoading(false))
-            dispatch(actions.updateOrders({ id: user.Id, list: pay }))
+            dispatch(actions.updateOrders(additionalData))
         }, 5000)
-    }, [user, cart])
+    }, [user, cart, paymentMethod])
     return (
         <>
             <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: colors.colorBackground }} >
@@ -106,15 +88,18 @@ const Checkout = () => {
                         <Card
                             style={styles.deliveredContainer}
                         >
-                            <View style={styles.addressContainer}>
-                                <Icon name="location" size={20} color={colors.colorFocus} style={{}} />
-                                <Text style={styles.addressText}> {user?.firstName + " " + (user?.address ?? '') + ", " + user?.phone}</Text>
-                            </View>
+                            {user?.address[0].location ? <>
+                                <View style={styles.addressContainer}>
+                                    <Icon name="location" size={20} color={colors.colorFocus} style={{}} />
+                                    <Text style={styles.addressText}> {user?.firstName + ", " + (user?.address[0].address ?? '') + ", " + user?.phone}</Text>
+                                </View>
 
-                            <View style={styles.underline} />
-                            {/* <View>
-                                <Icon.Button name='add' style={{}} />
-                            </View> */}
+                                <View style={styles.underline} />
+                            </> : null}
+                            <TouchableOpacity style={styles.addAddressContainer} activeOpacity={0.5} onPress={() => setNewAddress(true)}>
+                                <Icon name='add-circle-outline' style={{}} size={25} color={colors.colorFocus} />
+                                <Text style={styles.addNewText}> Add new</Text>
+                            </TouchableOpacity>
 
                         </Card>
                     </View>
@@ -138,7 +123,7 @@ const Checkout = () => {
                         >
                             {
                                 Methods.map((d, i) => (
-                                    <TouchableOpacity key={i} onPress={() => { console.log('print') }} style={{ zIndex: 500 }} >
+                                    <TouchableOpacity key={i} style={{ zIndex: 500 }} >
                                         <TouchableOpacity key={i} style={styles.methodsContainer} activeOpacity={0.5} onPress={() => setPaymentMethod(d.name)} >
                                             {paymentMethod === d.name ? <Image source={Images.ic_check} style={[styles.paymentImage]} /> : <Image source={Images.ic_uncheck} style={[styles.paymentImage]} />}
 
@@ -164,7 +149,7 @@ const Checkout = () => {
                     disabled={paymentMethod.length == 0}
                 />
             </SafeAreaView>
-
+            <AddNewAddress open={addNewAddress} onClose={() => setNewAddress(false)} />
         </>
     )
 }
@@ -212,7 +197,7 @@ const styles = StyleSheet.create({
     underline: {
         borderBottomWidth: 1,
         borderColor: colors.colorGreyText,
-        marginBottom: scaler(10),
+        marginBottom: scaler(15),
     },
 
     addressContainer: {
@@ -230,5 +215,19 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         marginLeft: scaler(5)
     },
-
+    addAddressContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: colors.colorFocus,
+        paddingHorizontal: scaler(15),
+        paddingVertical: scaler(5),
+        borderRadius: scaler(8),
+        // marginTop: scaler(10)
+    },
+    addNewText: {
+        fontSize: scaler(12),
+        fontWeight: '500'
+    }
 })

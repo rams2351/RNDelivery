@@ -17,6 +17,8 @@
 		18575655180A465B9527DEA6 /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8689A22796F43318AEB73DB /* Poppins-ExtraBold.ttf */; };
 		38C90A93E1F547E1840D7EFC /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70D2925E3E86469A822AAB5C /* Poppins-Medium.ttf */; };
 		49CE84BAEDEC4698AF4FCCF7 /* Poppins-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB37D57A2E334E4C922ACCA8 /* Poppins-MediumItalic.ttf */; };
+		5105C6C82B67CC5F006081C2 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105C6C72B67CC5F006081C2 /* LocationService.swift */; };
+		5105C6C92B67CC5F006081C2 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5105C6C72B67CC5F006081C2 /* LocationService.swift */; };
 		5135D3D42B62431E00E668FC /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 5135D3D32B62431E00E668FC /* Fonts */; };
 		5B1299055C944EA498025467 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA86A66069D2457F821B1C9F /* Poppins-Italic.ttf */; };
 		5D38D52A5D5A418E8BB940F7 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C18F7903C7B749E081304074 /* Poppins-ExtraLightItalic.ttf */; };
@@ -60,6 +62,9 @@
 		2172EEA7B9704A7EB4F930FB /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		2F8C57C9EEBA4409AFAA226E /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-FoodDelivery.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodDelivery.debug.xcconfig"; path = "Target Support Files/Pods-FoodDelivery/Pods-FoodDelivery.debug.xcconfig"; sourceTree = "<group>"; };
+		5105C6C52B67CC5D006081C2 /* FoodDelivery-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FoodDelivery-Bridging-Header.h"; sourceTree = "<group>"; };
+		5105C6C62B67CC5D006081C2 /* FoodDeliveryTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FoodDeliveryTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		5105C6C72B67CC5F006081C2 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		5135D3D32B62431E00E668FC /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = "../node_modules/react-native-vector-icons/Fonts"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-FoodDelivery.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodDelivery.release.xcconfig"; path = "Target Support Files/Pods-FoodDelivery/Pods-FoodDelivery.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-FoodDelivery-FoodDeliveryTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodDelivery-FoodDeliveryTests.debug.xcconfig"; path = "Target Support Files/Pods-FoodDelivery-FoodDeliveryTests/Pods-FoodDelivery-FoodDeliveryTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -180,6 +185,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				5105C6C72B67CC5F006081C2 /* LocationService.swift */,
 				13B07FAE1A68108700A75B9A /* FoodDelivery */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* FoodDeliveryTests */,
@@ -187,6 +193,8 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
 				466695200D7D460CBD9F92FA /* Resources */,
+				5105C6C52B67CC5D006081C2 /* FoodDelivery-Bridging-Header.h */,
+				5105C6C62B67CC5D006081C2 /* FoodDeliveryTests-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -269,10 +277,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						LastSwiftMigration = 1410;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1410;
 					};
 				};
 			};
@@ -488,6 +497,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5105C6C92B67CC5F006081C2 /* LocationService.swift in Sources */,
 				00E356F31AD99517003FC87E /* FoodDeliveryTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -497,6 +507,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				5105C6C82B67CC5F006081C2 /* LocationService.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -518,6 +529,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -536,6 +548,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FoodDeliveryTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FoodDelivery.app/FoodDelivery";
 			};
 			name = Debug;
@@ -546,6 +561,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = FoodDeliveryTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
@@ -561,6 +577,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FoodDeliveryTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FoodDelivery.app/FoodDelivery";
 			};
 			name = Release;
@@ -586,6 +604,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = FoodDelivery;
+				SWIFT_OBJC_BRIDGING_HEADER = "FoodDelivery-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -612,6 +631,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = FoodDelivery;
+				SWIFT_OBJC_BRIDGING_HEADER = "FoodDelivery-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

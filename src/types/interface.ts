@@ -2,7 +2,8 @@ export interface AppState {
     auth: AuthSlice,
     extra: ExtraSlice,
     user: UserSlice,
-    products:ProductsSlice,
+    products: ProductsSlice,
+    delivery:DeliverySlice
 }
 
 
@@ -16,6 +17,7 @@ export interface ExtraSlice{
 
 export interface UserSlice{
     user: any;
+    orders:any[]
 }
 
 export interface Action<P = any, T = any> {
@@ -26,4 +28,9 @@ export interface Action<P = any, T = any> {
 export interface ProductsSlice{
     products: any[],
     productDetail: any,
+}
+
+export interface DeliverySlice{
+    allUsers: any[],
+    ordersList:any[]
 }

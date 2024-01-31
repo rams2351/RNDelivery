@@ -7,6 +7,8 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
 import Text from 'src/components/Text'
 import { AppState } from 'src/types/interface'
+import { DashboardScreens } from 'utils/Constant'
+import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
 const PaymentSuccess = ({ navigation }: any) => {
@@ -26,6 +28,15 @@ const PaymentSuccess = ({ navigation }: any) => {
                 </View>
                 <Text style={styles.text}>Order Placed Successfully!</Text>
             </View>
+
+            <Button title="Track order" buttonStyle={{
+                marginHorizontal: scaler(20),
+                marginBottom: scaler(20)
+
+            }}
+                onPressButton={() => NavigationService.replace(DashboardScreens.BOTTOM_NAVIGATOR, { screen: DashboardScreens.ORDERS })}
+            />
+
             <Button title="Continue ordering" buttonStyle={{
                 marginHorizontal: scaler(20),
                 marginBottom: scaler(20)

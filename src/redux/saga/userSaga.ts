@@ -97,14 +97,27 @@ function* updateCartList({ payload:{list,id} }: Action<any>): Generator<any, any
     }
 }
 
-function* updateOrders({ payload:{list,id} }: Action<any>): Generator<any, any, any>{
+function* updateOrders({ payload }: Action<any>): Generator<any, any, any>{
     yield put(actions.setLoading(true))
-    let pay = { orders: JSON.stringify(list),cart:JSON.stringify([]), id: id }
+
+    let pay = {
+        ...payload,
+                deliverTo: JSON.stringify(payload?.deliverTo),
+                products: JSON.stringify(payload.products)
+    }
+
+    let userPay = { cart: JSON.stringify([]), id: payload.userId }
     try {
-        let res = yield call(ApiProvider._updateWishlist,pay)
+        let res = yield call(ApiProvider._addOrder, pay)
+        let userData = yield call(ApiProvider._updateWishlist,userPay)
+        console.log(userData,'in saga');
+
          if (res) {
-                 yield put(actions.setUserData(res))
-        }   else {
+                 yield put(actions.setOrderList(res))
+        }
+        if (userData) {
+             yield put(actions.setUserData(userData))
+        }  else {
              console.log('something went wrong');
             }
             yield put(actions.setLoading(false))
@@ -115,11 +128,30 @@ function* updateOrders({ payload:{list,id} }: Action<any>): Generator<any, any, 
     }
 }
 
+
+function* getOrders({ payload }: Action<any>): Generator<any, any, any>{
+
+    yield put(actions.setLoading(true))
+    try {
+        let res = yield call(ApiProvider._getOrders)
+        if (res) {
+            yield put(actions.setOrders(res))
+        }
+        yield put(actions.setLoading(false))
+    } catch (err) {
+        console.log(err, 'Catch Error in validate user')
+        _showErrorMessage('Some thing went wrong on validate user!')
+        yield put(actions.setLoading(false))
+    }
+}
+
 export default function* watchUsers() {
     yield takeLeading(actions.validateUser.toString(), validateUser)
     yield takeLeading(actions.signUpUser.toString(), signUpUser)
     yield takeLeading(actions.updateWishlist.toString(), updateWishlist)
     yield takeLeading(actions.getUser.toString(), getUser)
     yield takeLeading(actions.updateCart.toString(), updateCartList)
-    yield takeLeading(actions.updateOrders.toString(),updateOrders)
+    yield takeLeading(actions.updateOrders.toString(), updateOrders)
+    yield takeLeading(actions.getOrders.toString(),getOrders)
+
 }

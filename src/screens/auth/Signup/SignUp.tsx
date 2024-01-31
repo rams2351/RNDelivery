@@ -2,9 +2,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { colors, Images } from 'assets/alllll'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Form, FormProvider, useForm } from 'react-hook-form'
-import { Alert, ScrollView, StyleSheet, View } from 'react-native'
+import { Platform, ScrollView, StyleSheet, View } from 'react-native'
 import Geolocation from 'react-native-geolocation-service'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch } from 'react-redux'
 import Button from 'src/components/Button'
@@ -12,8 +13,8 @@ import DatePicker from 'src/components/DatePicker'
 import RnInput from 'src/components/RnInput'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
-import { requestLocationPermission } from 'utils/GeoLocation'
 import { scaler } from 'utils/Scaler'
+import { _showErrorMessage } from 'utils/Utils'
 import * as yup from 'yup'
 //@ts-ignore
 
@@ -39,31 +40,92 @@ const SignUp = (props: any) => {
     const { handleSubmit } = methods
 
     const handleSubmits = useCallback((data: any) => {
+        if (!location) {
+            _showErrorMessage("Please enable location for continue!")
+            return
+        }
+        const { address, ...rest } = data
+
         const payload = {
-            ...data,
+            ...rest,
             phone,
             countryCode: code,
-            location
+            address: [{
+                address: address,
+                location: location
+            }]
         }
         dispatch(actions.signUpUser(payload))
     }, [location])
 
-    useEffect(() => {
-        async function fetchLocation() {
-            const hasPermission = await requestLocationPermission()
-            if (hasPermission) {
-                Geolocation.getCurrentPosition(
-                    position => {
-                        const { latitude, longitude } = position.coords;
-                        setLocation({ latitude, longitude })
-                    },
-                    error => Alert.alert('Error', JSON.stringify(error)),
-                    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-                );
-            }
+
+
+    const requestLocationPermission = async () => {
+        let device: string = Platform.OS
+        if (device === 'ios') {
+            check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
+                switch (result) {
+                    case RESULTS.UNAVAILABLE:
+                        console.log('This feature is not available (on this device / in this context)');
+                        break;
+                    case RESULTS.DENIED:
+                        console.log('The permission has not been requested / is denied but requestable');
+                        break;
+                    case RESULTS.LIMITED:
+                        console.log('The permission is limited: some actions are possible');
+                        break;
+                    case RESULTS.GRANTED:
+                        console.log('The permission is granted');
+                        break;
+                    case RESULTS.BLOCKED:
+                        console.log('The permission is denied and not requestable anymore');
+                        break;
+                }
+            })
+                .catch((error) => {
+                    // …
+                });
+        } else if (device === 'android') {
+            check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
+                switch (result) {
+                    case RESULTS.UNAVAILABLE:
+                        console.log('This feature is not available (on this device / in this context)');
+                        break;
+                    case RESULTS.DENIED:
+                    case RESULTS.LIMITED:
+                    case RESULTS.GRANTED:
+                        request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((res) => {
+                            if (res === 'granted') {
+                                Geolocation.getCurrentPosition(
+                                    position => {
+                                        const { latitude, longitude } = position.coords;
+                                        setLocation({
+                                            latitude,
+                                            longitude,
+                                        });
+                                    },
+                                    error => {
+                                        console.log(error.code, error.message);
+                                    },
+                                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+                                );
+                            } else {
+                                console.log('You cannot use Geolocation');
+                            }
+                        })
+                        break;
+                    case RESULTS.BLOCKED:
+                        console.log('The permission is denied and not requestable anymore');
+                        break;
+                }
+            })
         }
-        fetchLocation()
-    }, [])
+    };
+
+    useEffect(() => {
+        requestLocationPermission()
+    }, []);
+
 
 
     return (

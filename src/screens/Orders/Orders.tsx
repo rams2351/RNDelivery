@@ -1,5 +1,5 @@
 import { colors, Images } from 'assets/alllll';
-import React, { useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -7,26 +7,27 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/Button';
 import Card from 'src/components/Card';
 import Text from 'src/components/Text';
+import { actions } from 'src/redux/slices/reducer';
 import { AppState } from 'src/types/interface';
 import { scaler } from 'src/utils/Scaler';
-import { AddMinutesToTime, DashboardScreens, getCurrentDateTime, GetCurrentTime, TimeFormatter } from 'utils/all';
+import { DashboardScreens, NameFormatter, TimeFormatter } from 'utils/all';
 import { NavigationService } from 'utils/NavigationService';
 
 const Orders = ({ navigation }: any) => {
     const dispatch = useDispatch()
-    const { user } = useSelector((state: AppState) => ({
-        user: state.user.user
+    const { user, orderList } = useSelector((state: AppState) => ({
+        user: state.user.user,
+        orderList: state.user.orders
     }), shallowEqual)
-    const orders = user?.orders
 
-    const getStatus = useCallback((item: any) => {
-        if (item.orderTime.date === getCurrentDateTime().date) {
-            return AddMinutesToTime(item.orderTime.time, item?.timeToDeliver) > GetCurrentTime() ? 'Delivered' : 'On the way'
-        } else {
-            return 'Delivered'
-        }
+    let orders = orderList?.filter((_: any) => _.status === 'placed' && _.userId == user.Id)
+
+
+    console.log(orders);
+
+    useEffect(() => {
+        dispatch(actions.getOrders())
     }, [])
-
     return (
         <View style={{ backgroundColor: colors.colorBackground, flex: 1 }}>
             {orders?.length ? (
@@ -42,12 +43,13 @@ const Orders = ({ navigation }: any) => {
                                     <View>
                                         <Text style={styles.infoText}>Order From: {item?.orderFrom}</Text>
                                         <Text>Date: {item.orderTime.date}</Text>
-                                        <Text>Items: {item.products?.length}</Text>
-                                        {getStatus(item) === 'On the way' ? <Text >Delivered in {TimeFormatter(item?.timeToDeliver + 15)}</Text> : null}
-                                        <Text style={[styles.infoText, { color: getStatus(item) === 'Delivered' ? colors.colorSuccess : colors.colorFocus }]}>Status: {getStatus(item)}</Text>
+                                        <Text>Item(s): {item.products?.length}</Text>
+                                        <Text>Payment Method: {item?.paymentMethod}</Text>
+                                        {item.status === 'On the way' ? <Text >Delivered in {TimeFormatter(item?.timeToDeliver + 15)}</Text> : null}
+                                        <Text style={[styles.infoText, { color: item.status === 'delivered' ? colors.colorSuccess : colors.colorFocus }]}>Status: {NameFormatter(item.status)}</Text>
                                     </View>
                                     {
-                                        getStatus(item) === 'On the way' ? (<TouchableOpacity activeOpacity={0.5} style={styles.trackIcon} >
+                                        item.status === 'on_the_way' ? (<TouchableOpacity activeOpacity={0.5} style={styles.trackIcon} >
                                             <Icon name='location-crosshairs' size={25} color={colors.colorPrimary} />
                                         </TouchableOpacity>) : null
                                     }

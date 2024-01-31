@@ -53,6 +53,8 @@ const Profile = ({ navigation }: any) => {
         dispatch(actions.setUserData(null))
         dispatch(actions.setLogin(false))
     }, [])
+    console.log(user);
+
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={{ padding: scaler(20) }}>
@@ -65,7 +67,7 @@ const Profile = ({ navigation }: any) => {
                             <Text style={styles.textName}>{user?.firstName + " " + user?.lastName}</Text>
                             <Text style={styles.textDesc}  >{user?.email} </Text>
                             <Text style={styles.textDesc}>{user?.countryCode + " " + user?.phone}</Text>
-                            <Text style={styles.textDesc}>{user?.address}</Text>
+                            {user?.address.map((d: any, i: number) => (<Text key={i} style={styles.textDesc}>{d.address}</Text>))}
                         </View>
                     </View>
                 </Card>
