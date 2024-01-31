@@ -149,5 +149,13 @@ export const _getOrders = async () => {
 }
 
 export const _getPlacedOrders = async () => {
-    return callApi(`pihvvyikhuujsw4/mer2hygg6gpz5f9/views/vw8szicwpw1zf98s`, 'GET')
+    return callApi(`mer2hygg6gpz5f9/views/vw8szicwpw1zf98s`, 'GET')
+}
+
+export const _updateDriverLocation = async (body: any) => {
+    return callApi(`mb53d0474hdwdy8/views/vw6bdfrm92pcnguv/${body?.id}`, 'PATCH', body)
+}
+
+export const _updateOrderStatus = async (body: any) => {
+    return callApi(`mer2hygg6gpz5f9/views/vw8szicwpw1zf98s/${body?.id}`, 'PATCH', body)
 }

@@ -1,5 +1,5 @@
 import { colors } from 'assets/Colors'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { FlatList, Platform, StyleSheet, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -17,8 +17,7 @@ import { scaler } from 'utils/Scaler'
 
 const Dashboard = () => {
     const dispatch = useDispatch()
-    const { users, driver, orderList } = useSelector((state: AppState) => ({
-        users: state.delivery.allUsers,
+    const { driver, orderList } = useSelector((state: AppState) => ({
         orderList: state.delivery.ordersList,
         driver: state.user.user
     }), shallowEqual)
@@ -28,29 +27,22 @@ const Dashboard = () => {
     })
     const [modalOpen, setModalOpen] = useState<boolean>(false)
 
-    useEffect(() => {
+    useLayoutEffect(useCallback(() => {
         dispatch(actions.getOrderList())
-    }, [])
+    }, []))
 
     let orders: Array<any> = useMemo(() => {
-        return orderList.filter((d) => d.Id != driver.Id)
+        return orderList?.filter((d) => d.Id != driver.Id)
     }, [orderList])
-    console.log(orders, '*******');
 
-
+    console.log(orders);
     const orderAcceptHandler = useCallback((item: any) => {
-        let payload = {
-            ...item,
-            status: 'dispatched',
-            driverId: driver.Id,
-        }
-        console.log(payload);
+        dispatch(actions.updateOrderStatus({ status: 'dispatched', driverId: driver.Id, id: item.Id }))
+        dispatch(actions.assignOrder({ id: driver.Id, order: item }))
         setConfirmModal({ data: null, open: false })
     }, [driver])
 
     const logoutHandler = useCallback(() => {
-        console.log('hello');
-
         dispatch(actions.setUserData(null))
         dispatch(actions.setLogin(false))
     }, [])

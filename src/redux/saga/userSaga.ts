@@ -58,7 +58,6 @@ function* getUser({ payload }: Action<any>): Generator<any, any, any>{
 }
 
 function* updateWishlist({payload:{list,id,loader}}:Action<any>): Generator<any, any, any>{
-    // yield put(actions.setLoading(true))
     loader(true)
 
     let pay = { wishlist: JSON.stringify(list), id: id }

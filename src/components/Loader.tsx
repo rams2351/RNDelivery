@@ -9,7 +9,7 @@ const Loader = () => {
         return (
             <View
                 style={styles.container}>
-                <ActivityIndicator color={colors.colorPrimary} size={'large'} />
+                <ActivityIndicator color={colors.colorFocus} size={50} />
             </View>
         )
     return null
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.colorD,
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
         top: 0,
         bottom: 0,
         left: 0,

@@ -62,17 +62,12 @@ const Checkout = () => {
                 orderTime: getCurrentDateTime(),
                 orderFrom: cart[0]?.origin.name,
                 status: 'placed',
-                deliverTo: user?.address.location,
+                deliverTo: user.address[0],
                 paymentMethod: paymentMethod,
                 orderId: Math.floor(Math.random() * 100000000),
-                products: cart
+                products: cart,
+                phone: user.phone
             }
-            // let pay = []
-            // if (user?.orders?.length) {
-            //     pay = [...user.orders, { products: cart, ...additionalData }]
-            // } else {
-            //     pay = [{ products: cart, ...additionalData }]
-            // }
 
             dispatch(actions.setLoading(false))
             dispatch(actions.updateOrders(additionalData))
