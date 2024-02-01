@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { LogBox } from 'react-native';
+import { enableLatestRenderer } from 'react-native-maps';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -15,6 +16,7 @@ function App(): React.JSX.Element {
     'Sending \`onAnimatedValueUpdate\` with no listeners registered.',
 
   ]);
+  enableLatestRenderer();
   return (
     <ToastProvider
       placement='top'

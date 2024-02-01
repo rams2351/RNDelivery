@@ -18,6 +18,7 @@ import { scaler } from 'utils/Scaler'
 const Tracking = () => {
     const [modalOpen, setModalOpen] = useState<boolean>(false)
     const [cancelModal, setCancelModal] = useState<boolean>(false)
+    const [deliveredModal, setDeliveredModal] = useState<boolean>(false)
     const [location, setLocation] = useState<any>()
     const { assignedOrder, user } = useSelector((state: AppState) => ({
         assignedOrder: state.user.user.assignedOrders,
@@ -29,11 +30,10 @@ const Tracking = () => {
         dispatch(actions.setLogin(false))
     }, [])
 
-    setTimeout(() => {
-        console.log('updating location***');
-        // dispatch(actions.updateDriverLocation({ coordinates: location, id: user?.Id }))
-    }, 20000)
-    console.log(assignedOrder);
+    // setTimeout(() => {
+    //     console.log('updating location***');
+    //     // dispatch(actions.updateDriverLocation({ coordinates: location, id: user?.Id }))
+    // }, 20000)
 
     const handleCancelOrder = useCallback(() => {
         dispatch(actions.updateOrderStatus({ status: 'placed', driverId: 0, id: assignedOrder.Id }))
@@ -41,6 +41,12 @@ const Tracking = () => {
         setCancelModal(false)
     }, [])
 
+
+    const handleOrderDelivered = useCallback(() => {
+        dispatch(actions.updateOrderStatus({ status: 'delivered', driverId: 0, id: assignedOrder.Id }))
+        dispatch(actions.assignOrder({ id: user.Id, order: null }))
+        setDeliveredModal(false)
+    }, [])
 
     const requestLocationPermission = async () => {
         let device: string = Platform.OS
@@ -107,6 +113,10 @@ const Tracking = () => {
     useEffect(() => {
         requestLocationPermission()
     }, []);
+
+    useEffect(() => {
+        dispatch(actions.updateDriverLocation({ coordinates: location, id: user?.Id }))
+    }, [cancelModal])
     return (
         <>
             <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1 }}>
@@ -122,10 +132,12 @@ const Tracking = () => {
                         >
                             <Text style={styles.text}>Pickup from:  {assignedOrder?.orderFrom}</Text>
                             <Text style={styles.text}>Deliver To:  {assignedOrder?.deliverTo?.address}</Text>
-                            <Text style={styles.text}>Contact no.:  {assignedOrder?.phone}</Text>
+                            <Text style={styles.text}>Contact no.:  {assignedOrder?.contact}</Text>
                             <Text style={styles.text}>No. of item(s): {assignedOrder?.products?.length}</Text>
                             <Text style={styles.text}>Pickup from:  {assignedOrder?.orderFrom}</Text>
-                            <Button title="Cancel order" buttonStyle={{ paddingVertical: scaler(10), margin: scaler(10) }} onPressButton={() => setCancelModal(true)} />
+                            <Button title="Cancel delivery" buttonStyle={{ paddingVertical: scaler(10), margin: scaler(10) }} onPressButton={() => setCancelModal(true)} />
+
+                            <Button title="Delivered" buttonStyle={{ paddingVertical: scaler(10), margin: scaler(10) }} onPressButton={() => setDeliveredModal(true)} />
                         </Card>
                     </View>
                     <Button title={'View on map'} buttonStyle={{ margin: scaler(15) }} />
@@ -158,6 +170,20 @@ const Tracking = () => {
             >
                 <View style={styles.modalContainer}>
                     <Text style={styles.modalText}>Are you want to cancel this order?</Text>
+                </View>
+            </Popup>
+
+            <Popup
+                isOpen={deliveredModal}
+                onClose={() => setDeliveredModal(false)}
+                title={'Complete Delivery'}
+                leftButtonText={'No'}
+                rightButtonText="Yes"
+                leftButtonAction={() => setDeliveredModal(false)}
+                rightButtonAction={handleOrderDelivered}
+            >
+                <View style={styles.modalContainer}>
+                    <Text style={styles.modalText}>Is this delivery completed?</Text>
                 </View>
             </Popup>
         </>

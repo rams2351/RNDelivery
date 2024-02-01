@@ -13,7 +13,7 @@ export const deliverySlice = createSlice({
         setAllUser: (state, { payload:{list} }:Action<any>) => {
             state.allUsers=list
         },
-        setOrderList:(state, { payload:{list} }:Action<any>) => {
+        setOrderList: (state, { payload: { list } }: Action<any>) => {
             state.ordersList=list
         },
     }

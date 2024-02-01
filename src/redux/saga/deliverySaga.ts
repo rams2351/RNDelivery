@@ -34,15 +34,32 @@ function* getOrderList({ payload }: Action<any>): Generator<any, any, any>{
     }
 }
 
-function* updateDriverLocation({ payload:{coordinates,id} }: Action<any>): Generator<any, any, any>{
+function* getPlacedOrders({ payload }: Action<any>): Generator<any, any, any>{
+    yield put(actions.setLoading(true))
+    try {
+        let res = yield call(ApiProvider._getPlacedOrders)
+        if (res) {
+            yield put(actions.setOrderList(res))
+        }
+        yield put(actions.setLoading(false))
+    }
+    catch (err) {
+    yield put(actions.setLoading(false))
+        _showErrorMessage("Something wrong in get All user saga")
+    }
+}
+
+function* updateDriverLocation({ payload: { coordinates, id } }: Action<any>): Generator<any, any, any>{
+    console.log(id,'called');
+
     // yield put(actions.setLoading(true))
     let pay = { driverLocation: JSON.stringify(coordinates), id: id }
     try {
         let res = yield call(ApiProvider._updateDriverLocation,pay)
          if (res) {
-                //  yield put(actions.setUserData(res))
+                 yield put(actions.setUserData(res))
         }   else {
-            //  console.log('something went wrong');
+             console.log('something went wrong');
             }
             // yield put(actions.setLoading(false))
 
@@ -56,9 +73,12 @@ function* updateOrderStatus({ payload:{status,id,driverId} }: Action<any>): Gene
     yield put(actions.setLoading(true))
     let pay = { status:status, id: id, driverId:driverId }
     try {
-        let res = yield call(ApiProvider._updateOrderStatus,pay)
+        let res = yield call(ApiProvider._updateOrderStatus, pay)
+        console.log(res,'ajdajdfj*****');
+
          if (res) {
-                 yield put(actions.setOrderList(res))
+                //  yield put(actions.setOrderList(res))
+             yield put(actions.getOrderList())
         }   else {
              console.log('something went wrong');
             }
@@ -70,12 +90,14 @@ function* updateOrderStatus({ payload:{status,id,driverId} }: Action<any>): Gene
     }
 }
 
-function* assignOrder ({ payload:{order,id} }: Action<any>): Generator<any, any, any>{
+function* assignOrder ({ payload:{order,id,client} }: Action<any>): Generator<any, any, any>{
     yield put(actions.setLoading(true))
     let pay = { assignedOrders: JSON.stringify(order), id: id }
     try {
-        let res = yield call(ApiProvider._updateDriverLocation,pay)
-         if (res) {
+        let res = yield call(ApiProvider._updateDriverLocation, pay)
+        if (client) {
+
+        }else if (res) {
                  yield put(actions.setUserData(res))
         }   else {
              console.log('something went wrong');
@@ -94,6 +116,7 @@ export default function* watchDelivery() {
     yield takeLeading(actions.getOrderList.toString(), getOrderList)
     yield takeLeading(actions.updateDriverLocation.toString(), updateDriverLocation)
     yield takeLeading(actions.updateOrderStatus.toString(), updateOrderStatus)
-    yield takeLeading(actions.assignOrder.toString(),assignOrder)
+    yield takeLeading(actions.assignOrder.toString(), assignOrder)
+    yield takeLeading(actions.getPlacedOrders.toString(),getPlacedOrders)
 
 }

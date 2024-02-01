@@ -16,5 +16,6 @@ export const DashboardScreens = {
     CART: 'cart',
     CHECKOUT: 'checkout',
     BOTTOM_NAVIGATOR: 'BottomNavigation',
-    PAYMENT_SUCCESS: 'paymentSuccess'
+    PAYMENT_SUCCESS: 'paymentSuccess',
+    TRACKING_MAP: 'TrackingMap'
 }

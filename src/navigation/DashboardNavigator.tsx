@@ -5,6 +5,7 @@ import Cart from 'screens/Cart/Cart'
 import Checkout from 'screens/Checkout/Checkout'
 import PaymentSuccess from 'screens/Payment/PaymentSuccess'
 import ProductDetail from 'screens/ProductDetail'
+import TrackingMap from 'screens/TrackingMap/TrackingMap'
 import { DashboardScreens, scaler } from 'utils/all'
 import BottomTabNavigator from './BottomTabNavigator'
 
@@ -28,6 +29,10 @@ const DashboardScreensArray = [
     {
         name: DashboardScreens.PAYMENT_SUCCESS,
         component: PaymentSuccess
+    },
+    {
+        name: DashboardScreens.TRACKING_MAP,
+        component: TrackingMap
     }
 ]
 

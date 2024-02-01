@@ -66,7 +66,7 @@ const Checkout = () => {
                 paymentMethod: paymentMethod,
                 orderId: Math.floor(Math.random() * 100000000),
                 products: cart,
-                phone: user.phone
+                contact: user.phone
             }
 
             dispatch(actions.setLoading(false))

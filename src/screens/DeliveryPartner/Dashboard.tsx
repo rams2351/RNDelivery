@@ -1,6 +1,6 @@
 import { colors } from 'assets/Colors'
 import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react'
-import { FlatList, Platform, StyleSheet, View } from 'react-native'
+import { FlatList, Platform, RefreshControl, StyleSheet, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -26,16 +26,16 @@ const Dashboard = () => {
         data: null
     })
     const [modalOpen, setModalOpen] = useState<boolean>(false)
+    const [refreshing, setRefreshing] = useState<boolean>(false)
 
     useLayoutEffect(useCallback(() => {
-        dispatch(actions.getOrderList())
+        dispatch(actions.getPlacedOrders())
     }, []))
 
     let orders: Array<any> = useMemo(() => {
         return orderList?.filter((d) => d.Id != driver.Id)
     }, [orderList])
 
-    console.log(orders);
     const orderAcceptHandler = useCallback((item: any) => {
         dispatch(actions.updateOrderStatus({ status: 'dispatched', driverId: driver.Id, id: item.Id }))
         dispatch(actions.assignOrder({ id: driver.Id, order: item }))
@@ -45,6 +45,13 @@ const Dashboard = () => {
     const logoutHandler = useCallback(() => {
         dispatch(actions.setUserData(null))
         dispatch(actions.setLogin(false))
+    }, [])
+
+
+    const refreshHandler = useCallback(() => {
+        setRefreshing(true)
+        dispatch(actions.getPlacedOrders())
+        setRefreshing(false)
     }, [])
 
     return (
@@ -57,6 +64,7 @@ const Dashboard = () => {
                 {orders?.length > 0 ? (<View style={styles.container}>
                     <Text style={styles.heading}>Incoming  Orders</Text>
                     <FlatList
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />}
                         showsVerticalScrollIndicator={false}
                         data={orders.slice().reverse()}
                         keyExtractor={(e, i) => i.toString()}

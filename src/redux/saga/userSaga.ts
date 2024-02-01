@@ -151,6 +151,6 @@ export default function* watchUsers() {
     yield takeLeading(actions.getUser.toString(), getUser)
     yield takeLeading(actions.updateCart.toString(), updateCartList)
     yield takeLeading(actions.updateOrders.toString(), updateOrders)
-    yield takeLeading(actions.getOrders.toString(),getOrders)
+    // yield takeLeading(actions.getOrders.toString(),getOrders)
 
 }

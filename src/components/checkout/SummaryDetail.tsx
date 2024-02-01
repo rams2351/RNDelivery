@@ -47,8 +47,6 @@ const SummaryDetail: React.FC<SummaryDetailsProps> = (props) => {
                 }
             } else return d
         })
-        console.log(pay);
-
         dispatch(actions.updateCart({ id: user?.Id, list: pay }))
     }, [user])
 

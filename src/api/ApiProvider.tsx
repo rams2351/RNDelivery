@@ -137,7 +137,7 @@ export const _getProductsByCategory = async (body: any) => {
 }
 
 export const _getOrderList = async () => {
-    return callApi(`mer2hygg6gpz5f9/views/vw8szicwpw1zf98s`, 'GET')
+    return callApi(`mer2hygg6gpz5f9/views/vwzuzgz0qe2je497`, 'GET')
 }
 
 export const _addOrder = async (body: any) => {
@@ -157,5 +157,5 @@ export const _updateDriverLocation = async (body: any) => {
 }
 
 export const _updateOrderStatus = async (body: any) => {
-    return callApi(`mer2hygg6gpz5f9/views/vw8szicwpw1zf98s/${body?.id}`, 'PATCH', body)
+    return callApi(`mer2hygg6gpz5f9/views/vwzuzgz0qe2je497/${body?.id}`, 'PATCH', body)
 }

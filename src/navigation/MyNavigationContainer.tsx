@@ -24,7 +24,8 @@ const AuthScreensArray = [
     {
         name: AuthScreens.VERIFY_OTP,
         component: VerifyOtp
-    }, {
+    },
+    {
         name: AuthScreens.SIGN_UP,
         component: SignUp
     },
