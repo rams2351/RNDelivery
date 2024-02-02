@@ -8,7 +8,7 @@ interface InputProps {
     name: string;
     placeholder?: string;
     defaultValue?: string;
-    onChangeValue: (e: string) => void;
+    onChangeValue?: (e: string) => void;
     containerStyle?: StyleProp<ViewStyle>;
     icon?: ImageProps;
     type?: KeyboardType;

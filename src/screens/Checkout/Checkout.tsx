@@ -49,7 +49,6 @@ const Checkout = () => {
     const dispatch = useDispatch()
 
     const paymentHandler = useCallback(() => {
-
         dispatch(actions.setLoading(true))
         setTimeout(() => {
             NavigationService.replace(DashboardScreens.PAYMENT_SUCCESS)
@@ -66,11 +65,14 @@ const Checkout = () => {
                 paymentMethod: paymentMethod,
                 orderId: Math.floor(Math.random() * 100000000),
                 products: cart,
-                contact: user.phone
+                contact: user.phone,
+                timeToDeliver: cart.reduce((current: any, next: any) => {
+                    return current += next.prepTime
+                }, 0) + 15
             }
-
-            dispatch(actions.setLoading(false))
+            dispatch(actions.getOrderList())
             dispatch(actions.updateOrders(additionalData))
+            dispatch(actions.setLoading(false))
         }, 5000)
     }, [user, cart, paymentMethod])
     return (
@@ -113,8 +115,6 @@ const Checkout = () => {
                         <Text style={styles.methodText}>Payment Method</Text>
                         <Card
                             style={styles.cardContainer}
-                            // onPressCard={() => { }}
-                            touchableOpacity={1}
                         >
                             {
                                 Methods.map((d, i) => (

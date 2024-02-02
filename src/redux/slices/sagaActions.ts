@@ -5,17 +5,18 @@ export const sagaActions = {
     signUpUser: createAction<any>('signUpUser'),
     getAllProducts: createAction('getAllProducts'),
     getProductDetail: createAction<any>('getProductDetail'),
-    updateWishlist: createAction<any,any>('updateWishlist'),
+    updateWishlist: createAction<any, any>('updateWishlist'),
     getProductsByCategory: createAction<any>('getProductsByCategory'),
     getUser: createAction<any>('getUser'),
     updateCart: createAction<any>('updateCart'),
     updateOrders: createAction<any>('updateOrder'),
-    getAllUser:createAction('getAllUser'),
-    getOrderList:createAction('getOrderList'),
-// getOrders:createAction('getOrders'),
-updateDriverLocation:createAction<any>('updateDriverLocation'),
+    getAllUser: createAction('getAllUser'),
+    getOrderList: createAction('getOrderList'),
+    // getOrders:createAction('getOrders'),
+    updateDriverLocation: createAction<any>('updateDriverLocation'),
     updateOrderStatus: createAction<any>('updateOrderStatus'),
     assignOrder: createAction<any>('assignOrder'),
-    getPlacedOrders: createAction('getPlacedOrders')
-
+    getPlacedOrders: createAction('getPlacedOrders'),
+    getOrderDetail: createAction<any>('getOrderDetail'),
+    getDriverInfo:createAction<any>('getDriverInfo')
 }

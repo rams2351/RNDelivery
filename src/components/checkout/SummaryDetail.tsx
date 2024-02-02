@@ -13,11 +13,11 @@ import Text from '../Text'
 
 interface SummaryDetailsProps {
     list: any[];
-
+    status?: string;
 }
 
 const SummaryDetail: React.FC<SummaryDetailsProps> = (props) => {
-    const { list } = props
+    const { list, status } = props
 
     const dispatch = useDispatch()
     let total = 0
@@ -78,10 +78,10 @@ const SummaryDetail: React.FC<SummaryDetailsProps> = (props) => {
                 <Text style={styles.methodText}>Total</Text>
                 <Text style={styles.methodText}>{CurrencyFormatter(total)}</Text>
             </View>
-            <View style={styles.deliveryInstruction}>
+            {status && status?.length > 0 ? null : <View style={styles.deliveryInstruction}>
                 <Icon name='infocirlce' size={17} color={colors.colorFocus} style={{}} />
                 <Text style={styles.deliveredText}>Delivered in {TimeFormatter(totalTime + 15)}</Text>
-            </View>
+            </View>}
         </>
 
     )

@@ -3,7 +3,9 @@ import { Action, DeliverySlice } from "src/types/interface";
 
 const initialState:DeliverySlice = {
     allUsers: [],
-    ordersList:[]
+    ordersList: [],
+    orderDetail: null,
+    driverInfo:null
 }
 
 export const deliverySlice = createSlice({
@@ -15,6 +17,12 @@ export const deliverySlice = createSlice({
         },
         setOrderList: (state, { payload: { list } }: Action<any>) => {
             state.ordersList=list
+        },
+        setDriverInfo:(state, { payload }: Action<any>) => {
+            state.driverInfo=payload
+        },
+        setOrderDetail:(state, { payload }: Action<any>) => {
+            state.orderDetail=payload
         },
     }
 })

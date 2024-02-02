@@ -41,7 +41,7 @@ const Popup: React.FC<ModalProps> = (props) => {
                     </View>
                     {rightButtonText || leftButtonText ? <View style={styles.buttonContainer}>
                         {leftButtonText ?
-                            <Button title={leftButtonText} buttonStyle={[styles.button, styles.noButton]} textStyle={{ color: colors.colorPrimary, fontWeight: '500', fontSize: scaler(12) }} onPressButton={leftButtonAction} />
+                            <Button title={leftButtonText} type="secondary" buttonStyle={[styles.button, styles.noButton]} textStyle={{ color: colors.colorPrimary, fontWeight: '500', fontSize: scaler(12) }} onPressButton={leftButtonAction} />
                             : null}
                         {rightButtonText ?
                             <Button title={rightButtonText} buttonStyle={[styles.button, { marginLeft: 'auto' }]} textStyle={{ fontWeight: '500', fontSize: scaler(12) }} onPressButton={rightButtonAction} />

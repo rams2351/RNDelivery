@@ -1,10 +1,6 @@
-import { useFocusEffect } from '@react-navigation/native';
 import { colors, Images } from 'assets/alllll';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { FlatList, Image, RefreshControl, StyleSheet, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/Button';
 import Card from 'src/components/Card';
@@ -38,11 +34,9 @@ const Orders = ({ navigation }: any) => {
         setCancelModal({ open: false, data: null })
     }, [])
 
-    useFocusEffect(useCallback(() => {
+    useLayoutEffect(useCallback(() => {
         dispatch(actions.getOrderList())
     }, []))
-
-    console.log(orders, 'dadfd');
 
     const refreshHandler = useCallback(() => {
         setRefreshing(true)
@@ -60,33 +54,18 @@ const Orders = ({ navigation }: any) => {
                                 <RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />
                             }
                             data={orders.slice().reverse()}
-                            style={{ padding: 10 }}
+                            style={{ padding: 0 }}
                             keyExtractor={(d, i) => i.toString()}
                             showsVerticalScrollIndicator={false}
                             renderItem={({ item }) => (
-                                <Card style={styles.cardStyle}>
+                                <Card style={styles.cardStyle} onPressCard={() => NavigationService.push(DashboardScreens.ORDER_DETAIL, { orderId: item.Id })} >
                                     <View style={styles.mainContainer}>
                                         <View>
                                             <Text style={styles.infoText}>Order From: {item?.orderFrom}</Text>
                                             <Text>Date: {item.orderTime.date}</Text>
                                             <Text>Item(s): {item.products?.length}</Text>
-                                            <Text>Payment Method: {item?.paymentMethod}</Text>
-                                            {item.status === 'dispatched' ? <Text >Delivered in {TimeFormatter(item?.timeToDeliver + 15)}</Text> : null}
-                                            <Text style={[styles.infoText, { color: item.status === 'delivered' ? colors.colorSuccess : colors.colorFocus }]}>Status: {NameFormatter(item.status)}</Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'space-between', flexDirection: 'column', padding: scaler(10) }}>
-                                            {
-                                                item.status === 'dispatched' ? (<TouchableOpacity activeOpacity={0.5} style={styles.trackIcon} onPress={() => NavigationService.push(DashboardScreens.TRACKING_MAP)}>
-                                                    <Icon name='location-crosshairs' size={25} color={colors.colorPrimary} />
-                                                </TouchableOpacity>) : null
-                                            }
-                                            {
-                                                item.status !== 'delivered' && item.status !== 'cancelled' ? <>
-                                                    <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 'auto' }} onPress={() => setCancelModal({ data: item, open: true })}>
-                                                        <MaterialIcon name='cancel' size={25} color={colors.colorPrimary} />
-                                                    </TouchableOpacity>
-                                                </> : null
-                                            }
+                                            {item.status === 'dispatched' ? <Text >Delivered in {TimeFormatter(parseInt(item?.timeToDeliver))}</Text> : null}
+                                            <Text style={[styles.infoText, { color: item.status === 'delivered' ? colors.colorSuccess : item.status == 'cancelled' ? colors.colorRed : colors.colorFocus }]}>Status: {NameFormatter(item.status)}</Text>
                                         </View>
                                     </View>
                                 </Card>
@@ -149,7 +128,8 @@ const styles = StyleSheet.create({
         fontSize: scaler(25),
         fontWeight: '700',
         color: colors.colorBlackText,
-        marginTop: scaler(10)
+        marginTop: scaler(10),
+        textAlign: 'center'
     },
     textDescription: {
         paddingHorizontal: scaler(70),

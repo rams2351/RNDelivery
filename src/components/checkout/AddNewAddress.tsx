@@ -1,24 +1,31 @@
-import { colors } from 'assets/Colors';
+import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useCallback, useState } from 'react';
-import { TextInput, View } from 'react-native';
-import { scaler } from 'utils/Scaler';
-import { _showErrorMessage } from 'utils/Utils';
+import { Form, FormProvider, useForm } from 'react-hook-form';
+import { View } from 'react-native';
+import * as yup from 'yup';
 import Popup from '../Popup';
+import RnInput from '../RnInput';
 
 interface AddNewAddressProps {
     open: boolean;
     onClose: () => void;
 }
 
+const formSchema = yup.object({
+    address: yup.string().required('Please enter a valid address!')
+})
+
 const AddNewAddress: React.FC<AddNewAddressProps> = (props) => {
     const { onClose, open } = props
     const [text, setText] = useState<string>('')
+
+    const methods = useForm({
+        resolver: yupResolver(formSchema)
+    })
+
+
     const addHandler = useCallback(() => {
-        if (!text.length) {
-            _showErrorMessage('Please insert Address first!')
-        } else {
-            'add new address'
-        }
+
     }, [])
     return (
         <Popup
@@ -31,15 +38,11 @@ const AddNewAddress: React.FC<AddNewAddressProps> = (props) => {
             leftButtonAction={onClose}
         >
             <View style={{ padding: 20 }}>
-                <TextInput
-                    onChangeText={setText}
-                    style={{
-                        padding: scaler(15),
-                        borderWidth: scaler(1),
-                        borderColor: colors.colorFocus,
-                        borderRadius: scaler(10)
-                    }}
-                />
+                <FormProvider {...methods}>
+                    <Form render={() => (
+                        <RnInput name='address' placeholder='Enter new address' />
+                    )} />
+                </FormProvider>
             </View>
         </Popup>
     )

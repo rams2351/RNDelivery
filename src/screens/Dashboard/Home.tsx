@@ -1,7 +1,6 @@
-import { useFocusEffect } from '@react-navigation/native'
 import { colors, Images } from 'assets/alllll'
-import React, { useCallback, useRef, useState } from 'react'
-import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, View } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import CategoryTab from 'src/components/home/CategoryTab'
 import SearchBar from 'src/components/home/SearchBar'
@@ -17,6 +16,7 @@ const padding = 30
 
 const Home = () => {
     const [activeTab, setActiveTab] = useState<string>('All')
+    const [refreshing, setRefreshing] = useState<boolean>(false)
     const { products, user, order } = useSelector((state: AppState) => ({
         products: state.products.products,
         user: state.user.user,
@@ -25,20 +25,31 @@ const Home = () => {
     ), shallowEqual)
 
     const scrollViewRef = useRef<FlatList>(null)
-
-
     const dispatch = useDispatch()
-    useFocusEffect(useCallback(() => {
-        if (activeTab != 'All') {
-            dispatch(actions.getAllProducts())
-            setActiveTab('All')
-            scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
-            dispatch(actions.getUser(user?.Id))
-        }
-        // dispatch(actions.getOrders())
-        // dispatch(actions.setLogin(false))
+
+    useEffect(() => {
+        dispatch(actions.getAllProducts())
     }, [])
-    )
+
+    // useFocusEffect(useCallback(() => {
+    //     if (activeTab != 'All') {
+    //         dispatch(actions.getAllProducts())
+    //         setActiveTab('All')
+    //         scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
+    //         dispatch(actions.getUser(user?.Id))
+    //     }
+    //     // dispatch(actions.getOrders())
+    //     // dispatch(actions.setLogin(false))
+    // }, [])
+    // )
+
+    const onPageRefresh = useCallback(() => {
+        setRefreshing(true)
+        dispatch(actions.getAllProducts())
+        setActiveTab('All')
+        scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
+        setRefreshing(false)
+    }, [])
 
     const handleCategoryChange = useCallback((type: string) => {
         setActiveTab(type)
@@ -77,7 +88,7 @@ const Home = () => {
     }, [scrollViewRef])
 
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onPageRefresh} />}>
             <View style={styles.logoTextContainer}>
                 <View style={styles.imageContainer}><Image source={Images.logo} style={styles.image} /></View>
                 <View>

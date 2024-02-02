@@ -12,10 +12,11 @@ interface ButtonProps {
     endIcon?: ImageSourcePropType | undefined;
     onPressButton?: ((event: GestureResponderEvent) => void) | undefined | any;
     disabled?: boolean;
+    type?: 'primary' | 'secondary'
 }
 
 const Button = (props: ButtonProps) => {
-    const { title, startIcon, endIcon, onPressButton, disabled, containerStyle } = props
+    const { title, startIcon, endIcon, onPressButton, disabled, containerStyle, type = 'primary' } = props
 
     const styles = StyleSheet.create({
         title: {
@@ -26,12 +27,11 @@ const Button = (props: ButtonProps) => {
         },
         button: {
             backgroundColor: disabled ? colors.colorFadedPrimary : colors.colorPrimary,
-            display: 'flex',
+            flexDirection: 'row',
             alignItems: 'center',
             justifyContent: startIcon || endIcon ? 'flex-start' : 'center',
-            paddingVertical: scaler(17),
+            paddingVertical: scaler(15),
             borderRadius: scaler(25),
-            flexDirection: 'row',
             ...StyleSheet.flatten(props.buttonStyle)
         },
         icon: {
@@ -42,17 +42,25 @@ const Button = (props: ButtonProps) => {
         },
         container: {
             ...StyleSheet.flatten(containerStyle)
+        },
+        secondaryButton: {
+            borderWidth: 2,
+            borderColor: colors.colorPrimary,
+            backgroundColor: 'transparent',
+        },
+        secondaryText: {
+            color: colors.colorPrimary
         }
     })
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.button} onPress={onPressButton} disabled={disabled} activeOpacity={0.7}>
+            <TouchableOpacity style={[styles.button, type == 'primary' ? {} : styles.secondaryButton]} onPress={onPressButton} disabled={disabled} activeOpacity={0.7}>
                 {startIcon ?
                     <Image source={startIcon} style={styles.icon} />
                     : null
                 }
-                {<Text style={styles.title}>{title}</Text>}
+                {<Text style={[styles.title, type == 'secondary' ? styles.secondaryText : {}]}>{title}</Text>}
                 {endIcon ?
                     <Image source={endIcon} style={styles.icon} />
                     : null

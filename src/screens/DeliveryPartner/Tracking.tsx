@@ -117,6 +117,7 @@ const Tracking = () => {
     useEffect(() => {
         dispatch(actions.updateDriverLocation({ coordinates: location, id: user?.Id }))
     }, [cancelModal])
+
     return (
         <>
             <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1 }}>

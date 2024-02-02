@@ -105,7 +105,7 @@ export function AddMinutesToTime(timeString: String, minutesToAdd: number) {
 export function GetCurrentTime() {
     const now = new Date();
     const options = { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
-
+    //@ts-ignore
     const formattedTime = now.toLocaleTimeString(undefined, options);
     return formattedTime;
 }
@@ -113,4 +113,5 @@ export function GetCurrentTime() {
 function padZero(value: number) {
     return value < 10 ? `0${value}` : value;
 }
+
 

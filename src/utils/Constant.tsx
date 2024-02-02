@@ -17,5 +17,6 @@ export const DashboardScreens = {
     CHECKOUT: 'checkout',
     BOTTOM_NAVIGATOR: 'BottomNavigation',
     PAYMENT_SUCCESS: 'paymentSuccess',
-    TRACKING_MAP: 'TrackingMap'
+    TRACKING_MAP: 'TrackingMap',
+    ORDER_DETAIL: 'OrderDetails'
 }

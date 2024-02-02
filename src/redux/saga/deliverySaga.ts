@@ -50,8 +50,6 @@ function* getPlacedOrders({ payload }: Action<any>): Generator<any, any, any>{
 }
 
 function* updateDriverLocation({ payload: { coordinates, id } }: Action<any>): Generator<any, any, any>{
-    console.log(id,'called');
-
     // yield put(actions.setLoading(true))
     let pay = { driverLocation: JSON.stringify(coordinates), id: id }
     try {
@@ -74,7 +72,6 @@ function* updateOrderStatus({ payload:{status,id,driverId} }: Action<any>): Gene
     let pay = { status:status, id: id, driverId:driverId }
     try {
         let res = yield call(ApiProvider._updateOrderStatus, pay)
-        console.log(res,'ajdajdfj*****');
 
          if (res) {
                 //  yield put(actions.setOrderList(res))
@@ -110,6 +107,37 @@ function* assignOrder ({ payload:{order,id,client} }: Action<any>): Generator<an
     }
 }
 
+function* getOrderDetail({ payload }: Action<any>): Generator<any, any, any>{
+
+    yield put(actions.setLoading(true))
+    try {
+        let res = yield call(ApiProvider._getOrderDetailById, `(Id,eq,${payload})`)
+        if (res) {
+            yield put(actions.setOrderDetail(res))
+        }
+        yield put(actions.setLoading(false))
+    } catch (err) {
+        console.log(err, 'Catch Error in validate user')
+        _showErrorMessage('Some thing went wrong on validate user!')
+        yield put(actions.setLoading(false))
+    }
+}
+
+function* getDriverInfo({ payload }: Action<any>): Generator<any, any, any>{
+
+    yield put(actions.setLoading(true))
+    try {
+        let res = yield call(ApiProvider._getDriverInfo, `(Id,eq,${payload})`)
+        if (res) {
+            yield put(actions.setDriverInfo(res))
+        }
+        yield put(actions.setLoading(false))
+    } catch (err) {
+        console.log(err, 'Catch Error in validate user')
+        _showErrorMessage('Some thing went wrong on validate user!')
+        yield put(actions.setLoading(false))
+    }
+}
 
 export default function* watchDelivery() {
     yield takeLeading(actions.getAllUser.toString(), getAllUsers)
@@ -117,6 +145,9 @@ export default function* watchDelivery() {
     yield takeLeading(actions.updateDriverLocation.toString(), updateDriverLocation)
     yield takeLeading(actions.updateOrderStatus.toString(), updateOrderStatus)
     yield takeLeading(actions.assignOrder.toString(), assignOrder)
-    yield takeLeading(actions.getPlacedOrders.toString(),getPlacedOrders)
+    yield takeLeading(actions.getPlacedOrders.toString(), getPlacedOrders)
+    yield takeLeading(actions.getOrderDetail.toString(),getOrderDetail)
+    yield takeLeading(actions.getDriverInfo.toString(),getDriverInfo)
+
 
 }

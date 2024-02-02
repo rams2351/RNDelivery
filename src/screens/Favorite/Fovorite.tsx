@@ -1,7 +1,6 @@
-import { useFocusEffect } from '@react-navigation/native'
 import { colors, Images } from 'assets/alllll'
 import React, { createRef, RefObject, useCallback, useState } from 'react'
-import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, RefreshControl, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
@@ -23,12 +22,15 @@ const Favorite = () => {
     let rowRefs = new Map();
     const wishListedProducts = products?.filter((d, i) => user?.wishlist?.includes(d?.Id))
     const [swipedItem, setSwipedItem] = useState<any>(null)
+    const [refreshing, setRefreshing] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    // console.log(wishListedProducts);
 
-    console.log(wishListedProducts);
-
-    const removeWishListed = useCallback((d: any) => {
+    const removeWishListed = useCallback(async (d: any) => {
         let filtered = user?.wishlist?.filter((_: any) => _ != d.Id)
-        dispatch(actions.updateWishlist({ id: user.Id, list: filtered }))
+        dispatch(actions.setLoading(true))
+        dispatch(actions.updateWishlist({ id: user.Id, list: filtered, loader: setLoading }))
+
     }, [wishListedProducts])
 
 
@@ -43,10 +45,16 @@ const Favorite = () => {
             </View>
         )
     }, [swipedItem])
-    useFocusEffect(useCallback(() => {
-        dispatch(actions.getAllProducts())
-    }, []))
 
+    // useFocusEffect(useCallback(() => {
+    //     dispatch(actions.getAllProducts())
+    // }, []))
+
+    const onRefreshPage = useCallback(() => {
+        setRefreshing(true)
+        dispatch(actions.getAllProducts())
+        setRefreshing(false)
+    }, [])
 
     return (
         <View style={{ backgroundColor: colors.colorBackground, flex: 1 }}>
@@ -57,6 +65,7 @@ const Favorite = () => {
                             <Image source={Images.ic_swipe_text} style={{ width: '80%', height: 25 }} />
                         </View>
                         <FlatList
+                            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshPage} />}
                             style={{ padding: scaler(5) }}
                             data={wishListedProducts}
                             keyExtractor={(_: any, i: number) => i.toString()}

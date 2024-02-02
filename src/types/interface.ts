@@ -32,5 +32,7 @@ export interface ProductsSlice{
 
 export interface DeliverySlice{
     allUsers: any[],
-    ordersList:any[]
+    ordersList: any[],
+     orderDetail: any,
+    driverInfo:any
 }

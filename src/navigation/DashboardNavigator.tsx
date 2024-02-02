@@ -3,6 +3,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import Cart from 'screens/Cart/Cart'
 import Checkout from 'screens/Checkout/Checkout'
+import OrderDetail from 'screens/Orders/OrderDetail'
 import PaymentSuccess from 'screens/Payment/PaymentSuccess'
 import ProductDetail from 'screens/ProductDetail'
 import TrackingMap from 'screens/TrackingMap/TrackingMap'
@@ -33,6 +34,10 @@ const DashboardScreensArray = [
     {
         name: DashboardScreens.TRACKING_MAP,
         component: TrackingMap
+    },
+    {
+        name: DashboardScreens.ORDER_DETAIL,
+        component: OrderDetail
     }
 ]
 

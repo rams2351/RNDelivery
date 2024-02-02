@@ -24,10 +24,6 @@ const OptionList = [
         name: 'Help',
         route: ''
     },
-    // {
-    //     name: 'Faq',
-    //     route: ''
-    // },
     {
         name: 'Logout',
         route: 'logout'
@@ -53,22 +49,23 @@ const Profile = ({ navigation }: any) => {
         dispatch(actions.setUserData(null))
         dispatch(actions.setLogin(false))
     }, [])
-    console.log(user);
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-            <View style={{ padding: scaler(20) }}>
+            <View style={{ paddingHorizontal: scaler(15) }}>
                 <Text style={[styles.textName, { marginVertical: scaler(10) }]}>Personal Detail</Text>
                 <Card style={[{ marginBottom: scaler(10) }]}>
-                    <View style={styles.imageTextContainer}>
-
+                    <View style={[styles.imageTextContainer, { borderBottomWidth: 1, borderColor: colors.colorGreyMore }]}>
                         <Image source={Images.ic_user1} style={styles.imageContainer} />
                         <View style={styles.textContainer}>
                             <Text style={styles.textName}>{user?.firstName + " " + user?.lastName}</Text>
                             <Text style={styles.textDesc}  >{user?.email} </Text>
                             <Text style={styles.textDesc}>{user?.countryCode + " " + user?.phone}</Text>
-                            {user?.address.map((d: any, i: number) => (<Text key={i} style={styles.textDesc}>{d.address}</Text>))}
                         </View>
+                    </View>
+                    <View>
+                        <Text>Address:</Text>
+                        {user?.address.map((d: any, i: number) => (<Text key={i} style={styles.textDesc}>{d.address}</Text>))}
                     </View>
                 </Card>
 
@@ -103,12 +100,12 @@ export default Profile
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.colorBackground,
-        flex: 1
     },
     imageContainer: {
-        height: scaler(100),
-        width: scaler(100),
-        borderRadius: scaler(20)
+        height: scaler(85),
+        width: scaler(85),
+        borderRadius: scaler(20),
+        marginBottom: scaler(8)
     },
     imageTextContainer: {
         display: 'flex',
@@ -119,7 +116,6 @@ const styles = StyleSheet.create({
         paddingLeft: scaler(10),
         flexShrink: 1,
         display: 'flex',
-        // flexWrap: 'wrap',
     },
     textName: {
         fontSize: scaler(17),

@@ -30,8 +30,8 @@ export const Images = {
     ic_paypal: require('./images/paypal.png'),
     ic_check: require('./images/check.png'),
     ic_uncheck: require('./images/uncheck.png'),
-    ic_success_gif:require('./images/successGif.gif')
-
+    ic_success_gif:require('./images/successGif.gif'),
+    ic_order_detail:require('./images/orderDetail.jpg')
 
 
 }

@@ -159,3 +159,11 @@ export const _updateDriverLocation = async (body: any) => {
 export const _updateOrderStatus = async (body: any) => {
     return callApi(`mer2hygg6gpz5f9/views/vwzuzgz0qe2je497/${body?.id}`, 'PATCH', body)
 }
+
+export const _getOrderDetailById = async (body: any) => {
+    return callApi('mer2hygg6gpz5f9/views/vw8szicwpw1zf98s/find-one?where=', 'GET', { where: body })
+}
+
+export const _getDriverInfo = (body: any) => {
+    return callApi('mb53d0474hdwdy8/views/vw6bdfrm92pcnguv/find-one?where=', 'GET', { where: body })
+}

@@ -57,9 +57,8 @@ function* getUser({ payload }: Action<any>): Generator<any, any, any>{
     }
 }
 
-function* updateWishlist({payload:{list,id,loader}}:Action<any>): Generator<any, any, any>{
+function* updateWishlist({ payload: { list, id, loader } }: Action<any>): Generator<any, any, any>{
     loader(true)
-
     let pay = { wishlist: JSON.stringify(list), id: id }
     try {
         let res = yield call(ApiProvider._updateWishlist,pay)
@@ -109,8 +108,6 @@ function* updateOrders({ payload }: Action<any>): Generator<any, any, any>{
     try {
         let res = yield call(ApiProvider._addOrder, pay)
         let userData = yield call(ApiProvider._updateWishlist,userPay)
-        console.log(userData,'in saga');
-
          if (res) {
                  yield put(actions.setOrderList(res))
         }
