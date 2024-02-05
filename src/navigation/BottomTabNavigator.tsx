@@ -36,6 +36,7 @@ const BottomNavigationScreenArray = [
         component: Orders,
         icon: (p: any) => <OrdersSvg {...p} />
     },
+
 ]
 const BottomTabNavigator = () => {
     const BottomNavigator = createBottomTabNavigator();

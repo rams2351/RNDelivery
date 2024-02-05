@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import { LogBox } from 'react-native';
+import { LogBox, Platform } from 'react-native';
 import { enableLatestRenderer } from 'react-native-maps';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { Provider } from 'react-redux';
@@ -24,7 +24,7 @@ function App(): React.JSX.Element {
       animationType={'zoom-in'}
       animationDuration={250}
       offset={50} // offset for both top and bottom toasts
-      offsetTop={50}
+      offsetTop={Platform.OS === 'ios' ? 50 : 20}
       offsetBottom={40}
       swipeEnabled={true}
       renderToast={(e) => <CustomToast {...e} />}

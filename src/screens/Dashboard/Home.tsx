@@ -29,6 +29,7 @@ const Home = () => {
 
     useEffect(() => {
         dispatch(actions.getAllProducts())
+        dispatch(actions.getUser(user?.Id))
     }, [])
 
     // useFocusEffect(useCallback(() => {
@@ -98,6 +99,7 @@ const Home = () => {
             </View>
 
             <SearchBar />
+
 
             <CategoryTab
                 tabList={['All', 'Foods', 'Drinks', 'Snacks', 'Burgers', 'Pizza']}

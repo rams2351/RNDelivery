@@ -1,14 +1,29 @@
-import { colors, Images } from 'assets/alllll'
-import React from 'react'
-import { Image, StyleSheet, TextInput, View } from 'react-native'
+import { colors } from 'assets/Colors'
+import { Images } from 'assets/image'
+import React, { useCallback } from 'react'
+import { Image, StyleSheet, View } from 'react-native'
+import { useDispatch } from 'react-redux'
+import { actions } from 'src/redux/slices/reducer'
+import { DashboardScreens } from 'utils/Constant'
+import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
+import Card from '../Card'
+import Text from '../Text'
 
 const SearchBar = () => {
+    const dispatch = useDispatch()
+
+    const onPressHandler = useCallback(() => {
+        dispatch(actions.getOrderList())
+        NavigationService.push(DashboardScreens.SEARCH_SCREEN)
+    }, [])
     return (
-        <View style={styles.container}>
-            <Image source={Images.ic_search} style={styles.image} />
-            <TextInput style={styles.input} placeholder="Search" />
-        </View>
+        <Card style={styles.cardContainer} onPressCard={onPressHandler}>
+            <View style={styles.container}>
+                <Image source={Images.ic_search} style={styles.image} />
+                <Text style={styles.text}>Search</Text>
+            </View>
+        </Card>
     )
 }
 
@@ -16,29 +31,24 @@ export default SearchBar
 
 const styles = StyleSheet.create({
     container: {
-        marginVertical: scaler(25),
-        backgroundColor: colors.colorWhite,
-        borderRadius: scaler(25),
-        marginHorizontal: scaler(20),
-        // borderWidth: scaler(1),
-        // borderColor: colors.colorGreyInactive
-        shadowColor: colors.colorGreyInactive,
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: scaler(18),
-        elevation: 15
     },
-    input: {
-        paddingVertical: scaler(15),
+    text: {
         paddingHorizontal: scaler(10),
-        fontSize: scaler(15)
+        fontSize: scaler(15),
+        fontWeight: '400',
+        color: colors.colorGreyText
+    },
+    cardContainer: {
+        margin: scaler(18),
+        marginHorizontal: scaler(25),
+        padding: scaler(3),
+        borderRadius: scaler(30)
     },
     image: {
-        height: scaler(25),
-        width: scaler(25)
-    }
+        height: scaler(22),
+        width: scaler(22)
+    },
 })

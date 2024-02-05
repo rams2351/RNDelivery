@@ -59,7 +59,7 @@ const Checkout = () => {
             let additionalData = {
                 userId: user.Id,
                 orderTime: getCurrentDateTime(),
-                orderFrom: cart[0]?.origin.name,
+                orderFrom: cart[0]?.origin,
                 status: 'placed',
                 deliverTo: user.address[0],
                 paymentMethod: paymentMethod,

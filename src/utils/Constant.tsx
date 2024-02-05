@@ -18,5 +18,6 @@ export const DashboardScreens = {
     BOTTOM_NAVIGATOR: 'BottomNavigation',
     PAYMENT_SUCCESS: 'paymentSuccess',
     TRACKING_MAP: 'TrackingMap',
-    ORDER_DETAIL: 'OrderDetails'
+    ORDER_DETAIL: 'OrderDetails',
+    SEARCH_SCREEN: 'SearchScreen'
 }

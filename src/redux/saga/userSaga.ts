@@ -12,6 +12,8 @@ function* validateUser({ payload }: Action<any>): Generator<any, any, any>{
         let res = yield call(ApiProvider._validateUser, `(phone,eq,${payload.slice(3)})`)
         if (res?.Id) {
             yield put(actions.setUserData(res))
+        } else {
+            yield put(actions.setUserData(null))
         }
         yield put(actions.setLoading(false))
         NavigationService.push(AuthScreens.VERIFY_OTP,{phone:payload})

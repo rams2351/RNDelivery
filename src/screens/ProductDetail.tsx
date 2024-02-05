@@ -30,11 +30,9 @@ const ProductDetail = ({ route, navigation }: any) => {
 
 
     useEffect(() => {
-        if (product?.Id === id) {
-            return
-        }
+
         dispatch(actions.getProductDetail(`(Id,eq,${id})`))
-    }, [id, product])
+    }, [id])
 
 
     const wishlistHandler = useCallback(() => {
@@ -42,8 +40,10 @@ const ProductDetail = ({ route, navigation }: any) => {
         if (filtered) {
             if (filtered.includes(product.Id)) {
                 filtered = filtered.filter((_: any) => _ != product.Id)
+                _showSuccessMessage('Item removed from favorites')
             } else {
                 filtered = [...filtered, product.Id]
+                _showSuccessMessage('Item added to favorites')
             }
         } else {
             filtered = [product.Id]
@@ -114,7 +114,7 @@ const ProductDetail = ({ route, navigation }: any) => {
 
                 <View style={{ paddingHorizontal: scaler(30) }}>
                     <Text style={styles.descHeading}>Product Details</Text>
-                    <Text style={styles.desc} >{product?.origin?.name}</Text>
+                    <Text style={styles.desc} >{product?.origin}</Text>
                     {product?.prepTime > 0 ? <Text style={styles.desc} >Preparation time: {TimeFormatter(product?.prepTime)}</Text> : null}
                     <Text style={styles.desc} >{product?.description}</Text>
 

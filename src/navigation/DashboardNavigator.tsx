@@ -6,6 +6,7 @@ import Checkout from 'screens/Checkout/Checkout'
 import OrderDetail from 'screens/Orders/OrderDetail'
 import PaymentSuccess from 'screens/Payment/PaymentSuccess'
 import ProductDetail from 'screens/ProductDetail'
+import SearchScreen from 'screens/Search/SearchScreen'
 import TrackingMap from 'screens/TrackingMap/TrackingMap'
 import { DashboardScreens, scaler } from 'utils/all'
 import BottomTabNavigator from './BottomTabNavigator'
@@ -38,6 +39,10 @@ const DashboardScreensArray = [
     {
         name: DashboardScreens.ORDER_DETAIL,
         component: OrderDetail
+    },
+    {
+        name: DashboardScreens.SEARCH_SCREEN,
+        component: SearchScreen
     }
 ]
 
