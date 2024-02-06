@@ -1,4 +1,7 @@
-import { Toast } from "react-native-toast-notifications"
+import { decode } from "@mapbox/polyline"; //please install this package before running!
+import { Toast } from "react-native-toast-notifications";
+import { config } from "src/api";
+
 
 export const _showSuccessMessage = (msg: string | JSX.Element) => {
     Toast.show(msg, { type: 'success' })
@@ -115,3 +118,26 @@ function padZero(value: number) {
 }
 
 
+export const getDirections = async (startLoc: any, destinationLoc: any) => {
+    try {
+        const KEY = config.GOOGLE_MAP_API_KEY; //put your API key here.
+        //otherwise, you'll have an 'unauthorized' error.
+        let resp = await fetch(
+            `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${KEY}`
+        );
+        let respJson = await resp.json();
+        // console.log(startLoc, 'testing map', destinationLoc);
+
+        let points = decode(respJson.routes[0].overview_polyline.points);
+        console.log(points);
+        let coords = points.map((point, index) => {
+            return {
+                latitude: point[0],
+                longitude: point[1]
+            };
+        });
+        return coords;
+    } catch (error) {
+        return error;
+    }
+};

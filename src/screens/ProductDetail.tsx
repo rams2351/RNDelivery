@@ -11,8 +11,8 @@ import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { scaler } from 'src/utils/Scaler'
 import { DashboardScreens } from 'utils/Constant'
+import { CurrencyFormatter, TimeFormatter, _showSuccessMessage } from 'utils/Helpers'
 import { NavigationService } from 'utils/NavigationService'
-import { CurrencyFormatter, TimeFormatter, _showSuccessMessage } from 'utils/Utils'
 
 const ProductDetail = ({ route, navigation }: any) => {
 
@@ -30,7 +30,6 @@ const ProductDetail = ({ route, navigation }: any) => {
 
 
     useEffect(() => {
-
         dispatch(actions.getProductDetail(`(Id,eq,${id})`))
     }, [id])
 

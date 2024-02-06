@@ -45,9 +45,9 @@ const DashboardScreensArray = [
         component: SearchScreen
     }
 ]
+const StackNavigator = createStackNavigator();
 
 const DashboardNavigator = () => {
-    const StackNavigator = createStackNavigator();
     return (
         <StackNavigator.Navigator screenOptions={{
             headerShown: false,

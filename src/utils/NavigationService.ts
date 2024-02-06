@@ -1,6 +1,6 @@
 import { NavigationContainerRef, Route, StackActions } from "@react-navigation/native";
 import React from "react";
-import { _showErrorMessage } from "./Utils";
+import { _showErrorMessage } from "./Helpers";
 
 const navigationRef: React.MutableRefObject<NavigationContainerRef<any> | null> = React.createRef();
 

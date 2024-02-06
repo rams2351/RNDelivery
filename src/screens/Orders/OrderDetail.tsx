@@ -13,9 +13,9 @@ import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
+import { NameFormatter, TimeFormatter } from 'utils/Helpers'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
-import { NameFormatter, TimeFormatter } from 'utils/Utils'
 
 const OrderDetail = ({ route, navigation }: any) => {
     const orderId = route?.params?.orderId

@@ -6,6 +6,8 @@ import { actions } from "../slices/reducer";
 
 function* getAllProducts({payload}:Action<any>):Generator<any,any,any>{
     yield put(actions.setLoading(true))
+    console.log('called');
+
     try {
         let res = yield call(ApiProvider._getAllProducts)
         if (res) {

@@ -15,9 +15,9 @@ import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
+import { getCurrentDateTime } from 'utils/Helpers'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
-import { getCurrentDateTime } from 'utils/Utils'
 
 const Methods = [
     {

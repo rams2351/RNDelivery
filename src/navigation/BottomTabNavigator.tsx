@@ -38,8 +38,9 @@ const BottomNavigationScreenArray = [
     },
 
 ]
+const BottomNavigator = createBottomTabNavigator();
+
 const BottomTabNavigator = () => {
-    const BottomNavigator = createBottomTabNavigator();
 
     return (
         <BottomNavigator.Navigator initialRouteName={DashboardScreens.HOME}

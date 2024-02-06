@@ -18,7 +18,6 @@ const SearchScreen = () => {
     const [searchList, setSearchList] = useState<any>([])
     const [text, setText] = useState<string>('')
 
-    let OrderRef = React.createRef<any[]>()
     const { products } = useSelector((state: AppState) => ({ products: state.products.products }), shallowEqual)
     const searchHandler = useCallback((e: string) => {
         let arr: any = []
@@ -34,6 +33,8 @@ const SearchScreen = () => {
         })
         setSearchList(arr)
     }, [products])
+    console.log(products);
+
     return (
         <SafeAreaView edges={['top']} style={styles.safeArea}>
             <CustomHeader title='Search' />

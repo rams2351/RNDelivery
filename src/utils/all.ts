@@ -1,4 +1,4 @@
 export * from './Constant';
+export * from './Helpers';
 export * from './Scaler';
-export * from './Utils';
 

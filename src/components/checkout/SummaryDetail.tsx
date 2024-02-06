@@ -6,8 +6,8 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
+import { CurrencyFormatter, TimeFormatter } from 'utils/Helpers'
 import { scaler } from 'utils/Scaler'
-import { CurrencyFormatter, TimeFormatter } from 'utils/Utils'
 import Text from '../Text'
 
 

@@ -10,7 +10,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [GMSServices provideAPIKey:GOOGLE_MAP_API_KEY];
+  [GMSServices provideAPIKey:@"AIzaSyCEDneNFR8b4DYl9cIldAlUAMGYjfUFfhM"];
   self.moduleName = @"FoodDelivery";
 
   // You can add your custom initial props in the dictionary below.

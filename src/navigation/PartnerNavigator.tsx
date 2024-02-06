@@ -8,23 +8,10 @@ import TrackingMap from 'screens/TrackingMap/TrackingMap'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
 
-const PartnerScreens = [
-    {
-        name: 'Home',
-        component: Dashboard
-    },
-    {
-        name: 'Tracking',
-        component: Tracking
-    },
-    {
-        name: DashboardScreens.TRACKING_MAP,
-        component: TrackingMap
-    }
-]
 
+const PartnerStack = createStackNavigator()
 const PartnerNavigator = () => {
-    const PartnerStack = createStackNavigator()
+
 
     const { user } = useSelector((state: AppState) => ({ user: state.user.user }), shallowEqual)
 

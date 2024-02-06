@@ -53,8 +53,6 @@ const Dashboard = () => {
         dispatch(actions.getPlacedOrders())
         setRefreshing(false)
     }, [])
-    console.log(driver);
-
     return (
         <>
             <SafeAreaView edges={['top']} style={{ flex: 1 }}>

@@ -1,5 +1,6 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { memo, ReactElement, ReactNode } from 'react';
 import { GestureResponderEvent, Image, ImageSourcePropType, StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 import { colors } from 'src/assets/Colors';
 import { scaler } from '../utils/Scaler';
 import Text from './Text';
@@ -10,13 +11,13 @@ interface ButtonProps {
     buttonStyle?: StyleProp<ViewStyle>;
     startIcon?: ImageSourcePropType | undefined;
     endIcon?: ImageSourcePropType | undefined;
-    onPressButton?: ((event: GestureResponderEvent) => void) | undefined | any;
+    onPressButton?: (((event: GestureResponderEvent) => void) & (() => void)) | undefined
     disabled?: boolean;
     type?: 'primary' | 'secondary'
 }
 
 const Button = (props: ButtonProps) => {
-    const { title, startIcon, endIcon, onPressButton, disabled, containerStyle, type = 'primary' } = props
+    const { title, startIcon, endIcon, onPressButton, disabled = false, containerStyle, type = 'primary' } = props
 
     const styles = StyleSheet.create({
         title: {
@@ -52,7 +53,6 @@ const Button = (props: ButtonProps) => {
             color: colors.colorPrimary
         }
     })
-
     return (
         <View style={styles.container}>
             <TouchableOpacity style={[styles.button, type == 'primary' ? {} : styles.secondaryButton]} onPress={onPressButton} disabled={disabled} activeOpacity={0.7}>
@@ -70,5 +70,5 @@ const Button = (props: ButtonProps) => {
     )
 }
 
-export default Button
+export default memo(Button)
 

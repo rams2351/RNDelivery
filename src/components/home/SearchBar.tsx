@@ -14,7 +14,7 @@ const SearchBar = () => {
     const dispatch = useDispatch()
 
     const onPressHandler = useCallback(() => {
-        dispatch(actions.getOrderList())
+        dispatch(actions.getAllProducts())
         NavigationService.push(DashboardScreens.SEARCH_SCREEN)
     }, [])
     return (

@@ -35,22 +35,7 @@
 			</dict>
 		</dict>
 	</dict>
-	<!-- <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Please add location for delivery</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Please add location for delivery</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Please add location for delivery</string> -->
 
- <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Let me use your location, even in background</string>
-	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
-	<dict>
-		<key>full-accuracy</key>
-		<string>Let me use your precise location temporarily</string>
-	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Let me use your location when the app is opened</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Black.ttf</string>
@@ -109,5 +94,46 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+     <key>NSAppleMusicUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSBluetoothAlwaysUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSBluetoothPeripheralUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSCalendarsFullAccessUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSCameraUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSContactsUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSFaceIDUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSLocationTemporaryUsageDescriptionDictionary</key>
+     <dict>
+     <key>YOUR-PURPOSE-KEY</key>
+       <string>YOUR TEXT</string>
+     </dict>
+     <key>NSLocationWhenInUseUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSMicrophoneUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSMotionUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSPhotoLibraryUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSPhotoLibraryAddUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSRemindersFullAccessUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSSpeechRecognitionUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSSiriUsageDescription</key>
+     <string>YOUR TEXT</string>
+     <key>NSUserTrackingUsageDescription</key>
+     <string>YOUR TEXT</string>
 </dict>
 </plist>

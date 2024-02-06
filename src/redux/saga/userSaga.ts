@@ -29,12 +29,13 @@ function* signUpUser({ payload }: Action<any>): Generator<any, any, any>{
     yield put(actions.setLoading(true))
     try {
         let res = yield call(ApiProvider._addUser, payload)
+console.log(res,'msg');
 
         if (res?.Id) {
             yield put(actions.setUserData(res))
             yield put(actions.setLogin(true))
-            yield put(actions.setLoading(false))
         }
+        yield put(actions.setLoading(false))
     } catch (err) {
         console.log(err, 'Catch Error in validate user')
         _showErrorMessage('Some thing went wrong on validate user!')
@@ -70,7 +71,7 @@ function* updateWishlist({ payload: { list, id, loader } }: Action<any>): Genera
              console.log('something went wrong');
          }
         loader(false)
-            yield put(actions.setLoading(false))
+        yield put(actions.setLoading(false))
 
     } catch (error) {
         console.log("Catch Error", error);
@@ -127,21 +128,7 @@ function* updateOrders({ payload }: Action<any>): Generator<any, any, any>{
 }
 
 
-function* getOrders({ payload }: Action<any>): Generator<any, any, any>{
 
-    yield put(actions.setLoading(true))
-    try {
-        let res = yield call(ApiProvider._getOrders)
-        if (res) {
-            yield put(actions.setOrders(res))
-        }
-        yield put(actions.setLoading(false))
-    } catch (err) {
-        console.log(err, 'Catch Error in validate user')
-        _showErrorMessage('Some thing went wrong on validate user!')
-        yield put(actions.setLoading(false))
-    }
-}
 
 export default function* watchUsers() {
     yield takeLeading(actions.validateUser.toString(), validateUser)

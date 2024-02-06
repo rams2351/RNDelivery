@@ -30,9 +30,9 @@ const AuthScreensArray = [
         component: SignUp
     },
 ]
+const AuthStack = createStackNavigator()
 
 const Navigator = () => {
-    const AuthStack = createStackNavigator()
     const { isLogin, user } = useSelector((state: AppState) => (
         {
             isLogin: state.auth.isLogin,

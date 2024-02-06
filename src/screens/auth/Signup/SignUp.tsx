@@ -13,8 +13,8 @@ import DatePicker from 'src/components/DatePicker'
 import RnInput from 'src/components/RnInput'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
+import { _showErrorMessage } from 'utils/Helpers'
 import { scaler } from 'utils/Scaler'
-import { _showErrorMessage } from 'utils/Utils'
 import * as yup from 'yup'
 //@ts-ignore
 
@@ -45,15 +45,15 @@ const SignUp = (props: any) => {
             return
         }
         const { address, ...rest } = data
-
+        let addPay = [{
+            address: address,
+            location: location
+        }]
         const payload = {
             ...rest,
             phone,
             countryCode: code,
-            address: [{
-                address: address,
-                location: location
-            }]
+            address: JSON.stringify(addPay)
         }
         dispatch(actions.signUpUser(payload))
     }, [location])
@@ -126,7 +126,9 @@ const SignUp = (props: any) => {
         requestLocationPermission()
     }, []);
 
-
+    // requestLocationAccuracy({ purposeKey: 'full-accuracy' })
+    //     .then((accuracy) => console.log(`Location accuracy is: ${accuracy}`))
+    //     .catch(() => console.warn('Cannot request location accuracy'));
 
     return (
         <SafeAreaView edges={['top']} style={styles.safeAreaContainer} >
