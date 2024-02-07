@@ -284,6 +284,8 @@ const Tracking = () => {
                         <Text style={styles.methodText}>Order Delivery Info:</Text>
                         <Card
                             style={styles.deliveredContainer}
+                            onPressCard={() => { }}
+                            touchableOpacity={1}
                         >
                             <Text style={styles.text}>Pickup from:  {assignedOrder?.orderFrom}</Text>
                             <Text style={styles.text}>Deliver To:  {assignedOrder?.deliverTo?.address}</Text>
