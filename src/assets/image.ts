@@ -32,7 +32,8 @@ export const Images = {
     ic_uncheck: require('./images/uncheck.png'),
     ic_success_gif:require('./images/successGif.gif'),
     ic_order_detail: require('./images/orderDetail.jpg'),
-    ic_delivery_vehicle:require('./images/delivery_vehicle.png')
+    ic_delivery_vehicle: require('./images/delivery_vehicle.png'),
+    ic_no_order:require('./images/no_orders.jpg')
 
 
 }

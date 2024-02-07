@@ -1,8 +1,11 @@
+import { useFocusEffect } from '@react-navigation/native'
 import { colors } from 'assets/Colors'
-import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react'
-import { FlatList, Platform, RefreshControl, StyleSheet, View } from 'react-native'
+import { Images } from 'assets/image'
+import React, { useCallback, useMemo, useState } from 'react'
+import { FlatList, Image, Platform, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import EntypoIcon from 'react-native-vector-icons/Entypo'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Card from 'src/components/Card'
@@ -13,24 +16,21 @@ import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { scaler } from 'utils/Scaler'
 
+interface IConfirmModal { open: boolean; data: any; }
 
 
 const Dashboard = () => {
-    const dispatch = useDispatch()
     const { driver, orderList } = useSelector((state: AppState) => ({
         orderList: state.delivery.ordersList,
         driver: state.user.user
     }), shallowEqual)
-    const [confirmModal, setConfirmModal] = useState<any>({
+    const [confirmModal, setConfirmModal] = useState<IConfirmModal>({
         open: false,
         data: null
     })
     const [modalOpen, setModalOpen] = useState<boolean>(false)
     const [refreshing, setRefreshing] = useState<boolean>(false)
-
-    useLayoutEffect(useCallback(() => {
-        dispatch(actions.getPlacedOrders())
-    }, []))
+    const dispatch = useDispatch()
 
     let orders: Array<any> = useMemo(() => {
         return orderList?.filter((d) => d.Id != driver.Id)
@@ -53,15 +53,22 @@ const Dashboard = () => {
         dispatch(actions.getPlacedOrders())
         setRefreshing(false)
     }, [])
+
+
+    useFocusEffect(useCallback(() => {
+        dispatch(actions.getPlacedOrders())
+    }, [])
+    )
+
     return (
         <>
             <SafeAreaView edges={['top']} style={{ flex: 1 }}>
                 <CustomHeader title='Home' showLeftIcon={false} />
-                <View style={[styles.cartContainer, { position: 'absolute', top: Platform.OS === 'android' ? scaler(10) : scaler(40), right: scaler(30) }]}>
-                    <Icon name='logout' size={27} color={colors.colorWhite} style={[{}]} onPress={() => setModalOpen(true)} />
+                <View style={[styles.cartContainer, styles.logout]}>
+                    <Icon name='logout' size={20} color={colors.colorWhite} onPress={() => setModalOpen(true)} />
                 </View>
                 {orders?.length > 0 ? (<View style={styles.container}>
-                    <Text style={styles.heading}>Incoming  Orders</Text>
+                    <Text style={styles.heading}>Placed  Orders</Text>
                     <FlatList
                         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />}
                         showsVerticalScrollIndicator={false}
@@ -84,9 +91,19 @@ const Dashboard = () => {
                             </Card>
                         )}
                     />
-                </View>) : <View>
-                    <Text style={styles.text}>No orders yet!</Text>
-                </View>}
+                </View>
+                ) : (
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />}
+                        contentContainerStyle={styles.noOrderContainer}>
+                        <Image source={Images.ic_no_order} style={styles.image} />
+                        <View style={styles.iconTextContainer}>
+                            <EntypoIcon name='info-with-circle' size={22} color={colors.colorLink} style={{ marginHorizontal: scaler(5) }} />
+                            <Text style={styles.text}>No orders placed yet!</Text>
+                        </View>
+                    </ScrollView>
+                )}
             </SafeAreaView>
 
             <Popup
@@ -141,8 +158,13 @@ const styles = StyleSheet.create({
     },
     cartContainer: {
         backgroundColor: colors.colorPrimary,
-        padding: 10,
-        borderRadius: 50
+        padding: scaler(5),
+        borderRadius: scaler(5)
+    },
+    logout: {
+        position: 'absolute',
+        top: Platform.OS === 'android' ? scaler(13) : scaler(55),
+        right: scaler(30)
     },
     cartImage: {
         height: scaler(25),
@@ -175,5 +197,22 @@ const styles = StyleSheet.create({
     modalText: {
         fontWeight: '600',
         color: colors.colorGreyInactive
+    },
+    image: {
+        height: scaler(200),
+        width: scaler(200),
+        objectFit: 'contain',
+        marginBottom: scaler(25),
+        borderRadius: scaler(10)
+    },
+    noOrderContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1
+    },
+    iconTextContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })

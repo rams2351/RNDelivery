@@ -1,6 +1,6 @@
-import { colors, Images } from 'assets/alllll'
+import { colors } from 'assets/Colors'
 import React, { useCallback, useState } from 'react'
-import { Image, Platform, StyleSheet, View } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch } from 'react-redux'
@@ -34,40 +34,29 @@ const GetOtpScreen = ({ navigation }: any) => {
             ph = '+91' + phone
         }
         dispatch(actions.validateUser(ph))
-        // navigation.push(AuthScreens.VERIFY_OTP, { phone: ph })
     }, [])
 
     return (
-        <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
-            <View
-                style={styles.container}>
-                <Image source={Images.logo} />
-                <Text style={styles.otpText}>OTP</Text>
-                <View style={styles.underline} />
-            </View>
+        <SafeAreaView edges={['bottom', 'top']} style={{ flex: 1 }}>
             <KeyboardAwareScrollView
                 bounces={false}
                 showsVerticalScrollIndicator={false}
-                enableOnAndroid={true}
-                // extraScrollHeight={Platform.OS === 'ios' ? 0 : 40}
-                enableAutomaticScroll={(Platform.OS === 'ios')}
             >
                 <View style={styles.inputContainer}>
                     <Text style={styles.enterMobileText}>Enter your mobile number to get OTP</Text>
                     <RNPhoneInput onChangeValue={phoneHandler} defaultValue={mobile.value} />
                 </View>
             </KeyboardAwareScrollView>
-            <View style={{ paddingHorizontal: scaler(15) }}>
+            <View style={styles.btnContainer}>
                 <Text style={styles.termsText}>By clicking, I accept the terms of service and privacy policy.</Text>
                 <Button
                     title='Get OTP'
-                    buttonStyle={{ marginBottom: scaler(25) }}
+                    buttonStyle={{ marginBottom: Platform.OS == 'android' ? scaler(25) : scaler(5) }}
                     textStyle={{ fontWeight: '600' }}
                     disabled={mobile.disable}
                     onPressButton={() => getOtpHandler(mobile.value)}
                 />
             </View>
-
         </SafeAreaView >
     )
 }
@@ -75,33 +64,11 @@ const GetOtpScreen = ({ navigation }: any) => {
 export default GetOtpScreen
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40,
-        backgroundColor: colors.colorWhite,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    otpText: {
-        fontSize: scaler(20),
-        fontWeight: '600',
-        color: colors.colorBlackText,
-        marginRight: scaler(10)
-    },
-    underline: {
-        borderTopWidth: 2,
-        width: scaler(40),
-        marginRight: scaler(10),
-        borderTopColor: colors.colorPrimary
-    },
     inputContainer: {
         flex: 1,
         backgroundColor: colors.colorBackground,
         marginTop: scaler(20),
         paddingHorizontal: scaler(15),
-        display: 'flex'
     },
     enterMobileText: {
         fontSize: scaler(20),
@@ -114,5 +81,8 @@ const styles = StyleSheet.create({
         color: colors.colorBlackText,
         marginBottom: scaler(10),
         textAlign: 'center'
+    },
+    btnContainer: {
+        paddingHorizontal: scaler(15)
     }
 })

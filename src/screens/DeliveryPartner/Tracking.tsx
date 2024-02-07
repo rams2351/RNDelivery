@@ -200,13 +200,27 @@ const Tracking = () => {
                         console.log('This feature is not available (on this device / in this context)');
                         break;
                     case RESULTS.DENIED:
-                        console.log('The permission has not been requested / is denied but requestable');
-                        break;
                     case RESULTS.LIMITED:
-                        console.log('The permission is limited: some actions are possible');
-                        break;
                     case RESULTS.GRANTED:
-                        console.log('The permission is granted');
+                        request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((res) => {
+                            if (res === 'granted') {
+                                Geolocation.getCurrentPosition(
+                                    position => {
+                                        const { latitude, longitude } = position.coords;
+                                        setLocation({
+                                            latitude,
+                                            longitude,
+                                        });
+                                    },
+                                    error => {
+                                        console.log(error.code, error.message);
+                                    },
+                                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+                                );
+                            } else {
+                                console.log('You cannot use Geolocation');
+                            }
+                        })
                         break;
                     case RESULTS.BLOCKED:
                         console.log('The permission is denied and not requestable anymore');
@@ -256,8 +270,8 @@ const Tracking = () => {
 
     useEffect(() => {
         requestLocationPermission()
-        const interval = setInterval(() => setCount(_ => _ + 1), 5000)
-        return () => clearInterval(interval)
+        // const interval = setInterval(() => setCount(_ => _ + 1), 5000)
+        // return () => clearInterval(interval)
     }, [])
 
     useEffect(() => {
@@ -270,6 +284,8 @@ const Tracking = () => {
         }
         dispatch(actions.updateDriverLocation({ coordinates: coordinate, id: user?.Id }))
     }, [count])
+
+    console.log(location);
 
 
     return (

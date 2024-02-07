@@ -6278,10 +6278,10 @@ react-native-modal-datetime-picker@^17.1.0:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-permissions@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-4.1.0.tgz#6f09c2ea6d20554608312ca6450990abe52392ac"
-  integrity sha512-P07Ge+gxj0yLcKPE9YK5EQq6PEYDi78aHtJs8E6LAh0actAqe3r3CxnqyVHJ+w4NQbXCJwoqqGTLULYn7OeuhA==
+react-native-permissions@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-4.1.1.tgz#6c185f9ec45069fa14cf8992bed6b67fc8981478"
+  integrity sha512-wdIHMwmDZ6pRVsgAgF7mn/pJEuJd5wJDGENqvFDJs2lW4BSZeN++ZFsA6FgOqUs/2276Oj7rslQgVaxdOsi6yw==
 
 react-native-phone-number-input@^2.1.0:
   version "2.1.0"

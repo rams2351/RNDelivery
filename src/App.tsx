@@ -24,7 +24,7 @@ function App(): React.JSX.Element {
       animationType={'zoom-in'}
       animationDuration={250}
       offset={50} // offset for both top and bottom toasts
-      offsetTop={Platform.OS === 'ios' ? 50 : 20}
+      offsetTop={Platform.OS === 'ios' ? 50 : 50}
       offsetBottom={40}
       swipeEnabled={true}
       renderToast={(e) => <CustomToast {...e} />}

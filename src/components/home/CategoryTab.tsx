@@ -1,7 +1,7 @@
-import { colors } from 'assets/alllll';
+import { colors } from 'assets/Colors';
 import React, { useRef } from 'react';
 import { Dimensions, FlatList, GestureResponderEvent, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { scaler } from 'utils/all';
+import { scaler } from 'utils/Scaler';
 import Text from '../Text';
 
 interface CategoryTabProps {

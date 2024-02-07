@@ -20,7 +20,6 @@ const RNPhoneInput = (props: PhoneInputProps) => {
             placeholder="10 digit mobile number"
             onChangeFormattedText={onChangeValue}
             defaultValue={defaultValue}
-        // autoFocus
         />
     )
 }
@@ -32,6 +31,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: scaler(10),
         overflow: 'hidden',
+        padding: 0,
         borderColor: colors.colorPrimary,
         backgroundColor: colors.colorWhite,
         width: '100%',

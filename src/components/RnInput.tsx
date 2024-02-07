@@ -1,4 +1,4 @@
-import { colors } from 'assets/alllll';
+import { colors } from 'assets/Colors';
 import React, { useMemo, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Image, ImageProps, KeyboardType, StyleProp, StyleSheet, TextInput, View, ViewStyle } from 'react-native';

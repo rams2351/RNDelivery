@@ -1,4 +1,5 @@
-import { colors, Images } from 'assets/alllll'
+import { colors } from 'assets/Colors'
+import { Images } from 'assets/image'
 import React, { createRef, RefObject, useCallback, useState } from 'react'
 import { FlatList, Image, RefreshControl, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'

@@ -1,4 +1,4 @@
-import { Images } from 'assets/alllll'
+import { Images } from 'assets/image'
 import React, { useCallback, useState } from 'react'
 import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
@@ -9,7 +9,7 @@ import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'src/utils/Constant'
-import { scaler } from 'utils/all'
+import { scaler } from 'utils/Scaler'
 
 const OptionList = [
     {

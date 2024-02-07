@@ -8,7 +8,7 @@ import { AuthScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
-const GetStartScreen = ({ navigation }: any) => {
+const GetStartScreen = () => {
     const onPressGetStarted = useCallback(() => {
         NavigationService.push(AuthScreens.GET_OTP)
     }, [])
@@ -20,7 +20,7 @@ const GetStartScreen = ({ navigation }: any) => {
                     <View style={styles.logoContainer}>
                         <Image source={Images.logo} style={styles.logo} />
                     </View>
-                    <Text style={{ color: colors.colorWhite, fontSize: scaler(50), fontWeight: '800', lineHeight: 65 }}>Food for Everyone</Text>
+                    <Text style={styles.foodForEveryone}>Food for Everyone</Text>
                 </View>
                 <View style={styles.toysLogoContainer}>
                     <Image source={Images.toy2}
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
         height: scaler(60),
         width: scaler(60),
         backgroundColor: colors.colorWhite,
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 100,
@@ -100,5 +99,11 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'flex-end',
         paddingVertical: scaler(25)
+    },
+    foodForEveryone: {
+        color: colors.colorWhite,
+        fontSize: scaler(50),
+        fontWeight: '800',
+        lineHeight: 65
     }
 })

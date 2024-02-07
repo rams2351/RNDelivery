@@ -1,17 +1,19 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { colors } from 'assets/alllll'
+import { colors } from 'assets/Colors'
 import FavoriteSvg from 'assets/svg/FavoriteSvg'
 import HomeSvg from 'assets/svg/HomeSvg'
 import OrdersSvg from 'assets/svg/OrdersSvg'
 import UserSvg from 'assets/svg/UserSvg'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import Home from 'screens/Dashboard/Home'
 import Favorite from 'screens/Favorite/Fovorite'
+import Home from 'screens/Home/Home'
 import Orders from 'screens/Orders/Orders'
 import Profile from 'screens/Profile/Profile'
 import Header from 'src/components/Header'
-import { DashboardScreens, NameFormatter, scaler } from 'utils/all'
+import { DashboardScreens } from 'utils/Constant'
+import { NameFormatter } from 'utils/Helpers'
+import { scaler } from 'utils/Scaler'
 
 
 

@@ -1,30 +1,31 @@
 import OTPInputView from '@twotalltotems/react-native-otp-input'
-import React, { useCallback, useState } from 'react'
-import { ActivityIndicator, Image, Platform, StyleSheet, View } from 'react-native'
+import React, { useCallback, useMemo, useState } from 'react'
+import { Platform, StyleSheet, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { colors } from 'src/assets/Colors'
-import { Images } from 'src/assets/image'
 import Button from 'src/components/Button'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { AuthScreens } from 'utils/Constant'
+import { _showErrorMessage } from 'utils/Helpers'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
 interface IOtpState {
     value: string | any;
     disable: boolean;
+    error: boolean;
 }
 
 const VerifyOtp = ({ route, navigation }: any) => {
     const [otp, setOtp] = useState<IOtpState>({
         value: "",
-        disable: true
+        disable: true,
+        error: false
     })
-    const [loading, setLoading] = useState<boolean>(false)
     const phone = route?.params?.phone?.slice(3)
     const dispatch = useDispatch()
 
@@ -32,33 +33,36 @@ const VerifyOtp = ({ route, navigation }: any) => {
         userData: state.user.user
     }
     ), shallowEqual)
+
+    const inputStyle = useMemo(() => {
+        return {
+            ...styles.underlineStyleBase,
+            borderColor: otp.error ? colors.colorRed : colors.colorGreyMore,
+            borderWidth: otp.error ? 2 : 1,
+            color: otp.error ? colors.colorRed : colors.colorBlackText
+        }
+    }, [otp])
+    const focusInput = useMemo(() => {
+        return { borderColor: otp.error ? colors.colorRed : colors.colorFocus, borderWidth: otp.error ? 2 : 1 }
+    }, [otp])
+
     const getOtpHandler = useCallback((otp: string) => {
         if (otp === '1234') {
-            // dispatch(actions.setLogin(true))
             if (userData?.Id) {
                 dispatch(actions.setLogin(true))
             } else {
                 NavigationService.push(AuthScreens.SIGN_UP, { phone: route?.params?.phone })
             }
         } else {
-
+            _showErrorMessage('Please enter valid otp!')
+            setOtp(_ => ({ ..._, error: true }))
         }
     }, [userData])
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <View
-                style={styles.container}>
-                <Image source={Images.logo} />
-                <Text style={styles.otpText}>Verify OTP</Text>
-                <View style={styles.underline} />
-            </View>
+        <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
             <KeyboardAwareScrollView
                 bounces={false}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ flex: 1 }}
-                enableOnAndroid={true}
-                // extraScrollHeight={Platform.OS === 'ios' ? 0 : 40}
-                enableAutomaticScroll={(Platform.OS === 'ios')}
             >
                 <View style={styles.inputContainer}>
                     <Text style={styles.enterMobileText}>Verify with OTP sent to {phone}</Text>
@@ -68,24 +72,23 @@ const VerifyOtp = ({ route, navigation }: any) => {
                         pinCount={4}
                         code={otp.value}
                         editable
-                        onCodeChanged={code => setOtp((d) => ({ disable: code.length == 4 ? false : true, value: code }))}
+                        onCodeChanged={code => setOtp((d) => ({ disable: code.length == 4 ? false : true, value: code, error: false }))}
                         autoFocusOnLoad
-                        codeInputFieldStyle={styles.underlineStyleBase}
-                        codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                        codeInputFieldStyle={inputStyle}
+                        codeInputHighlightStyle={focusInput}
+
                     />
 
-
-                    <Text style={styles.termsText}>Didn't receive it? Retry in 00:24</Text>
-
-                    <Button
-                        title={loading ? <ActivityIndicator color={colors.colorPrimary} /> : 'Continue'}
-                        buttonStyle={{ marginBottom: scaler(20) }}
-                        textStyle={{ fontWeight: '700' }}
-                        disabled={otp.disable}
-                        onPressButton={() => getOtpHandler(otp.value)}
-                    />
                 </View>
             </KeyboardAwareScrollView>
+            <Text style={styles.termsText}>Didn't receive it? Retry in 00:24</Text>
+            <Button
+                title={'Continue'}
+                buttonStyle={{ marginBottom: Platform.OS == 'android' ? scaler(20) : scaler(5), marginHorizontal: scaler(20) }}
+                textStyle={{ fontWeight: '700' }}
+                disabled={otp.disable}
+                onPressButton={() => getOtpHandler(otp.value)}
+            />
         </SafeAreaView>
     )
 }
@@ -93,28 +96,6 @@ const VerifyOtp = ({ route, navigation }: any) => {
 export default VerifyOtp
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1 / 2,
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40,
-        backgroundColor: colors.colorWhite,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    otpText: {
-        fontSize: scaler(20),
-        fontWeight: '600',
-        color: colors.colorBlackText,
-        marginRight: scaler(10)
-    },
-    underline: {
-        borderTopWidth: 2,
-        width: scaler(100),
-        marginRight: scaler(10),
-        marginTop: scaler(2),
-        borderTopColor: colors.colorPrimary
-    },
     inputContainer: {
         flex: 1,
         backgroundColor: colors.colorBackground,
@@ -148,14 +129,12 @@ const styles = StyleSheet.create({
         width: scaler(40),
         height: scaler(40),
         borderWidth: 1,
-        // paddingHorizontal: 20,
         borderRadius: scaler(8),
         color: colors.colorBlackText,
         backgroundColor: colors.colorWhite
-        // borderBottomWidth: 1,
     },
 
     underlineStyleHighLighted: {
-        borderColor: colors.colorPrimary,
+        borderColor: colors.colorFocus,
     },
 })

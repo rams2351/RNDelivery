@@ -1,4 +1,5 @@
-import { colors, Images } from 'assets/alllll';
+import { colors } from 'assets/Colors';
+import { Images } from 'assets/image';
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { FlatList, Image, RefreshControl, StyleSheet, View } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -9,7 +10,8 @@ import Text from 'src/components/Text';
 import { actions } from 'src/redux/slices/reducer';
 import { AppState } from 'src/types/interface';
 import { scaler } from 'src/utils/Scaler';
-import { DashboardScreens, NameFormatter, TimeFormatter } from 'utils/all';
+import { DashboardScreens } from 'utils/Constant';
+import { NameFormatter, TimeFormatter } from 'utils/Helpers';
 import { NavigationService } from 'utils/NavigationService';
 const Orders = ({ navigation }: any) => {
     const dispatch = useDispatch()

@@ -1,4 +1,5 @@
-import { colors, Images } from 'assets/alllll'
+import { colors } from 'assets/Colors'
+import { Images } from 'assets/image'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'

@@ -1,9 +1,10 @@
-import { colors } from 'assets/alllll'
+import { colors } from 'assets/Colors'
 import React from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import Icon from 'react-native-vector-icons/Entypo'
-import { scaler } from 'utils/all'
+import { scaler } from 'utils/Scaler'
+
 import Text from './Text'
 
 const CustomToast = (props: ToastProps) => {
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
         borderRadius: scaler(10),
         paddingHorizontal: scaler(25),
         flexDirection: 'row',
-        // alignItems: 'center',
+        alignItems: Platform.OS == 'ios' ? 'center' : 'flex-start',
     },
     success: {
         backgroundColor: colors.colorSuccess,

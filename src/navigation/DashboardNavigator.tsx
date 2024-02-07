@@ -8,7 +8,8 @@ import PaymentSuccess from 'screens/Payment/PaymentSuccess'
 import ProductDetail from 'screens/ProductDetail'
 import SearchScreen from 'screens/Search/SearchScreen'
 import TrackingMap from 'screens/TrackingMap/TrackingMap'
-import { DashboardScreens, scaler } from 'utils/all'
+import { DashboardScreens } from 'utils/Constant'
+import { scaler } from 'utils/Scaler'
 import BottomTabNavigator from './BottomTabNavigator'
 
 const DashboardScreensArray = [
