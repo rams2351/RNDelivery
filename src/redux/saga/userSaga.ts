@@ -81,8 +81,8 @@ function* updateWishlist({ payload: { list, id, loader } }: Action<any>): Genera
     }
 }
 
-function* updateCartList({ payload:{list,id} }: Action<any>): Generator<any, any, any>{
-    yield put(actions.setLoading(true))
+function* updateCartList({ payload:{list,id,loader} }: Action<any>): Generator<any, any, any>{
+   loader(true)
     let pay = { cart: JSON.stringify(list), id: id }
     try {
         let res = yield call(ApiProvider._updateWishlist,pay)
@@ -91,11 +91,10 @@ function* updateCartList({ payload:{list,id} }: Action<any>): Generator<any, any
         }   else {
              console.log('something went wrong');
             }
-            yield put(actions.setLoading(false))
-
+              loader(false)
     } catch (error) {
         console.log("Catch Error", error);
-        yield put(actions.setLoading(false));
+        loader(false)
     }
 }
 

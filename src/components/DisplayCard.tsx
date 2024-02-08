@@ -1,6 +1,6 @@
 import { Images } from 'assets/image'
-import React, { useCallback } from 'react'
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useState } from 'react'
+import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { colors } from 'src/assets/Colors'
 import { CurrencyFormatter } from 'utils/Helpers'
 import { scaler } from 'utils/Scaler'
@@ -12,10 +12,10 @@ import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 const DisplayCard = (props: any) => {
     const { name, img, price, onPress, Id: id, qty } = props
-
     const { user } = useSelector((state: AppState) => ({ user: state.user.user }), shallowEqual)
     const dispatch = useDispatch()
 
+    const [qtyLoader, setQtyLoader] = useState<boolean>(false)
 
 
     const qtyHandler = useCallback((id: string, qty: number, type: string) => {
@@ -34,7 +34,7 @@ const DisplayCard = (props: any) => {
                 }
             } else return d
         })
-        dispatch(actions.updateCart({ id: user?.Id, list: pay }))
+        dispatch(actions.updateCart({ id: user?.Id, list: pay, loader: setQtyLoader }))
     }, [user])
 
     return (
@@ -54,13 +54,13 @@ const DisplayCard = (props: any) => {
                         <Text style={styles.price} >{qty ? CurrencyFormatter(qty * price) : CurrencyFormatter(price)}</Text>
                         {qty ?
                             <TouchableOpacity style={styles.groupButtonContainer} onPress={() => { }} activeOpacity={1}>
-                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qty > 1 ? qtyHandler(id, qty, '-',) : null} disabled={qty == 1}>
+                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qty > 1 ? qtyHandler(id, qty, '-',) : null} disabled={qty == 1 || qtyLoader}>
                                     <Text style={styles.actionText}>-</Text>
                                 </TouchableOpacity>
                                 <View style={styles.qtyContainer}>
-                                    <Text style={styles.qtyText}>{qty}</Text>
+                                    {qtyLoader ? <ActivityIndicator color={colors.colorPrimary} size={20} /> : <Text style={styles.qtyText}>{qty}</Text>}
                                 </View>
-                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qtyHandler(id, qty, '+')}>
+                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qtyHandler(id, qty, '+')} disabled={qtyLoader} >
                                     <Text style={styles.actionText}>+</Text>
                                 </TouchableOpacity>
                             </TouchableOpacity>

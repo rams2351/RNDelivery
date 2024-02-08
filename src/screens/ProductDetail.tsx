@@ -1,10 +1,10 @@
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
 import FavoriteSvg from 'assets/svg/FavoriteSvg'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useDispatch, useSelector } from 'react-redux'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
@@ -15,24 +15,24 @@ import { CurrencyFormatter, TimeFormatter, _showSuccessMessage } from 'utils/Hel
 import { NavigationService } from 'utils/NavigationService'
 
 const ProductDetail = ({ route, navigation }: any) => {
-
     const dispatch = useDispatch()
     const id = route?.params?.id
-
-    const product = useSelector((state: AppState) => state.products.productDetail)
-    const user = useSelector((state: AppState) => state.user.user)
-
+    const { product, user } = useSelector((state: AppState) => ({
+        product: state.products.productDetail,
+        user: state.user.user
+    }), shallowEqual)
     const wishListed = user?.wishlist?.includes(id)
     const [qty, setQty] = useState<number>(1)
     const [loader, setLoader] = useState<boolean>(false)
-    const isAddedToCart = user?.cart?.filter((_: any) => _.Id === product?.Id)?.[0]?.Id
-    const cartItem = user?.cart?.filter((_: any) => _?.Id === product?.Id)?.[0]
+    const [qtyLoader, setQtyLoader] = useState<boolean>(false)
+    const [addCartLoader, setAddCartLoader] = useState<boolean>(false)
 
-
-    useEffect(() => {
-        dispatch(actions.getProductDetail(`(Id,eq,${id})`))
-    }, [id])
-
+    const isAddedToCart = useMemo(() => {
+        return user?.cart?.filter((_: any) => _.Id === product?.Id)?.[0]?.Id
+    }, [user, product])
+    const cartItem = useMemo(() => {
+        return user?.cart?.filter((_: any) => _?.Id === product?.Id)?.[0]
+    }, [user])
 
     const wishlistHandler = useCallback(() => {
         let filtered = user.wishlist ?? []
@@ -47,10 +47,10 @@ const ProductDetail = ({ route, navigation }: any) => {
         } else {
             filtered = [product.Id]
         }
+        // return
         dispatch(actions.updateWishlist({ id: user.Id, list: filtered, loader: setLoader }))
 
     }, [product, user])
-
 
     const addToCartHandler = useCallback(() => {
         let payload = {
@@ -58,12 +58,12 @@ const ProductDetail = ({ route, navigation }: any) => {
             qty
         }
         const cartItems = [...user?.cart, payload]
-        dispatch(actions.updateCart({ id: user?.Id, list: cartItems }))
-        _showSuccessMessage(<Text style={{ fontWeight: '600' }}>Item added successfully!</Text>)
+        dispatch(actions.updateCart({ id: user?.Id, list: cartItems, loader: setAddCartLoader }))
+        _showSuccessMessage(`Item added successfully!`)
 
     }, [user, qty, product])
 
-    const qtyHandler = useCallback((id: string, qty: number, type: string) => {
+    const qtyHandler = useCallback((id: number, qty: number, type: string) => {
         let newQty = qty;
         if (type === "+") {
             newQty += 1
@@ -80,8 +80,14 @@ const ProductDetail = ({ route, navigation }: any) => {
                 }
             } else return d
         })
-        dispatch(actions.updateCart({ id: user?.Id, list: pay }))
+        dispatch(actions.updateCart({ id: user?.Id, list: pay, loader: setQtyLoader }))
     }, [user, product])
+
+    useEffect(() => {
+        dispatch(actions.getProductDetail(`(Id,eq,${id})`))
+        console.log('called');
+
+    }, [id])
 
     return (
         <SafeAreaView style={styles.safeAreaView}>
@@ -101,7 +107,7 @@ const ProductDetail = ({ route, navigation }: any) => {
                     <View style={styles.imageContainer}>
                         <Image source={Images.orders} src={product?.img[0]?.signedUrl} style={styles.image} />
                     </View>
-                    <View style={{ display: 'flex', width: '80%', paddingBottom: scaler(5) }}>
+                    <View style={{ width: '80%', paddingBottom: scaler(5) }}>
                         {product?.veg == 1 ? <Image source={Images.orders} style={styles.backIcon} src="https://img.icons8.com/fluency/48/vegetarian-food-symbol.png" alt="vegetarian-food-symbol" />
                             :
                             <Image style={styles.backIcon} source={Images.orders} src="https://img.icons8.com/fluency/48/non-vegetarian-food-symbol.png" alt="non-vegetarian-food-symbol" />
@@ -123,34 +129,35 @@ const ProductDetail = ({ route, navigation }: any) => {
             </ScrollView>
             <View style={{
                 marginHorizontal: scaler(20),
-                // marginBottom: scaler(20),
                 marginTop: isAddedToCart ? scaler(10) : 0
             }}>
                 {
                     isAddedToCart ?
-                        (<View style={styles.buttonContainer}>
-                            <View style={styles.groupButtonContainer}>
-                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qty > 1 ? qtyHandler(product?.Id, cartItem?.qty, '-',) : null} disabled={qty == 1}>
-                                    <Text style={styles.actionText}>-</Text>
-                                </TouchableOpacity>
-                                <View style={styles.qtyContainer}><Text style={styles.qtyText}>{cartItem?.qty}</Text></View>
-                                <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qtyHandler(product?.Id, cartItem?.qty, '+')}>
-                                    <Text style={styles.actionText}>+</Text>
-                                </TouchableOpacity>
+                        (
+                            <View style={styles.buttonContainer}>
+                                <View style={styles.groupButtonContainer}>
+                                    <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qty > 1 ? qtyHandler(product?.Id, cartItem?.qty, '-',) : null} disabled={qty == 1}>
+                                        <Text style={styles.actionText}>-</Text>
+                                    </TouchableOpacity>
+                                    <View style={styles.qtyContainer}>{qtyLoader ? <ActivityIndicator color={colors.colorPrimary} size={25} /> : <Text style={styles.qtyText}>{cartItem?.qty}</Text>}</View>
+                                    <TouchableOpacity style={styles.actionButton} activeOpacity={0.7} onPress={() => qtyHandler(product?.Id, cartItem?.qty, '+')}>
+                                        <Text style={styles.actionText}>+</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <Button title="Go to Cart"
+                                    onPressButton={() => NavigationService.push(DashboardScreens.CART)}
+                                    buttonStyle={{ paddingHorizontal: 20, height: scaler(35), paddingVertical: 0 }}
+                                />
                             </View>
-                            <Button title="Go to Cart"
-                                // startIcon={Images.ic_order_bg}
-                                onPressButton={() => NavigationService.push(DashboardScreens.CART)}
-                                buttonStyle={{ paddingHorizontal: 20, height: scaler(35), paddingVertical: 0 }}
+                        )
+                        : (
+                            <Button
+                                onPressButton={addToCartHandler}
+                                title={addCartLoader ? <ActivityIndicator size={25} color={colors.colorWhite} /> : isAddedToCart ? 'Go to' : 'Add to Cart'}
+                                buttonStyle={{}}
+                                containerStyle={{ paddingBottom: scaler(10) }}
                             />
-
-                        </View>)
-                        : (<Button
-                            onPressButton={addToCartHandler}
-                            title={isAddedToCart ? 'Go to' : 'Add to Cart'}
-                            buttonStyle={{}}
-                            containerStyle={{ paddingBottom: scaler(10) }}
-                        />)
+                        )
                 }
             </View>
 
@@ -167,7 +174,6 @@ const styles = StyleSheet.create({
 
     },
     header: {
-        display: 'flex',
         justifyContent: 'space-between',
         flexDirection: 'row',
         padding: scaler(15),
@@ -215,7 +221,6 @@ const styles = StyleSheet.create({
         color: colors.colorPrimary
     },
     imageTextContainer: {
-        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -232,16 +237,12 @@ const styles = StyleSheet.create({
         marginBottom: scaler(5)
     },
     groupButtonContainer: {
-        // borderWidth: scaler(1),
-        // borderColor: colors.colorFocus,
         borderRadius: scaler(10),
-        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         overflow: 'hidden'
     },
     buttonContainer: {
-        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -251,7 +252,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.colorPrimary,
         width: scaler(45),
         height: scaler(35),
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: colors.colorPrimary,
@@ -259,7 +259,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     qtyContainer: {
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         width: scaler(45),

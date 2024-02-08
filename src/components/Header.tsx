@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
     cartContainer: {
         position: 'absolute',
         backgroundColor: colors.colorPrimary,
-        top: Platform.OS === 'android' ? 20 : 55,
+        top: Platform.OS === 'android' ? 12 : 55,
         right: 30,
         padding: 10,
         borderRadius: 50
     },
     cartImage: {
-        height: scaler(25),
-        width: scaler(25)
+        height: scaler(22),
+        width: scaler(22)
     }
 })

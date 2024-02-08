@@ -137,6 +137,7 @@ export const _getProductsByCategory = async (body: any) => {
 }
 
 export const _getOrderList = async () => {
+    console.log(`!1`);
     return callApi(`mer2hygg6gpz5f9/views/vwzuzgz0qe2je497`, 'GET')
 }
 
@@ -144,9 +145,6 @@ export const _addOrder = async (body: any) => {
     return callApi(`mer2hygg6gpz5f9/views/vwzuzgz0qe2je497`, 'POST', body)
 }
 
-export const _getOrders = async () => {
-    return callApi(`mer2hygg6gpz5f9/views/vwzuzgz0qe2je497`, 'GET')
-}
 
 export const _getPlacedOrders = async () => {
     return callApi(`mer2hygg6gpz5f9/views/vw8szicwpw1zf98s`, 'GET')

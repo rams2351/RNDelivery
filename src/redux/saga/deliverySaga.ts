@@ -67,7 +67,7 @@ function* updateDriverLocation({ payload: { coordinates, id } }: Action<any>): G
     }
 }
 
-function* updateOrderStatus({ payload:{status,id,driverId} }: Action<any>): Generator<any, any, any>{
+function* updateOrderStatus({ payload: { status, id, driverId } }: Action<any>): Generator<any, any, any>{
     yield put(actions.setLoading(true))
     let pay = { status:status, id: id, driverId:driverId }
     try {

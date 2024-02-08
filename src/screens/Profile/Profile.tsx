@@ -9,9 +9,15 @@ import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'src/utils/Constant'
+import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
-const OptionList = [
+interface IOptionList {
+    name: string;
+    route: string;
+}
+
+const OptionList: IOptionList[] = [
     {
         name: 'Orders',
         route: DashboardScreens.ORDERS
@@ -31,7 +37,7 @@ const OptionList = [
 
 ]
 
-const Profile = ({ navigation }: any) => {
+const Profile = () => {
     const dispatch = useDispatch()
     const { user } = useSelector((state: AppState) => ({
         user: state.user.user
@@ -42,7 +48,7 @@ const Profile = ({ navigation }: any) => {
         if (route === 'logout') {
             setModalOpen(true)
         } else {
-            navigation.push('BottomNavigation', { screen: route })
+            NavigationService.push(DashboardScreens.BOTTOM_NAVIGATOR, { screen: route })
         }
     }, [])
     const logoutHandler = useCallback(() => {
@@ -70,7 +76,11 @@ const Profile = ({ navigation }: any) => {
                 </Card>
 
                 {OptionList.map((d, i) => (
-                    <Card key={i} style={{ marginVertical: scaler(10) }} onPressCard={() => d.route.length ? navigationHandler(d.route) : null}>
+                    <Card
+                        key={i}
+                        style={{ marginVertical: scaler(10) }}
+                        onPressCard={() => d.route.length ? navigationHandler(d.route) : null}
+                    >
                         <View style={[styles.imageTextContainer, styles.additional]}>
                             <Text style={styles.textName}>{d.name}</Text>
                             <Image source={Images.ic_left_icon} style={{ height: scaler(18), width: scaler(18) }} />
@@ -108,14 +118,12 @@ const styles = StyleSheet.create({
         marginBottom: scaler(8)
     },
     imageTextContainer: {
-        display: 'flex',
         flexDirection: 'row',
     },
     textContainer: {
         marginTop: scaler(8),
         paddingLeft: scaler(10),
         flexShrink: 1,
-        display: 'flex',
     },
     textName: {
         fontSize: scaler(17),
@@ -134,7 +142,6 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         padding: scaler(15),
-        display: 'flex',
         flexShrink: 1
     },
     modalText: {

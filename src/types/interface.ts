@@ -16,8 +16,7 @@ export interface ExtraSlice{
 }
 
 export interface UserSlice{
-    user: any;
-    orders:any[]
+    user: IUser | any;
 }
 
 export interface Action<P = any, T = any> {
@@ -26,14 +25,80 @@ export interface Action<P = any, T = any> {
 }
 
 export interface ProductsSlice{
-    products: any[],
-    productDetail: any,
-    categoryProducts:any[]
+    products: IProduct[];
+    productDetail: IProduct;
+    categoryProducts: IProduct[];
 }
 
 export interface DeliverySlice{
-    allUsers: any[],
-    ordersList: any[],
-     orderDetail: any,
-    driverInfo:any
+    allUsers: IUser[],
+    ordersList: IAssignedOrder[],
+     orderDetail: IAssignedOrder,
+    driverInfo: IUser
+}
+
+export interface IUser {
+    Id: string;
+    firstName: string;
+    lastName: string;
+    cart: ICartProduct[];
+    driverLocation: IDriverLocation;
+    deliveryPartner: number;
+    assignedOrder: IAssignedOrder;
+    countryCode: string;
+    email: string;
+    phone: string;
+    image: any[];
+    address: IAddress[];
+    dob: string;
+    wishlist: number[];
+
+}
+
+export interface IDriverLocation extends ILatLng{
+    route : ILatLng[]
+}
+
+export interface IProduct{
+    Id: number;
+    name: string;
+    veg: number;
+    img: any[];
+    category: string;
+    price: number;
+    description: string;
+    prepTime: number;
+    origin: string;
+}
+
+export interface ICartProduct extends IProduct{
+    qty: number;
+}
+
+export interface IAssignedOrder {
+    Id: number;
+    userId: number;
+    status: 'placed'| 'dispatched'|'delivered' | 'cancelled'  ;
+    orderFrom: string;
+    paymentMethod: 'Card' | 'Bank' | 'Paypal' | 'COD';
+    driverId: number;
+    contact: number;
+    timeToDeliver: number;
+    products: IProduct[];
+    deliverTo: IAddress;
+    orderTime: {
+        date: string;
+        time: string;
+        day: string;
+    }
+}
+
+export interface ILatLng {
+    latitude: number;
+    longitude: number;
+}
+
+export interface IAddress {
+    address: string;
+    location: ILatLng;
 }

@@ -8,27 +8,34 @@ import Card from 'src/components/Card';
 import Popup from 'src/components/Popup';
 import Text from 'src/components/Text';
 import { actions } from 'src/redux/slices/reducer';
-import { AppState } from 'src/types/interface';
+import { AppState, IAssignedOrder } from 'src/types/interface';
 import { scaler } from 'src/utils/Scaler';
 import { DashboardScreens } from 'utils/Constant';
 import { NameFormatter, TimeFormatter } from 'utils/Helpers';
 import { NavigationService } from 'utils/NavigationService';
-const Orders = ({ navigation }: any) => {
-    const dispatch = useDispatch()
-    const [cancelModal, setCancelModal] = useState<any>({
-        data: null,
-        open: false
-    })
-    const [refreshing, setRefreshing] = useState<boolean>(false)
+
+interface ICancelModal {
+    data: IAssignedOrder | any;
+    open: boolean;
+}
+
+const Orders = () => {
     const { user, orderList } = useSelector((state: AppState) => ({
         user: state.user.user,
         orderList: state.delivery.ordersList
     }), shallowEqual)
 
-    let orders = orderList?.filter((_: any) => _.userId == user.Id)
+    const dispatch = useDispatch()
+    const [cancelModal, setCancelModal] = useState<ICancelModal>({
+        data: null,
+        open: false
+    })
+    const [refreshing, setRefreshing] = useState<boolean>(false)
+
+    let orders = orderList?.filter((_) => _.userId == user.Id)
 
 
-    const handleCancelOrder = useCallback((item: any) => {
+    const handleCancelOrder = useCallback((item: IAssignedOrder) => {
         if (item.driverId) {
             dispatch(actions.assignOrder({ id: item.driverId, order: null, client: true }))
         }
@@ -66,7 +73,7 @@ const Orders = ({ navigation }: any) => {
                                             <Text style={styles.infoText}>Order From: {item?.orderFrom}</Text>
                                             <Text>Date: {item.orderTime.date}</Text>
                                             <Text>Item(s): {item.products?.length}</Text>
-                                            {item.status === 'dispatched' ? <Text >Delivered in {TimeFormatter(parseInt(item?.timeToDeliver))}</Text> : null}
+                                            {item.status === 'dispatched' ? <Text >Delivered in {TimeFormatter(item?.timeToDeliver)}</Text> : null}
                                             <Text style={[styles.infoText, { color: item.status === 'delivered' ? colors.colorSuccess : item.status == 'cancelled' ? colors.colorRed : colors.colorFocus }]}>Status: {NameFormatter(item.status)}</Text>
                                         </View>
                                     </View>

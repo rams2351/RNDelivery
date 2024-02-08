@@ -63,7 +63,6 @@ const Checkout = () => {
                 status: 'placed',
                 deliverTo: user.address[0],
                 paymentMethod: paymentMethod,
-                orderId: Math.floor(Math.random() * 100000000),
                 products: cart,
                 contact: user.phone,
                 timeToDeliver: cart.reduce((current: any, next: any) => {

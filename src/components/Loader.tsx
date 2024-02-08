@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { colors } from 'src/assets/Colors';
 
@@ -9,7 +9,7 @@ const Loader = () => {
         return (
             <View
                 style={styles.container}>
-                <ActivityIndicator color={colors.colorFocus} size={50} />
+                <ActivityIndicator color={colors.colorFocus} size={Platform.OS === 'android' ? 50 : 'large'} />
             </View>
         )
     return null

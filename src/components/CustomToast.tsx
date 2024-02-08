@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: scaler(25),
         flexDirection: 'row',
         alignItems: Platform.OS == 'ios' ? 'center' : 'flex-start',
+        marginTop: scaler(10)
     },
     success: {
         backgroundColor: colors.colorSuccess,

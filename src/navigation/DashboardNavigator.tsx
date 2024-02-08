@@ -5,6 +5,7 @@ import Cart from 'screens/Cart/Cart'
 import Checkout from 'screens/Checkout/Checkout'
 import OrderDetail from 'screens/Orders/OrderDetail'
 import PaymentSuccess from 'screens/Payment/PaymentSuccess'
+import Practice from 'screens/Practice'
 import ProductDetail from 'screens/ProductDetail'
 import SearchScreen from 'screens/Search/SearchScreen'
 import TrackingMap from 'screens/TrackingMap/TrackingMap'
@@ -44,6 +45,9 @@ const DashboardScreensArray = [
     {
         name: DashboardScreens.SEARCH_SCREEN,
         component: SearchScreen
+    }, {
+        name: 'practice',
+        component: Practice
     }
 ]
 const StackNavigator = createStackNavigator();

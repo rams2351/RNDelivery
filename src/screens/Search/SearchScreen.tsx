@@ -1,13 +1,14 @@
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
-import React, { useCallback, useState } from 'react'
-import { FlatList, Image, StyleSheet, TextInput, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { ActivityIndicator, FlatList, Image, StyleSheet, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/Entypo'
-import { shallowEqual, useSelector } from 'react-redux'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import CustomHeader from 'src/components/CustomHeader'
 import DisplayCard from 'src/components/DisplayCard'
 import Text from 'src/components/Text'
+import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
@@ -16,8 +17,9 @@ import { scaler } from 'utils/Scaler'
 const SearchScreen = () => {
     const [focus, setFocus] = useState<boolean>(false)
     const [searchList, setSearchList] = useState<any>([])
+    const [loading, setLoading] = useState<boolean>(false)
     const [text, setText] = useState<string>('')
-
+    const dispatch = useDispatch()
     const { products } = useSelector((state: AppState) => ({ products: state.products.products }), shallowEqual)
     const searchHandler = useCallback((e: string) => {
         let arr: any = []
@@ -33,6 +35,10 @@ const SearchScreen = () => {
         })
         setSearchList(arr)
     }, [products])
+
+    useEffect(() => {
+        dispatch(actions.getAllProducts({ loader: setLoading }))
+    }, [])
     return (
         <SafeAreaView edges={['top']} style={styles.safeArea}>
             <CustomHeader title='Search' />
@@ -46,6 +52,7 @@ const SearchScreen = () => {
                     onBlur={() => setFocus(false)}
                     onChangeText={searchHandler}
                 />
+                {loading ? <ActivityIndicator color={colors.colorPrimary} size={25} /> : false}
             </View>
             {
                 searchList.length ? <FlatList
@@ -98,7 +105,8 @@ const styles = StyleSheet.create({
         paddingVertical: scaler(15),
         paddingHorizontal: scaler(10),
         fontSize: scaler(15),
-        color: colors.colorBlackText
+        color: colors.colorBlackText,
+        flex: 1
     },
     image: {
         height: scaler(22),

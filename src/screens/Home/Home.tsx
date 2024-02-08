@@ -35,7 +35,7 @@ const Home = () => {
 
     const onPageRefresh = useCallback(() => {
         setRefreshing(true)
-        dispatch(actions.getAllProducts())
+        dispatch(actions.getAllProducts({ loader: () => { } }))
         setActiveTab('All')
         if (scrollViewRef?.current)
             scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
@@ -144,19 +144,19 @@ const styles = StyleSheet.create({
         backgroundColor: colors.colorWhite,
         height: scaler(60),
         width: scaler(60),
-        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: scaler(10),
         borderRadius: 50,
-        borderWidth: 2,
+        borderWidth: scaler(2),
         borderColor: colors.colorFocus,
         overflow: 'hidden',
-        marginTop: scaler(5)
+        // marginTop: scaler(6)
     },
     logoTextContainer: {
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center',
         paddingHorizontal: scaler(20),
     },
     scroll: {

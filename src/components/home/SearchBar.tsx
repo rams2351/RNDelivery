@@ -3,7 +3,6 @@ import { Images } from 'assets/image'
 import React, { useCallback, useImperativeHandle } from 'react'
 import { GestureResponderEvent, Image, StyleSheet, View } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { actions } from 'src/redux/slices/reducer'
 import { DashboardScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
@@ -18,7 +17,6 @@ const SearchBar = React.forwardRef((props, ref) => {
     const dispatch = useDispatch()
 
     const onPressHandler = useCallback(() => {
-        dispatch(actions.getAllProducts())
         NavigationService.push(DashboardScreens.SEARCH_SCREEN)
     }, [])
 

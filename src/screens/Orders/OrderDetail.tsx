@@ -12,13 +12,13 @@ import CustomHeader from 'src/components/CustomHeader'
 import Popup from 'src/components/Popup'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
-import { AppState } from 'src/types/interface'
+import { AppState, IAssignedOrder } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
 import { NameFormatter, TimeFormatter } from 'utils/Helpers'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
-interface ICancelModal { data: any; open: boolean; }
+interface ICancelModal { data: IAssignedOrder | any; open: boolean; }
 
 const OrderDetail = ({ route, navigation }: any) => {
     const orderId = route?.params?.orderId
@@ -34,7 +34,7 @@ const OrderDetail = ({ route, navigation }: any) => {
     })
     const [refreshing, setRefreshing] = useState<boolean>(false)
 
-    const handleCancelOrder = useCallback((item: any) => {
+    const handleCancelOrder = useCallback((item: IAssignedOrder) => {
         if (item.driverId) {
             dispatch(actions.assignOrder({ id: item.driverId, order: null, client: true }))
         }
@@ -60,6 +60,7 @@ const OrderDetail = ({ route, navigation }: any) => {
                 <CustomHeader title='Order Details' />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 30 }}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />
                     }>
@@ -76,7 +77,7 @@ const OrderDetail = ({ route, navigation }: any) => {
                             <View >
                                 <Text style={[styles.infoText, { color: orderDetail.status == 'delivered' ? colors.colorSuccess : orderDetail.status == 'cancelled' ? colors.colorRed : colors.colorFocus }]}>Status: {NameFormatter(orderDetail?.status)}</Text>
                                 {orderDetail.status == 'delivered' ? <Text style={styles.infoText}>Delivered on: {orderDetail.orderTime.date}</Text> : null}
-                                {orderDetail.status == 'dispatched' ? <Text style={styles.infoText}>Remaining time: {TimeFormatter(parseInt(orderDetail?.timeToDeliver))}</Text> : null}
+                                {orderDetail.status == 'dispatched' ? <Text style={styles.infoText}>Remaining time: {TimeFormatter(orderDetail?.timeToDeliver)}</Text> : null}
                                 <Text style={styles.infoText}>Deliver to:  {orderDetail?.deliverTo?.address}</Text>
                                 <Text style={styles.infoText}>Contact no.:  {orderDetail?.contact}</Text>
                                 <Text style={styles.infoText}>Payment method:  {orderDetail?.paymentMethod}</Text>

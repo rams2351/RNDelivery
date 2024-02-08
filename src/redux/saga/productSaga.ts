@@ -4,19 +4,17 @@ import { Action } from "src/types/interface";
 import { _showErrorMessage } from "utils/Helpers";
 import { actions } from "../slices/reducer";
 
-function* getAllProducts({payload}:Action<any>):Generator<any,any,any>{
-    yield put(actions.setLoading(true))
-    console.log('called');
-
+function* getAllProducts({payload:{loader}}:Action<any>):Generator<any,any,any>{
+    loader(true)
     try {
         let res = yield call(ApiProvider._getAllProducts)
         if (res) {
             yield put(actions.setProducts(res))
         }
-        yield put(actions.setLoading(false))
+        loader(false)
     }
     catch (err) {
-    yield put(actions.setLoading(false))
+    loader(false)
         _showErrorMessage("Something wrong in get All Products saga")
     }
 }
