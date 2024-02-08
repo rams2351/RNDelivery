@@ -68,7 +68,7 @@ yarn-error.log
 
 # for adding .env into gitignore
 # react-native-ultimate-config
-rnuc.xcconfig
-dev.yaml
-beta.yaml
-production.yaml
+# rnuc.xcconfig
+# dev.yaml
+# beta.yaml
+# production.yaml
