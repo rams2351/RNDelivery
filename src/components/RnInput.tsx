@@ -51,7 +51,7 @@ const RnInput = (props: InputProps) => {
                     render={({ field: { onBlur, onChange, value, ref, name } }) => {
                         return (
                             <>
-                                {title ? (<View><Text style={innerStyles.title}>{title}</Text></View>) : null}
+                                {title ? (<View><Text style={innerStyles.title}>{title}{required ? `*` : null}</Text></View>) : null}
                                 <View style={innerStyles.container}>
                                     {icon ? <Image source={icon} style={styles.icon} /> : null}
                                     <TextInput
@@ -131,10 +131,11 @@ const styles = StyleSheet.create({
     },
     errorMsg: {
         color: colors.colorErrorRed,
-        fontWeight: '500',
+        fontWeight: '400',
         marginLeft: scaler(5),
         marginTop: scaler(1),
-        fontStyle: 'italic'
+        fontStyle: 'italic',
+        fontSize: scaler(11)
     },
     titleContainer: {
         marginBottom: scaler(3),

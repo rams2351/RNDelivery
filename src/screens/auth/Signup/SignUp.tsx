@@ -15,6 +15,7 @@ import RnInput from 'src/components/RnInput'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { _showErrorMessage } from 'utils/Helpers'
+import { useLocationService } from 'utils/LocationService'
 import { scaler } from 'utils/Scaler'
 import * as yup from 'yup'
 //@ts-ignore
@@ -24,7 +25,10 @@ const formSchema = yup.object().shape({
     lastName: yup.string().required('Last name is required!'),
     email: yup.string().required('Email is required!'),
     dob: yup.string().required('Date of birth is required!'),
-    address: yup.string().required('Address is required!')
+    lane: yup.string().required('Lane is required!'),
+    road: yup.string().required("Road is required"),
+    zip: yup.string().required('Zip is required!'),
+
 })
 
 const SignUp = (props: any) => {
@@ -45,9 +49,9 @@ const SignUp = (props: any) => {
             _showErrorMessage("Please enable location for continue!")
             return
         }
-        const { address, ...rest } = data
+        const { lane, road, zip, ...rest } = data
         let addPay = [{
-            address: address,
+            address: lane + ", " + road + ", " + zip,
             location: location
         }]
         const payload = {
@@ -124,12 +128,11 @@ const SignUp = (props: any) => {
     };
 
     useEffect(() => {
-        requestLocationPermission()
+        useLocationService().then((res) => setLocation(res))
     }, []);
 
-    // requestLocationAccuracy({ purposeKey: 'full-accuracy' })
-    //     .then((accuracy) => console.log(`Location accuracy is: ${accuracy}`))
-    //     .catch(() => console.warn('Cannot request location accuracy'));
+    console.log(location);
+
 
     return (
         <SafeAreaView edges={['top']} style={styles.safeAreaContainer} >
@@ -144,7 +147,6 @@ const SignUp = (props: any) => {
                 >
                     <View
                         style={styles.logoTextContainer}>
-                        {/* <Image source={Images.logo} /> */}
                         <Text style={styles.otpText}>Customer Details</Text>
                         <View style={styles.underline} />
                     </View>
@@ -158,7 +160,7 @@ const SignUp = (props: any) => {
                                         <RnInput
                                             title='First Name'
                                             name="firstName"
-                                            onChangeValue={(e) => console.log(e)}
+                                            required
                                             placeholder="First Name"
                                             icon={Images.user}
                                         />
@@ -166,7 +168,7 @@ const SignUp = (props: any) => {
                                         <RnInput
                                             title='Last Name'
                                             name="lastName"
-                                            onChangeValue={(e) => console.log(e)}
+                                            required
                                             placeholder="Last Name"
                                             icon={Images.user}
                                         />
@@ -174,7 +176,7 @@ const SignUp = (props: any) => {
                                         <RnInput
                                             title='Email address'
                                             name="email"
-                                            onChangeValue={(e) => console.log(e)}
+                                            required
                                             placeholder="Email"
                                             icon={Images.email}
                                             type={'email-address'}
@@ -182,17 +184,33 @@ const SignUp = (props: any) => {
 
                                         <DatePicker
                                             title='Date of birth'
-                                            onChangeValue={e => console.log((e))} />
+                                            required
+                                            onChangeValue={e => console.log((e))}
+                                        />
 
                                         <RnInput
-                                            title='Address'
-                                            name="address"
-                                            onChangeValue={(e) => console.log(e)}
-                                            placeholder="Address"
+                                            title='Lane'
+                                            name="lane"
+                                            required
+                                            placeholder="Lane"
+                                            icon={Images.user}
+                                        />
+                                        <RnInput
+                                            title='Road'
+                                            name="road"
+                                            required
+                                            placeholder="Road"
+                                            icon={Images.user}
+                                        />
+                                        <RnInput
+                                            title='Postal code'
+                                            name="zip"
+                                            required
+                                            type='numeric'
+                                            placeholder="Postal code"
                                             icon={Images.user}
                                         />
                                     </View>
-
 
                                     <Button title="Continue" onPressButton={submit as any} buttonStyle={styles.buttonContainer} />
 

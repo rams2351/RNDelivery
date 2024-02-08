@@ -1,8 +1,6 @@
 import { colors } from 'assets/Colors'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
-import Geolocation from 'react-native-geolocation-service'
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
+import { Platform, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
@@ -13,6 +11,7 @@ import Popup from 'src/components/Popup'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
 import { AppState } from 'src/types/interface'
+import { useLocationService } from 'utils/LocationService'
 import { scaler } from 'utils/Scaler'
 
 interface ICoordinates {
@@ -165,6 +164,7 @@ const Tracking = () => {
     const [cancelModal, setCancelModal] = useState<boolean>(false)
     const [deliveredModal, setDeliveredModal] = useState<boolean>(false)
     const [count, setCount] = useState<number>(0)
+    const [refreshing, setRefreshing] = useState<boolean>(false)
     const [location, setLocation] = useState<any>()
     const { assignedOrder, user } = useSelector((state: AppState) => ({
         assignedOrder: state.user.user.assignedOrders,
@@ -189,89 +189,17 @@ const Tracking = () => {
         setDeliveredModal(false)
     }, [])
 
-
-
-    const requestLocationPermission = async () => {
-        let device: string = Platform.OS
-        if (device === 'ios') {
-            check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
-                switch (result) {
-                    case RESULTS.UNAVAILABLE:
-                        console.log('This feature is not available (on this device / in this context)');
-                        break;
-                    case RESULTS.DENIED:
-                    case RESULTS.LIMITED:
-                    case RESULTS.GRANTED:
-                        request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((res) => {
-                            if (res === 'granted') {
-                                Geolocation.getCurrentPosition(
-                                    position => {
-                                        const { latitude, longitude } = position.coords;
-                                        setLocation({
-                                            latitude,
-                                            longitude,
-                                        });
-                                    },
-                                    error => {
-                                        console.log(error.code, error.message);
-                                    },
-                                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-                                );
-                            } else {
-                                console.log('You cannot use Geolocation');
-                            }
-                        })
-                        break;
-                    case RESULTS.BLOCKED:
-                        console.log('The permission is denied and not requestable anymore');
-                        break;
-                }
-            })
-                .catch((error) => {
-                    // …
-                });
-        } else if (device === 'android') {
-            check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
-                switch (result) {
-                    case RESULTS.UNAVAILABLE:
-                        console.log('This feature is not available (on this device / in this context)');
-                        break;
-                    case RESULTS.DENIED:
-                    case RESULTS.LIMITED:
-                    case RESULTS.GRANTED:
-                        request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((res) => {
-                            if (res === 'granted') {
-                                Geolocation.getCurrentPosition(
-                                    position => {
-                                        const { latitude, longitude } = position.coords;
-                                        setLocation({
-                                            latitude,
-                                            longitude,
-                                        });
-                                    },
-                                    error => {
-                                        console.log(error.code, error.message);
-                                    },
-                                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-                                );
-                            } else {
-                                console.log('You cannot use Geolocation');
-                            }
-                        })
-                        break;
-                    case RESULTS.BLOCKED:
-                        console.log('The permission is denied and not requestable anymore');
-                        break;
-                }
-            })
-        }
-    };
+    const refreshHandler = useCallback(() => {
+        setRefreshing(true)
+        dispatch(actions.getUser(user.Id))
+        setRefreshing(false)
+    }, [user])
 
 
     useEffect(() => {
-        requestLocationPermission()
-        // const interval = setInterval(() => setCount(_ => _ + 1), 5000)
-        // return () => clearInterval(interval)
+        useLocationService().then((res) => setLocation(res))
+        const interval = setInterval(() => setCount(_ => _ + 1), 5000)
+        return () => clearInterval(interval)
     }, [])
 
     useEffect(() => {
@@ -285,9 +213,6 @@ const Tracking = () => {
         dispatch(actions.updateDriverLocation({ coordinates: coordinate, id: user?.Id }))
     }, [count])
 
-    console.log(location);
-
-
     return (
         <>
             <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1 }}>
@@ -296,7 +221,9 @@ const Tracking = () => {
                     <Icon name='logout' size={27} color={colors.colorWhite} style={[{}]} onPress={() => setModalOpen(true)} />
                 </View>
                 {assignedOrder?.Id ? (<>
-                    <View style={styles.container}>
+                    <ScrollView
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />}
+                        contentContainerStyle={styles.container}>
                         <Text style={styles.methodText}>Order Delivery Info:</Text>
                         <Card
                             style={styles.deliveredContainer}
@@ -312,7 +239,7 @@ const Tracking = () => {
 
                             <Button title="Delivered" buttonStyle={{ paddingVertical: scaler(10), margin: scaler(10) }} onPressButton={() => setDeliveredModal(true)} />
                         </Card>
-                    </View>
+                    </ScrollView>
                     <Button title={'View on map'} buttonStyle={{ margin: scaler(15) }} />
                 </>) : null}
             </SafeAreaView>

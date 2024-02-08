@@ -1,10 +1,10 @@
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, Platform, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import CategoryTab from 'src/components/home/CategoryTab'
-import SearchBar from 'src/components/home/SearchBar'
+import SearchBar, { ISearchBar } from 'src/components/home/SearchBar'
 import ItemDisplayCard from 'src/components/ItemDisplayCard'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
@@ -12,85 +12,67 @@ import { AppState } from 'src/types/interface'
 import { DashboardScreens } from 'utils/Constant'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
-const { width } = Dimensions.get('screen')
 const padding = 30
 
 const Home = () => {
     const [activeTab, setActiveTab] = useState<string>('All')
+    const [loading, setLoading] = useState<boolean>(false)
     const [refreshing, setRefreshing] = useState<boolean>(false)
-    const { products, user, order } = useSelector((state: AppState) => ({
-        products: state.products.products,
+    const { products, user } = useSelector((state: AppState) => ({
+        products: state.products.categoryProducts,
         user: state.user.user,
-        order: state.user.orders
     }
     ), shallowEqual)
 
     const scrollViewRef = useRef<FlatList>(null)
+    const searchRef = useRef<ISearchBar>()
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(actions.getAllProducts())
         dispatch(actions.getUser(user?.Id))
+        dispatch(actions.getProductsByCategory({ link: `vwsmvu3tppwu7bkq`, loader: () => { } }))
     }, [])
-
-    // useFocusEffect(useCallback(() => {
-    //     if (activeTab != 'All') {
-    //         dispatch(actions.getAllProducts())
-    //         setActiveTab('All')
-    //         scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
-    //         dispatch(actions.getUser(user?.Id))
-    //     }
-    //     // dispatch(actions.getOrders())
-    //     // dispatch(actions.setLogin(false))
-    // }, [])
-    // )
 
     const onPageRefresh = useCallback(() => {
         setRefreshing(true)
         dispatch(actions.getAllProducts())
         setActiveTab('All')
-        scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
+        if (scrollViewRef?.current)
+            scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
         setRefreshing(false)
-    }, [])
+    }, [scrollViewRef])
 
     const handleCategoryChange = useCallback((type: string) => {
         setActiveTab(type)
         scrollViewRef?.current?.scrollToOffset({ animated: true, offset: 0 })
         switch (type) {
             case 'Foods':
-                dispatch(actions.getProductsByCategory(`vwpyg4ipcnsg09jz`))
+                dispatch(actions.getProductsByCategory({ link: `vwpyg4ipcnsg09jz`, loader: setLoading }))
                 break;
             case 'Drinks':
-                dispatch(actions.getProductsByCategory(`vw2wey7ikifg03dz`))
+                dispatch(actions.getProductsByCategory({ link: `vw2wey7ikifg03dz`, loader: setLoading }))
                 break;
             case 'Snacks':
-                dispatch(actions.getProductsByCategory(`vwpihhyum05e7iic`))
+                dispatch(actions.getProductsByCategory({ link: `vwpihhyum05e7iic`, loader: setLoading }))
                 break;
             case 'Burgers':
-                dispatch(actions.getProductsByCategory(`vwnrk04bf970xsmx`))
+                dispatch(actions.getProductsByCategory({ link: `vwnrk04bf970xsmx`, loader: setLoading }))
                 break;
             case 'Pizza':
-                dispatch(actions.getProductsByCategory(`vwphdvbk8l4a0hfm`))
+                dispatch(actions.getProductsByCategory({ link: `vwphdvbk8l4a0hfm`, loader: setLoading }))
                 break;
             default:
-                dispatch(actions.getAllProducts())
+                dispatch(actions.getProductsByCategory({ link: `vwsmvu3tppwu7bkq`, loader: setLoading }))
                 break;
-
         }
     }, [])
-    const onScrollProduct = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-
-        const containerWidth = e?.nativeEvent?.contentSize?.width;
-        const itemsQty = containerWidth / 257;
-        const re = containerWidth - e.nativeEvent.contentOffset.x
-        // console.log(e.nativeEvent, itemsQty);
-        if (scrollViewRef.current) {
-            // scrollViewRef.current.scrollToItem({ item: 1, animated: true })
-        }
-    }, [scrollViewRef])
 
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onPageRefresh} />}>
+        <ScrollView
+            style={styles.container}
+            showsVerticalScrollIndicator={false}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onPageRefresh} />}
+        >
             <View style={styles.logoTextContainer}>
                 <View style={styles.imageContainer}><Image source={Images.logo} style={styles.image} /></View>
                 <View>
@@ -99,8 +81,7 @@ const Home = () => {
                 </View>
             </View>
 
-            <SearchBar />
-
+            <SearchBar ref={searchRef} />
 
             <CategoryTab
                 tabList={['All', 'Foods', 'Drinks', 'Snacks', 'Burgers', 'Pizza']}
@@ -108,28 +89,33 @@ const Home = () => {
                 activeTab={activeTab}
             />
 
-            <FlatList
-                ref={scrollViewRef}
-                keyExtractor={(_, i) => i?.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.scroll}
-                ItemSeparatorComponent={
-                    () => { return <View style={{ width: padding }} /> }
-                }
-                data={products}
-                renderItem={({ item: d, index: i }) => (
-                    <ItemDisplayCard
-                        key={i}
-                        img={d.img[0].signedUrl}
-                        title={d.name}
-                        price={d?.price}
-                        onPressItem={(e) => NavigationService.push(DashboardScreens.PRODUCT_DETAIL, { id: d?.Id })}
-                    />
-                )}
-            />
-
-
+            {loading ?
+                (<View style={styles.loaderContainer}>
+                    <ActivityIndicator color={colors.colorPrimary} size={Platform.OS == 'ios' ? 'large' : 35} />
+                </View>
+                ) :
+                (<FlatList
+                    ref={scrollViewRef}
+                    keyExtractor={(_, i) => i?.toString()}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.scroll}
+                    ItemSeparatorComponent={
+                        () => { return <View style={{ width: padding }} /> }
+                    }
+                    data={products}
+                    renderItem={({ item: d, index: i }) => (
+                        <ItemDisplayCard
+                            key={i}
+                            img={d.img[0].signedUrl}
+                            title={d.name}
+                            price={d?.price}
+                            onPressItem={(e) => NavigationService.push(DashboardScreens.PRODUCT_DETAIL, { id: d?.Id })}
+                        />
+                    )}
+                />
+                )
+            }
         </ScrollView>
     )
 }
@@ -178,4 +164,10 @@ const styles = StyleSheet.create({
         paddingRight: 30,
         paddingVertical: scaler(50)
     },
+    loaderContainer: {
+        height: scaler(230),
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 })

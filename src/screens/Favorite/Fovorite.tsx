@@ -24,15 +24,17 @@ const Favorite = () => {
     const wishListedProducts = products?.filter((d, i) => user?.wishlist?.includes(d?.Id))
     const [swipedItem, setSwipedItem] = useState<any>(null)
     const [refreshing, setRefreshing] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)
-    // console.log(wishListedProducts);
 
     const removeWishListed = useCallback(async (d: any) => {
         let filtered = user?.wishlist?.filter((_: any) => _ != d.Id)
+        let list = [...rowRefs.entries()]
+        list.forEach(([key, ref]) => {
+            ref.close();
+        })
         dispatch(actions.setLoading(true))
-        dispatch(actions.updateWishlist({ id: user.Id, list: filtered, loader: setLoading }))
+        dispatch(actions.updateWishlist({ id: user.Id, list: filtered, loader: () => { } }))
 
-    }, [wishListedProducts])
+    }, [wishListedProducts, rowRefs])
 
 
     const rightSwipeActions = useCallback((e: any, f: any) => {
@@ -46,10 +48,6 @@ const Favorite = () => {
             </View>
         )
     }, [swipedItem])
-
-    // useFocusEffect(useCallback(() => {
-    //     dispatch(actions.getAllProducts())
-    // }, []))
 
     const onRefreshPage = useCallback(() => {
         setRefreshing(true)

@@ -38,20 +38,21 @@ function* getProductDetail({ payload }: Action<any>):Generator<any,any,any> {
     }
 }
 
-function* getProductByCategory({ payload }: Action<any>):Generator<any,any,any> {
-    yield put(actions.setLoading(true))
+function* getProductByCategory({ payload: { link, loader } }: Action<any>): Generator<any, any, any> {
 
+    // yield put(actions.setLoading(true))
+    loader(true)
     try {
-        let res = yield call(ApiProvider._getProductsByCategory, payload)
+        let res = yield call(ApiProvider._getProductsByCategory, link)
          if (res) {
-            yield put(actions.setProducts(res))
-        }
-   yield put(actions.setLoading(false))
+            yield put(actions.setCategoryProducts(res))
+         }
+    loader(false)
     }
     catch (err) {
         console.log(err, 'in  getProductCategory detail saga');
         _showErrorMessage('Something went wrong in getProductDetail')
-
+        loader(false)
     }
 }
 

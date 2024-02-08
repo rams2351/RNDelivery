@@ -4,6 +4,7 @@ import { Action, ProductsSlice } from "src/types/interface";
 const initialState: ProductsSlice = {
     products: [],
     productDetail: null,
+    categoryProducts:[]
 }
 
 export const productSlice = createSlice({
@@ -15,6 +16,9 @@ export const productSlice = createSlice({
         },
         setProductDetail: (state, { payload }: Action<any>) => {
             state.productDetail=payload
+        },
+        setCategoryProducts:(state, { payload }: Action<any>) => {
+            state.categoryProducts = payload?.list
         },
 
     }

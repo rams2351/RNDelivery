@@ -28,6 +28,7 @@ export interface Action<P = any, T = any> {
 export interface ProductsSlice{
     products: any[],
     productDetail: any,
+    categoryProducts:any[]
 }
 
 export interface DeliverySlice{

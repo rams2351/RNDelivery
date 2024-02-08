@@ -1,11 +1,8 @@
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
-import React, { useCallback } from 'react'
+import React, { useMemo } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { actions } from 'src/redux/slices/reducer'
-import { AppState } from 'src/types/interface'
 import { CurrencyFormatter, TimeFormatter } from 'utils/Helpers'
 import { scaler } from 'utils/Scaler'
 import Text from '../Text'
@@ -18,42 +15,20 @@ interface SummaryDetailsProps {
 
 const SummaryDetail: React.FC<SummaryDetailsProps> = (props) => {
     const { list, status } = props
-
-    const dispatch = useDispatch()
-    let total = 0
-    list?.forEach((_: any) => {
-        total += _.price * _.qty
-    })
-    const { user } = useSelector((state: AppState) => ({
-        user: state.user.user
-    }), shallowEqual)
-
     const listLength = list?.length
 
+    const totalAmount = useMemo(() => {
+        return list.reduce((p, c) => {
+            return p += (c.price * c.qty)
+        }, 0)
+    }, [list])
 
-    const qtyHandler = useCallback((id: string, qty: number, type: string) => {
-        let newQty = qty;
-        if (type === "+") {
-            newQty += 1
-        } else {
-            newQty -= 1
-        }
+    const totalTime = useMemo(() => {
+        return list.reduce((prev, current) => {
+            return prev += current.prepTime
+        }, 0)
+    }, [list])
 
-        let pay = user?.cart.map((d: any) => {
-            if (d.Id == id) {
-                return {
-                    ...d,
-                    qty: newQty
-                }
-            } else return d
-        })
-        dispatch(actions.updateCart({ id: user?.Id, list: pay }))
-    }, [user])
-
-    let totalTime = 0
-    list.forEach((d: any) => {
-        totalTime += d.prepTime
-    });
 
     return (
         <>
@@ -65,7 +40,7 @@ const SummaryDetail: React.FC<SummaryDetailsProps> = (props) => {
                         </View>
                         <View style={styles.container1} >
                             <Text style={[styles.text, d?.qty ? { marginBottom: scaler(1) } : {}]} numberOfLines={1} >{d?.name}</Text>
-                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                            <View style={styles.qtyPriceContainer}>
                                 <Text style={styles.qtyText}>Qty-{d?.qty}</Text>
                                 <Text style={styles.price} >{d?.qty ? CurrencyFormatter(d?.qty * d.price) : CurrencyFormatter(d.price)}</Text>
                             </View>
@@ -76,7 +51,7 @@ const SummaryDetail: React.FC<SummaryDetailsProps> = (props) => {
             ))}
             <View style={styles.totalContainer}>
                 <Text style={styles.methodText}>Total</Text>
-                <Text style={styles.methodText}>{CurrencyFormatter(total)}</Text>
+                <Text style={styles.methodText}>{CurrencyFormatter(totalAmount)}</Text>
             </View>
             {status && status?.length > 0 ? null : <View style={styles.deliveryInstruction}>
                 <Icon name='infocirlce' size={17} color={colors.colorFocus} style={{}} />
@@ -111,7 +86,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 5,
         resizeMode: 'contain',
-        zIndex: 55
+        zIndex: 55,
+        elevation: scaler(10)
     },
     container1: {
         display: 'flex',
@@ -131,7 +107,7 @@ const styles = StyleSheet.create({
     price: {
         fontSize: scaler(15),
         fontWeight: '700',
-        color: colors.colorPrimary,
+        color: colors.colorFocus,
     },
     qtyText: {
         fontSize: scaler(12),
@@ -162,7 +138,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: scaler(5)
+    },
+    qtyPriceContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%'
     }
 })
-
-

@@ -1,7 +1,7 @@
 import { colors } from 'assets/Colors'
 import { Images } from 'assets/image'
-import React, { useCallback } from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import React, { useCallback, useImperativeHandle } from 'react'
+import { GestureResponderEvent, Image, StyleSheet, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { actions } from 'src/redux/slices/reducer'
 import { DashboardScreens } from 'utils/Constant'
@@ -10,13 +10,25 @@ import { scaler } from 'utils/Scaler'
 import Card from '../Card'
 import Text from '../Text'
 
-const SearchBar = () => {
+export interface ISearchBar {
+    onPressCard: (e?: GestureResponderEvent) => void
+}
+
+const SearchBar = React.forwardRef((props, ref) => {
     const dispatch = useDispatch()
 
     const onPressHandler = useCallback(() => {
         dispatch(actions.getAllProducts())
         NavigationService.push(DashboardScreens.SEARCH_SCREEN)
     }, [])
+
+
+    useImperativeHandle(ref, () => {
+        return {
+            onPressCard: onPressHandler
+        }
+    }, [onPressHandler])
+
     return (
         <Card style={styles.cardContainer} onPressCard={onPressHandler}>
             <View style={styles.container}>
@@ -25,7 +37,7 @@ const SearchBar = () => {
             </View>
         </Card>
     )
-}
+})
 
 export default SearchBar
 

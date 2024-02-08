@@ -3,6 +3,7 @@ import { Images } from 'assets/image'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Image, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
 import Card from 'src/components/Card'
@@ -17,6 +18,8 @@ import { NameFormatter, TimeFormatter } from 'utils/Helpers'
 import { NavigationService } from 'utils/NavigationService'
 import { scaler } from 'utils/Scaler'
 
+interface ICancelModal { data: any; open: boolean; }
+
 const OrderDetail = ({ route, navigation }: any) => {
     const orderId = route?.params?.orderId
     const dispatch = useDispatch()
@@ -25,7 +28,7 @@ const OrderDetail = ({ route, navigation }: any) => {
         orderDetail: state.delivery.orderDetail
     }), shallowEqual)
 
-    const [cancelModal, setCancelModal] = useState<any>({
+    const [cancelModal, setCancelModal] = useState<ICancelModal>({
         data: null,
         open: false
     })
@@ -53,7 +56,7 @@ const OrderDetail = ({ route, navigation }: any) => {
 
     return (
         <>
-            <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: colors.colorBackground }} >
+            <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: colors.colorBackground }} >
                 <CustomHeader title='Order Details' />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -64,7 +67,8 @@ const OrderDetail = ({ route, navigation }: any) => {
                     {!orderDetail ? null : <>
 
                         <View style={styles.detailContainer}>
-                            <Text style={[styles.heading, { color: colors.colorPrimary, fontSize: scaler(18) }]}>Restaurant: {orderDetail?.orderFrom}</Text>
+                            <Icon name="local-restaurant" size={25} color={colors.colorWhite} />
+                            <Text style={[styles.heading, { color: colors.colorWhite, fontSize: scaler(18) }]}>Restaurant: {orderDetail?.orderFrom}</Text>
 
                         </View>
                         <Text style={styles.heading}>Order Status:</Text>
@@ -129,13 +133,13 @@ export default OrderDetail
 
 const styles = StyleSheet.create({
     orderBg: {
-        width: 'auto'
+        width: 'auto',
+        height: scaler(200)
     },
     detailContainer: {
-        backgroundColor: colors.colorWhite,
+        backgroundColor: colors.colorFocus,
         padding: scaler(15),
-        borderBottomRightRadius: scaler(40),
-        borderBottomLeftRadius: scaler(40),
+        flexDirection: 'row',
         marginBottom: scaler(10)
     },
     infoText: {

@@ -51,12 +51,14 @@ const Dashboard = () => {
     const refreshHandler = useCallback(() => {
         setRefreshing(true)
         dispatch(actions.getPlacedOrders())
+        dispatch(actions.getUser(driver.Id))
         setRefreshing(false)
-    }, [])
+    }, [driver])
 
 
     useFocusEffect(useCallback(() => {
         dispatch(actions.getPlacedOrders())
+        dispatch(actions.getUser(driver.Id))
     }, [])
     )
 

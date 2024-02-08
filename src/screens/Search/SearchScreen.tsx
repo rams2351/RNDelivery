@@ -33,8 +33,6 @@ const SearchScreen = () => {
         })
         setSearchList(arr)
     }, [products])
-    console.log(products);
-
     return (
         <SafeAreaView edges={['top']} style={styles.safeArea}>
             <CustomHeader title='Search' />

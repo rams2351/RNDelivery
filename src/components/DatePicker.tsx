@@ -1,8 +1,8 @@
 import { colors } from 'assets/Colors';
 import { Images } from 'assets/image';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Image, StyleSheet, TextInput, View } from 'react-native';
+import { Image, Keyboard, StyleSheet, TextInput, View } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { DateFormatter } from 'utils/Helpers';
 import { scaler } from 'utils/Scaler';
@@ -12,15 +12,20 @@ interface IDatePickerProps {
     defaultValue?: string;
     onChangeValue: (e: string) => void;
     title?: string;
+    required?: boolean;
 }
 
 const DatePicker = (props: IDatePickerProps) => {
-    const { onChangeValue, defaultValue, title } = props
+    const { onChangeValue, defaultValue, title, required } = props
     const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
     const [focus, setFocus] = useState<boolean>(false)
     const [dob, setDob] = useState<string>('')
 
     const { control, formState: { errors } } = useFormContext()
+
+    useEffect(() => {
+        Keyboard.dismiss()
+    }, [])
 
     const innerStyles = useMemo(() => {
         return {
@@ -65,7 +70,7 @@ const DatePicker = (props: IDatePickerProps) => {
                             return (
                                 <>
                                     <View>
-                                        {title ? (<View><Text style={innerStyles.title}>{title}</Text></View>) : null}
+                                        {title ? (<View><Text style={innerStyles.title}>{title}{required ? `*` : null}</Text></View>) : null}
                                         <View style={innerStyles.container}>
                                             <Image source={Images.calendar} style={styles.icon} />
                                             <TextInput
@@ -77,6 +82,7 @@ const DatePicker = (props: IDatePickerProps) => {
                                                 value={value}
                                                 placeholderTextColor={colors.colorGreyMore}
                                                 placeholder={'Date of birth'}
+
                                             />
                                         </View>
                                         <DateTimePicker
@@ -172,10 +178,11 @@ const styles = StyleSheet.create({
     },
     errorMsg: {
         color: colors.colorErrorRed,
-        fontWeight: '500',
+        fontWeight: '400',
         marginLeft: scaler(5),
         marginTop: scaler(1),
-        fontStyle: 'italic'
+        fontStyle: 'italic',
+        fontSize: scaler(11)
     },
     titleContainer: {
         marginBottom: scaler(2),
