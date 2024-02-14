@@ -64,8 +64,8 @@ const Checkout = () => {
                     return current += next.prepTime
                 }, 0) + 15
             }
-            dispatch(actions.getOrderList())
             dispatch(actions.updateOrders(additionalData))
+            dispatch(actions.getOrderList())
             dispatch(actions.setLoading(false))
         }, 5000)
         return () => clearInterval(interval)

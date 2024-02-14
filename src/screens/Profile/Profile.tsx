@@ -28,7 +28,7 @@ const OptionList: IOptionList[] = [
     },
     {
         name: 'Help',
-        route: ''
+        route: 'practice'
     },
     {
         name: 'Logout',
@@ -47,8 +47,10 @@ const Profile = () => {
     const navigationHandler = useCallback((route: string) => {
         if (route === 'logout') {
             setModalOpen(true)
-        } else {
+        } else if (route === 'orders') {
             NavigationService.push(DashboardScreens.BOTTOM_NAVIGATOR, { screen: route })
+        } else {
+            NavigationService.push(route)
         }
     }, [])
     const logoutHandler = useCallback(() => {

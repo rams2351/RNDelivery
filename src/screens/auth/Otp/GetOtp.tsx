@@ -36,6 +36,7 @@ const GetOtpScreen = ({ navigation }: any) => {
         dispatch(actions.validateUser(ph))
     }, [])
 
+
     return (
         <SafeAreaView edges={['bottom', 'top']} style={{ flex: 1 }}>
             <KeyboardAwareScrollView
@@ -47,6 +48,7 @@ const GetOtpScreen = ({ navigation }: any) => {
                     <RNPhoneInput onChangeValue={phoneHandler} defaultValue={mobile.value} />
                 </View>
             </KeyboardAwareScrollView>
+
             <View style={styles.btnContainer}>
                 <Text style={styles.termsText}>By clicking, I accept the terms of service and privacy policy.</Text>
                 <Button

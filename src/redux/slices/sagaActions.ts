@@ -19,5 +19,6 @@ export const sagaActions = {
     getPlacedOrders: createAction('getPlacedOrders'),
     getOrderDetail: createAction<any>('getOrderDetail'),
     getDriverInfo: createAction<any>('getDriverInfo'),
-    addAddress:createAction<any>('addAddress')
+    addAddress: createAction<any>('addAddress'),
+    LoggedAsPartner:createAction<any>('loggedAsPartner')
 }

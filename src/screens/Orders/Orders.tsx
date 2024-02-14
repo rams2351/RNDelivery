@@ -1,7 +1,6 @@
-import { useFocusEffect } from '@react-navigation/native';
 import { colors } from 'assets/Colors';
 import { Images } from 'assets/image';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, Image, RefreshControl, StyleSheet, View } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/Button';
@@ -49,9 +48,12 @@ const Orders = () => {
         setRefreshing(false)
     }, [])
 
-    useFocusEffect(useCallback(() => {
+    // useFocusEffect(useCallback(() => {
+    //     dispatch(actions.getOrderList())
+    // }, []))
+    useEffect(() => {
         dispatch(actions.getOrderList())
-    }, []))
+    }, [])
 
     return (
         <>

@@ -151,6 +151,26 @@ function* addAddress({ payload: { newAdd, id,key } }: Action<any>): Generator<an
     }
 }
 
+function* loggedAsPartner({ payload: { value, id } }: Action<any>): Generator<any, any, any>{
+
+        yield put(actions.setLoading(true))
+
+    let pay = { deliveryPartner: value, id: id }
+    try {
+        let res = yield call(ApiProvider._updateWishlist,pay)
+         if (res) {
+                 yield put(actions.setUserData(res))
+        }   else {
+             console.log('something went wrong');
+            }
+                      yield put(actions.setLoading(false))
+
+    } catch (error) {
+        console.log("Catch Error", error);
+                yield put(actions.setLoading(false))
+
+    }
+}
 
 
 export default function* watchUsers() {
@@ -160,7 +180,8 @@ export default function* watchUsers() {
     yield takeLeading(actions.getUser.toString(), getUser)
     yield takeLeading(actions.updateCart.toString(), updateCartList)
     yield takeLeading(actions.updateOrders.toString(), updateOrders)
-    yield takeLeading(actions.addAddress.toString(),addAddress)
+    yield takeLeading(actions.addAddress.toString(), addAddress)
+    yield takeLeading(actions.LoggedAsPartner.toString(),loggedAsPartner)
     // yield takeLeading(actions.getOrders.toString(),getOrders)
 
 }

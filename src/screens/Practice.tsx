@@ -1,57 +1,47 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import React, { useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 const Practice = () => {
-    const renderView = (skeletonEnabled: boolean) => {
-        return (
-            <SafeAreaView edges={['top', 'bottom']}>
-                <SkeletonPlaceholder borderRadius={4} enabled={skeletonEnabled}>
-                    <Text style={styles.title}>Lorem ipsum</Text>
-                </SkeletonPlaceholder>
-                <View style={styles.container}>
+    const [viewSize, setViewSize] = useState<any>('100%');
 
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.subtitle} numberOfLines={2}>
-                            Dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor.
-                        </Text>
-                    </View>
-                </View>
-            </SafeAreaView>
-        );
+    const resizeView = () => {
+        setViewSize(viewSize === '100%' ? '50%' : '100%');
     };
 
     return (
-        <View>
-            {renderView(false)}
-            {renderView(true)}
+        <View style={{ flex: 1, marginTop: 50 }}>
+            <View style={{ backgroundColor: '#E6EEF7', width: viewSize, height: 100, padding: 25, margin: 5, flexDirection: 'column', flexWrap: 'wrap' }}>
+                <Text style={{ margin: 3 }}>
+                    Educative is a ...
+                </Text>
+                <Text style={{ margin: 3 }}>
+                    Educative is a ...
+                </Text>
+                <Text style={{ margin: 3 }}>
+                    Educative is a ...
+                </Text>
+            </View>
+            <View style={{ backgroundColor: '#E6EEF7', width: viewSize, padding: 25, margin: 5, flexDirection: 'row' }}>
+                <Text style={{ flexShrink: 1, margin: 3 }}>
+                    Educative is a hands-on learning platform for software developers of all levels.
+                </Text>
+                <Text style={{ flexShrink: 1, margin: 3 }}>
+                    Educative is a hands-on learning platform for software developers of all levels.
+                </Text>
+            </View>
+            <TouchableOpacity
+                style={{
+                    backgroundColor: 'gray',
+                    padding: 10,
+                    marginTop: 10,
+                    alignItems: 'center',
+                }}
+                onPress={resizeView}
+            >
+                <Text style={{ color: 'white' }}>Resize Container</Text>
+            </TouchableOpacity>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        marginBottom: 16,
-    },
-    image: {
-        width: 65,
-        height: 65,
-    },
-    titleContainer: {
-        marginLeft: 16,
-        flex: 1,
-    },
-    title: {
-        fontSize: 20,
-        lineHeight: 22,
-    },
-    subtitle: {
-        fontSize: 14,
-        marginTop: 8,
-    },
-});
 
 export default Practice;

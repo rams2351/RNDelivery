@@ -1,6 +1,6 @@
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { Platform, StyleSheet, Switch, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
@@ -28,12 +28,12 @@ const VerifyOtp = ({ route, navigation }: any) => {
     })
     const phone = route?.params?.phone?.slice(3)
     const dispatch = useDispatch()
-
     const { userData } = useSelector((state: AppState) => ({
         userData: state.user.user
     }
     ), shallowEqual)
 
+    const [isEnabled, setIsEnabled] = useState<number>(userData.deliveryPartner ? 1 : 0);
     const inputStyle = useMemo(() => {
         return {
             ...styles.underlineStyleBase,
@@ -48,16 +48,23 @@ const VerifyOtp = ({ route, navigation }: any) => {
 
     const getOtpHandler = useCallback((otp: string) => {
         if (otp === '1234') {
-            if (userData?.Id) {
+            if (userData?.Id && isEnabled != userData?.deliveryPartner) {
                 dispatch(actions.setLogin(true))
-            } else {
+                dispatch(actions.LoggedAsPartner({ id: userData?.Id, value: isEnabled }))
+            } else if (userData?.Id) {
+                dispatch(actions.setLogin(true))
+            }
+            else {
                 NavigationService.push(AuthScreens.SIGN_UP, { phone: route?.params?.phone })
             }
         } else {
             _showErrorMessage('Please enter valid otp!')
             setOtp(_ => ({ ..._, error: true }))
         }
-    }, [userData])
+    }, [userData, isEnabled])
+
+    const toggleSwitch = () => setIsEnabled(previousState => previousState == 1 ? 0 : 1);
+
     return (
         <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
             <KeyboardAwareScrollView
@@ -78,10 +85,21 @@ const VerifyOtp = ({ route, navigation }: any) => {
                         codeInputHighlightStyle={focusInput}
 
                     />
+                    <Text style={styles.termsText}>Didn't receive it? Retry in 00:24</Text>
 
                 </View>
             </KeyboardAwareScrollView>
-            <Text style={styles.termsText}>Didn't receive it? Retry in 00:24</Text>
+            <View style={styles.deliveryPartner}>
+                <Switch
+                    style={{ borderWidth: 1, borderColor: colors.colorFocus }}
+                    trackColor={{ false: '#767577', true: colors.colorBackground }}
+                    thumbColor={isEnabled ? colors.colorPrimary : '#f4f3f4'}
+                    ios_backgroundColor='#f4f3f4'
+                    onValueChange={toggleSwitch}
+                    value={isEnabled == 1 ? true : false}
+                />
+                <Text style={styles.partnerText}>Logged in as delivery partner?</Text>
+            </View>
             <Button
                 title={'Continue'}
                 buttonStyle={{ marginBottom: Platform.OS == 'android' ? scaler(20) : scaler(5), marginHorizontal: scaler(20) }}
@@ -112,7 +130,6 @@ const styles = StyleSheet.create({
         fontSize: scaler(10),
         fontWeight: '600',
         color: colors.colorBlackText,
-        marginTop: 'auto',
         marginBottom: scaler(10),
         textAlign: 'center'
     },
@@ -137,4 +154,16 @@ const styles = StyleSheet.create({
     underlineStyleHighLighted: {
         borderColor: colors.colorFocus,
     },
+    deliveryPartner: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: scaler(25),
+        marginBottom: scaler(15)
+    },
+    partnerText: {
+        fontSize: scaler(13),
+        fontWeight: '500',
+        paddingLeft: scaler(10),
+        color: colors.colorBlackText,
+    }
 })

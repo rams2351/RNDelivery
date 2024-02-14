@@ -9,6 +9,7 @@ import Button from 'src/components/Button'
 import Card from 'src/components/Card'
 import SummaryDetail from 'src/components/checkout/SummaryDetail'
 import CustomHeader from 'src/components/CustomHeader'
+import ListView from 'src/components/ListView'
 import Popup from 'src/components/Popup'
 import Text from 'src/components/Text'
 import { actions } from 'src/redux/slices/reducer'
@@ -70,7 +71,6 @@ const OrderDetail = ({ route, navigation }: any) => {
                         <View style={styles.detailContainer}>
                             <Icon name="local-restaurant" size={25} color={colors.colorWhite} />
                             <Text style={[styles.heading, { color: colors.colorWhite, fontSize: scaler(18) }]}>Restaurant: {orderDetail?.orderFrom}</Text>
-
                         </View>
                         <Text style={styles.heading}>Order Status:</Text>
                         <Card style={styles.statusContainer}>
@@ -78,19 +78,20 @@ const OrderDetail = ({ route, navigation }: any) => {
                                 <Text style={[styles.infoText, { color: orderDetail.status == 'delivered' ? colors.colorSuccess : orderDetail.status == 'cancelled' ? colors.colorRed : colors.colorFocus }]}>Status: {NameFormatter(orderDetail?.status)}</Text>
                                 {orderDetail.status == 'delivered' ? <Text style={styles.infoText}>Delivered on: {orderDetail.orderTime.date}</Text> : null}
                                 {orderDetail.status == 'dispatched' ? <Text style={styles.infoText}>Remaining time: {TimeFormatter(orderDetail?.timeToDeliver)}</Text> : null}
-                                <Text style={styles.infoText}>Deliver to:  {orderDetail?.deliverTo?.address}</Text>
+                                <ListView heading='Deliver to' value={orderDetail?.deliverTo?.address} headingStyle={styles.infoText} valueStyle={{ marginTop: scaler(2) }} />
+                                <ListView heading='Contact' value={orderDetail?.contact} headingStyle={styles.infoText} valueStyle={{ marginTop: scaler(2) }} />
+                                <ListView heading='Payment method' value={orderDetail?.paymentMethod} headingStyle={styles.infoText} valueStyle={{ marginTop: scaler(2) }} />
+
+                                {/* <Text style={styles.infoText}>Deliver to:  {orderDetail?.deliverTo?.address}</Text>
                                 <Text style={styles.infoText}>Contact no.:  {orderDetail?.contact}</Text>
-                                <Text style={styles.infoText}>Payment method:  {orderDetail?.paymentMethod}</Text>
+                                <Text style={styles.infoText}>Payment method:  {orderDetail?.paymentMethod}</Text> */}
 
                             </View>
                         </Card>
-
                         <Text style={styles.heading}>Product detail:</Text>
-
                         <Card style={styles.statusContainer}>
                             <SummaryDetail list={orderDetail.products} status={orderDetail.status} />
                         </Card>
-
                         {
                             orderDetail.status !== 'delivered' && orderDetail.status !== 'cancelled' ?
                                 <Button title="Cancel order" buttonStyle={{ margin: scaler(15), marginVertical: scaler(10), paddingVertical: scaler(8) }} type="secondary"
@@ -104,11 +105,7 @@ const OrderDetail = ({ route, navigation }: any) => {
                                     onPressButton={() => NavigationService.push(DashboardScreens.TRACKING_MAP, { order: orderDetail })}
                                 /> : null
                         }
-
                     </>}
-
-
-
                 </ScrollView>
             </SafeAreaView>
 
@@ -144,7 +141,7 @@ const styles = StyleSheet.create({
         marginBottom: scaler(10)
     },
     infoText: {
-        paddingHorizontal: scaler(20),
+        paddingLeft: scaler(15),
         fontWeight: '500',
         fontSize: scaler(15),
         paddingBottom: scaler(2)
