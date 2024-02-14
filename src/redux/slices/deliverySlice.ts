@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Action, DeliverySlice } from "src/types/interface";
+import { Action, DeliverySlice, IAssignedOrder, IUser } from "src/types/interface";
 
 const initialState:DeliverySlice = {
     allUsers: [],
     ordersList: [],
-    orderDetail: null,
-    driverInfo:null
+    orderDetail: {} as IAssignedOrder,
+    driverInfo: {} as IUser
 }
 
 export const deliverySlice = createSlice({

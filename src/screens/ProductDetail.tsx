@@ -28,11 +28,11 @@ const ProductDetail = ({ route, navigation }: any) => {
     const [addCartLoader, setAddCartLoader] = useState<boolean>(false)
 
     const isAddedToCart = useMemo(() => {
-        return user?.cart?.filter((_: any) => _.Id === product?.Id)?.[0]?.Id
+        return user?.cart?.filter((_: any) => _.Id == product?.Id)?.[0]?.Id
     }, [user, product])
     const cartItem = useMemo(() => {
-        return user?.cart?.filter((_: any) => _?.Id === product?.Id)?.[0]
-    }, [user])
+        return user?.cart?.filter((_: any) => _?.Id == product?.Id)?.[0]
+    }, [user, product])
 
     const wishlistHandler = useCallback(() => {
         let filtered = user.wishlist ?? []
@@ -47,9 +47,7 @@ const ProductDetail = ({ route, navigation }: any) => {
         } else {
             filtered = [product.Id]
         }
-        // return
         dispatch(actions.updateWishlist({ id: user.Id, list: filtered, loader: setLoader }))
-
     }, [product, user])
 
     const addToCartHandler = useCallback(() => {
@@ -85,8 +83,6 @@ const ProductDetail = ({ route, navigation }: any) => {
 
     useEffect(() => {
         dispatch(actions.getProductDetail(`(Id,eq,${id})`))
-        console.log('called');
-
     }, [id])
 
     return (
@@ -152,6 +148,7 @@ const ProductDetail = ({ route, navigation }: any) => {
                         )
                         : (
                             <Button
+                                disabled={addCartLoader}
                                 onPressButton={addToCartHandler}
                                 title={addCartLoader ? <ActivityIndicator size={25} color={colors.colorWhite} /> : isAddedToCart ? 'Go to' : 'Add to Cart'}
                                 buttonStyle={{}}
@@ -171,7 +168,6 @@ const styles = StyleSheet.create({
     safeAreaView: {
         flex: 1,
         backgroundColor: colors.colorBackground
-
     },
     header: {
         justifyContent: 'space-between',

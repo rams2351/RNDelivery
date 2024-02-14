@@ -28,10 +28,10 @@ const Favorite = () => {
     const removeWishListed = useCallback(async (d: IProduct) => {
         let filtered = user?.wishlist?.filter((_: number) => _ != d.Id)
         let list = [...rowRefs.entries()]
+        dispatch(actions.setLoading(true))
         list.forEach(([key, ref]) => {
             ref.close();
         })
-        dispatch(actions.setLoading(true))
         dispatch(actions.updateWishlist({ id: user.Id, list: filtered, loader: () => { } }))
 
     }, [wishListedProducts, rowRefs, user])

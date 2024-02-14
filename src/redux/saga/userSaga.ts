@@ -5,6 +5,7 @@ import { AuthScreens } from "utils/Constant";
 import { _showErrorMessage } from "utils/Helpers";
 import { NavigationService } from "utils/NavigationService";
 import { actions } from "../slices/reducer";
+import { store } from "../store";
 
 function* validateUser({ payload }: Action<any>): Generator<any, any, any>{
 
@@ -30,8 +31,6 @@ function* signUpUser({ payload }: Action<any>): Generator<any, any, any>{
     yield put(actions.setLoading(true))
     try {
         let res = yield call(ApiProvider._addUser, payload)
-console.log(res,'msg');
-
         if (res?.Id) {
             yield put(actions.setUserData(res))
             yield put(actions.setLogin(true))
@@ -127,6 +126,30 @@ function* updateOrders({ payload }: Action<any>): Generator<any, any, any>{
     }
 }
 
+function* addAddress({ payload: { newAdd, id,key } }: Action<any>): Generator<any, any, any>{
+    yield put(actions.setLoading(true))
+    let add = store.getState().user.user.address
+
+    let pay = {
+        currentAddress: JSON.stringify(newAdd),
+   address: key == 'add' ? JSON.stringify([...add, newAdd]) : JSON.stringify(add),
+        id: id
+    }
+    try {
+        let res = yield call(ApiProvider._updateWishlist,pay)
+         if (res) {
+             yield put(actions.setUserData(res))
+             NavigationService.goBack()
+         } else {
+             console.log('something went wrong');
+         }
+        yield put(actions.setLoading(false))
+    } catch (error) {
+        console.log("Catch Error", error);
+                   yield put(actions.setLoading(false))
+        yield put(actions.setLoading(false));
+    }
+}
 
 
 
@@ -137,6 +160,7 @@ export default function* watchUsers() {
     yield takeLeading(actions.getUser.toString(), getUser)
     yield takeLeading(actions.updateCart.toString(), updateCartList)
     yield takeLeading(actions.updateOrders.toString(), updateOrders)
+    yield takeLeading(actions.addAddress.toString(),addAddress)
     // yield takeLeading(actions.getOrders.toString(),getOrders)
 
 }

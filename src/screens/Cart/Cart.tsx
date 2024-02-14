@@ -22,18 +22,15 @@ const Cart = () => {
         user: state.user.user
     }), shallowEqual)
 
-    const [swipedItem, setSwipedItem] = useState<IProduct | any>(null)
+    const [swipedItem, setSwipedItem] = useState<IProduct>({} as IProduct)
     const [qtyLoader, setQtyLoader] = useState<boolean>(false)
     const dispatch = useDispatch()
     const swipeRef: RefObject<Swipeable> = createRef()
 
     let rowRefs = new Map();
 
-    const removeCartItem = useCallback((d: any) => {
-        const filtered = cart.filter((_: any) => {
-            if (_?.Id === d?.Id) return false
-            else return true
-        })
+    const removeCartItem = useCallback((d: IProduct) => {
+        const filtered = cart.filter((_) => _?.Id != d?.Id)
         let list = [...rowRefs.entries()]
         dispatch(actions.updateCart({ id: user.Id, list: filtered, loader: () => { } }))
         _showSuccessMessage(`Item removed successfully!`)

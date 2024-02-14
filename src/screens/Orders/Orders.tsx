@@ -1,6 +1,7 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { colors } from 'assets/Colors';
 import { Images } from 'assets/image';
-import React, { useCallback, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FlatList, Image, RefreshControl, StyleSheet, View } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/Button';
@@ -20,8 +21,8 @@ interface ICancelModal {
 }
 
 const Orders = () => {
-    const { user, orderList } = useSelector((state: AppState) => ({
-        user: state.user.user,
+    const { userId, orderList } = useSelector((state: AppState) => ({
+        userId: state.user.user?.Id,
         orderList: state.delivery.ordersList
     }), shallowEqual)
 
@@ -32,8 +33,7 @@ const Orders = () => {
     })
     const [refreshing, setRefreshing] = useState<boolean>(false)
 
-    let orders = orderList?.filter((_) => _.userId == user.Id)
-
+    const orders = orderList?.filter((_) => _.userId == userId)
 
     const handleCancelOrder = useCallback((item: IAssignedOrder) => {
         if (item.driverId) {
@@ -43,15 +43,15 @@ const Orders = () => {
         setCancelModal({ open: false, data: null })
     }, [])
 
-    useLayoutEffect(useCallback(() => {
-        dispatch(actions.getOrderList())
-    }, []))
-
     const refreshHandler = useCallback(() => {
         setRefreshing(true)
         dispatch(actions.getOrderList())
         setRefreshing(false)
     }, [])
+
+    useFocusEffect(useCallback(() => {
+        dispatch(actions.getOrderList())
+    }, []))
 
     return (
         <>

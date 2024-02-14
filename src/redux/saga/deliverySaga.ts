@@ -20,9 +20,10 @@ function* getAllUsers({ payload }: Action<any>): Generator<any, any, any>{
     }
 }
 function* getOrderList({ payload }: Action<any>): Generator<any, any, any>{
+    console.log('called this time')
     yield put(actions.setLoading(true))
     try {
-        let res = yield call(ApiProvider._getOrderList)
+        let res = yield call(ApiProvider._getOrders)
         if (res) {
             yield put(actions.setOrderList(res))
         }

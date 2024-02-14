@@ -19,5 +19,7 @@ export const DashboardScreens = {
     PAYMENT_SUCCESS: 'paymentSuccess',
     TRACKING_MAP: 'TrackingMap',
     ORDER_DETAIL: 'OrderDetails',
-    SEARCH_SCREEN: 'SearchScreen'
+    SEARCH_SCREEN: 'SearchScreen',
+    CHANGE_ADDRESS: 'ChangeAddress',
+    ADD_NEW_ADDRESS: 'AddNewAddress'
 }

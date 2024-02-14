@@ -39,7 +39,7 @@ const Popup: React.FC<ModalProps> = (props) => {
                     <View style={{ paddingVertical: 5 }}>
                         {children}
                     </View>
-                    {rightButtonText || leftButtonText ? <View style={styles.buttonContainer}>
+                    {rightButtonText || leftButtonText ? <View style={[styles.buttonContainer, !leftButtonText ? { justifyContent: 'flex-end', } : {}]}>
                         {leftButtonText ?
                             <Button title={leftButtonText} type="secondary" buttonStyle={[styles.button, styles.noButton]} textStyle={{ color: colors.colorPrimary, fontWeight: '500', fontSize: scaler(12) }} onPressButton={leftButtonAction} />
                             : null}
@@ -67,7 +67,9 @@ const styles = StyleSheet.create({
     modalContainer: {
         backgroundColor: colors.colorWhite,
         width: '85%',
-        borderRadius: scaler(10)
+        borderRadius: scaler(10),
+        maxHeight: '80%',
+        overflow: 'scroll'
     },
     titleContainer: {
         display: 'flex',
@@ -92,10 +94,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     buttonContainer: {
-        display: 'flex',
         padding: scaler(15),
         flexDirection: 'row',
-        paddingHorizontal: scaler(15),
         justifyContent: 'space-between',
         borderTopWidth: 1,
         borderColor: colors.colorGreyMore,

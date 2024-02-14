@@ -4,11 +4,11 @@ import React, { useCallback, useState } from 'react'
 import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import Button from 'src/components/Button'
 import Card from 'src/components/Card'
-import AddNewAddress from 'src/components/checkout/AddNewAddress'
 import SummaryDetail from 'src/components/checkout/SummaryDetail'
 import CustomHeader from 'src/components/CustomHeader'
 import Text from 'src/components/Text'
@@ -40,8 +40,7 @@ const Methods = [
 
 const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState<string>('')
-    const [location, setLocation] = useState<any>()
-    const [addNewAddress, setNewAddress] = useState<boolean>(false)
+    const [changeAddressModal, setChangeAddressModal] = useState<boolean>(false)
     const { cart, user } = useSelector((state: AppState) => ({
         cart: state.user.user?.cart,
         user: state.user.user
@@ -50,21 +49,17 @@ const Checkout = () => {
 
     const paymentHandler = useCallback(() => {
         dispatch(actions.setLoading(true))
-        setTimeout(() => {
+        let interval = setTimeout(() => {
             NavigationService.replace(DashboardScreens.PAYMENT_SUCCESS)
-            let totalTime = 0
-            cart.forEach((d: any) => {
-                totalTime += d.prepTime
-            });
             let additionalData = {
                 userId: user.Id,
                 orderTime: getCurrentDateTime(),
                 orderFrom: cart[0]?.origin,
                 status: 'placed',
-                deliverTo: user.address[0],
+                deliverTo: user.currentAddress,
                 paymentMethod: paymentMethod,
                 products: cart,
-                contact: user.phone,
+                contact: user?.currentAddress?.phone,
                 timeToDeliver: cart.reduce((current: any, next: any) => {
                     return current += next.prepTime
                 }, 0) + 15
@@ -73,6 +68,7 @@ const Checkout = () => {
             dispatch(actions.updateOrders(additionalData))
             dispatch(actions.setLoading(false))
         }, 5000)
+        return () => clearInterval(interval)
     }, [user, cart, paymentMethod])
     return (
         <>
@@ -84,17 +80,20 @@ const Checkout = () => {
                         <Card
                             style={styles.deliveredContainer}
                         >
-                            {user?.address[0].location ? <>
+                            {user?.address[0].location || user.currentAddress ? <>
                                 <View style={styles.addressContainer}>
-                                    <Icon name="location" size={20} color={colors.colorFocus} style={{}} />
-                                    <Text style={styles.addressText}> {user?.firstName + ", " + (user?.address[0].address ?? '') + ", " + user?.phone}</Text>
+                                    <Ionicons name="location" size={20} color={colors.colorFocus} style={{}} />
+                                    <Text style={styles.addressText}> {(user?.currentAddress?.address ?? user?.address[0]?.address)}</Text>
                                 </View>
-
                                 <View style={styles.underline} />
                             </> : null}
-                            <TouchableOpacity style={styles.addAddressContainer} activeOpacity={0.5} onPress={() => setNewAddress(true)}>
-                                <Icon name='add-circle-outline' style={{}} size={25} color={colors.colorFocus} />
-                                <Text style={styles.addNewText}> Add new</Text>
+                            <TouchableOpacity
+                                style={styles.addAddressContainer}
+                                activeOpacity={0.5}
+                                onPress={() => NavigationService.push(DashboardScreens.CHANGE_ADDRESS)}
+                            >
+                                <Icon name='change-circle' style={{}} size={20} color={colors.colorFocus} />
+                                <Text style={styles.addNewText}> Change Address</Text>
                             </TouchableOpacity>
 
                         </Card>
@@ -117,7 +116,7 @@ const Checkout = () => {
                         >
                             {
                                 Methods.map((d, i) => (
-                                    <TouchableOpacity key={i} style={{ zIndex: 500 }} >
+                                    <TouchableOpacity key={i}  >
                                         <TouchableOpacity key={i} style={styles.methodsContainer} activeOpacity={0.5} onPress={() => setPaymentMethod(d.name)} >
                                             {paymentMethod === d.name ? <Image source={Images.ic_check} style={[styles.paymentImage]} /> : <Image source={Images.ic_uncheck} style={[styles.paymentImage]} />}
 
@@ -129,6 +128,7 @@ const Checkout = () => {
                                         <View style={styles.underline} />
                                     </TouchableOpacity>))
                             }
+
                         </Card>
                     </View>
 
@@ -143,7 +143,7 @@ const Checkout = () => {
                     disabled={paymentMethod.length == 0}
                 />
             </SafeAreaView>
-            <AddNewAddress open={addNewAddress} onClose={() => setNewAddress(false)} />
+
         </>
     )
 }
@@ -179,7 +179,6 @@ const styles = StyleSheet.create({
         marginHorizontal: scaler(15)
     },
     methodsContainer: {
-        display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: scaler(10),
@@ -211,17 +210,17 @@ const styles = StyleSheet.create({
     },
     addAddressContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'center',
+        alignItems: 'center',
         borderWidth: 1,
         borderColor: colors.colorFocus,
         paddingHorizontal: scaler(15),
         paddingVertical: scaler(5),
         borderRadius: scaler(8),
-        // marginTop: scaler(10)
     },
     addNewText: {
         fontSize: scaler(12),
-        fontWeight: '500'
+        fontWeight: '500',
+        color: colors.colorFocus
     }
 })

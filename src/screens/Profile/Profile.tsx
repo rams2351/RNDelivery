@@ -61,7 +61,7 @@ const Profile = () => {
             <View style={{ paddingHorizontal: scaler(15) }}>
                 <Text style={[styles.textName, { marginVertical: scaler(10) }]}>Personal Detail</Text>
                 <Card style={[{ marginBottom: scaler(10) }]}>
-                    <View style={[styles.imageTextContainer, { borderBottomWidth: 1, borderColor: colors.colorGreyMore }]}>
+                    <View style={styles.imageTextContainer}>
                         <Image source={Images.ic_user1} style={styles.imageContainer} />
                         <View style={styles.textContainer}>
                             <Text style={styles.textName}>{user?.firstName + " " + user?.lastName}</Text>
@@ -69,10 +69,10 @@ const Profile = () => {
                             <Text style={styles.textDesc}>{user?.countryCode + " " + user?.phone}</Text>
                         </View>
                     </View>
-                    <View>
+                    {/* <View>
                         <Text>Address:</Text>
                         {user?.address.map((d: any, i: number) => (<Text key={i} style={styles.textDesc}>{d.address}</Text>))}
-                    </View>
+                    </View> */}
                 </Card>
 
                 {OptionList.map((d, i) => (

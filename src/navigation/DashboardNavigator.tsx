@@ -2,6 +2,8 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import Cart from 'screens/Cart/Cart'
+import AddNewAddress from 'screens/Checkout/AddNewAddress'
+import ChangeAddress from 'screens/Checkout/ChangeAddress'
 import Checkout from 'screens/Checkout/Checkout'
 import OrderDetail from 'screens/Orders/OrderDetail'
 import PaymentSuccess from 'screens/Payment/PaymentSuccess'
@@ -13,7 +15,12 @@ import { DashboardScreens } from 'utils/Constant'
 import { scaler } from 'utils/Scaler'
 import BottomTabNavigator from './BottomTabNavigator'
 
-const DashboardScreensArray = [
+interface IDashboardScreens {
+    name: string;
+    component: (e: any) => React.JSX.Element
+}
+
+const DashboardScreensArray: IDashboardScreens[] = [
     {
         name: DashboardScreens.BOTTOM_NAVIGATOR,
         component: BottomTabNavigator
@@ -45,9 +52,18 @@ const DashboardScreensArray = [
     {
         name: DashboardScreens.SEARCH_SCREEN,
         component: SearchScreen
-    }, {
+    },
+    {
         name: 'practice',
         component: Practice
+    },
+    {
+        name: DashboardScreens.CHANGE_ADDRESS,
+        component: ChangeAddress
+    },
+    {
+        name: DashboardScreens.ADD_NEW_ADDRESS,
+        component: AddNewAddress
     }
 ]
 const StackNavigator = createStackNavigator();

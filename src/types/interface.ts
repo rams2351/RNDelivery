@@ -16,7 +16,7 @@ export interface ExtraSlice{
 }
 
 export interface UserSlice{
-    user: IUser | any;
+    user: IUser;
 }
 
 export interface Action<P = any, T = any> {
@@ -38,7 +38,7 @@ export interface DeliverySlice{
 }
 
 export interface IUser {
-    Id: string;
+    Id: number;
     firstName: string;
     lastName: string;
     cart: ICartProduct[];
@@ -52,6 +52,7 @@ export interface IUser {
     address: IAddress[];
     dob: string;
     wishlist: number[];
+    currentAddress:IAddress
 
 }
 
@@ -101,4 +102,5 @@ export interface ILatLng {
 export interface IAddress {
     address: string;
     location: ILatLng;
+    phone: string;
 }

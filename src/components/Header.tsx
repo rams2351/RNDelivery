@@ -27,11 +27,9 @@ const Header = (props: BottomTabHeaderProps) => {
             <View style={styles.container}>
                 <Text style={styles.text}>{props?.options?.title}</Text>
             </View>
-            {cartItem ? (<View style={styles.cartContainer}>
-                <TouchableOpacity style={{}} activeOpacity={0.7} onPress={handleCartRoute}>
-                    <Image source={Images.ic_cart_white} style={styles.cartImage} />
-                </TouchableOpacity>
-            </View>) : null}
+            {cartItem ? (<TouchableOpacity style={styles.cartContainer} activeOpacity={0.7} onPress={handleCartRoute}>
+                <Image source={Images.ic_cart_white} style={styles.cartImage} />
+            </TouchableOpacity>) : null}
         </>
     )
 }

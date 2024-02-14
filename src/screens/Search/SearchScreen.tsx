@@ -24,20 +24,24 @@ const SearchScreen = () => {
     const searchHandler = useCallback((e: string) => {
         let arr: any = []
         setText(e)
-        products.forEach((d: any) => {
-            if (e.length > 1) {
+        if (e.length > 1) {
+            products.forEach((d: any) => {
                 if (d.name?.includes(e)) {
                     arr.push(d)
                 } else if (d.category?.includes(e.toLowerCase())) {
                     arr.push(d)
+                } else {
+                    setSearchList(arr)
                 }
-            }
-        })
-        setSearchList(arr)
+            })
+        } else {
+            setSearchList(products)
+        }
     }, [products])
 
     useEffect(() => {
         dispatch(actions.getAllProducts({ loader: setLoading }))
+        setSearchList(products)
     }, [])
     return (
         <SafeAreaView edges={['top']} style={styles.safeArea}>
@@ -95,11 +99,11 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity: 0.4,
         shadowRadius: 8,
-        display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: scaler(18),
-        elevation: 15
+        elevation: 15,
+        marginBottom: scaler(5)
     },
     input: {
         paddingVertical: scaler(15),

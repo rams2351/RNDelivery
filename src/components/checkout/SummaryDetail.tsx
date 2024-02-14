@@ -18,13 +18,13 @@ const SummaryDetail: React.FC<SummaryDetailsProps> = (props) => {
     const listLength = list?.length
 
     const totalAmount = useMemo(() => {
-        return list.reduce((p, c) => {
+        return list?.reduce((p, c) => {
             return p += (c.price * c.qty)
         }, 0)
     }, [list])
 
     const totalTime = useMemo(() => {
-        return list.reduce((prev, current) => {
+        return list?.reduce((prev, current) => {
             return prev += current.prepTime
         }, 0)
     }, [list])

@@ -55,6 +55,7 @@ function interceptResponse(res: AxiosResponse) {
 const api = axios.create({
     baseURL: config.BASE_URL,
     timeout: 1000 * 30,
+    params: { limit: 200 },
     headers: {
         'cache-control': 'no-cache',
         'xc-token': config.XC_TOKEN,
@@ -136,11 +137,15 @@ export const _getProductsByCategory = async (body: any) => {
     return callApi(`msa8dpk9qcum5x5/views/${body}`, 'GET')
 }
 
-export const _getOrderList = async () => {
-    console.log(`!1`);
+// export const _getOrderList = async () => {
+//     console.log(`!1`);
+//     return callApi(`mer2hygg6gpz5f9/views/vwzuzgz0qe2je497`, 'GET')
+// }
+
+export const _getOrders = async () => {
+    console.log(`!2`);
     return callApi(`mer2hygg6gpz5f9/views/vwzuzgz0qe2je497`, 'GET')
 }
-
 export const _addOrder = async (body: any) => {
     return callApi(`mer2hygg6gpz5f9/views/vwzuzgz0qe2je497`, 'POST', body)
 }
